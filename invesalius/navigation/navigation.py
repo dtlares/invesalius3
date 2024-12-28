@@ -62,7 +62,8 @@ class NavigationHub(metaclass=Singleton):
         self.neuronavigation_api = NeuronavigationApi()
         self.pedal_connector = PedalConnector(self.neuronavigation_api, window)
         self.navigation = Navigation(
-            pedal_connector=self.pedal_connector, neuronavigation_api=self.neuronavigation_api
+            pedal_connector=self.pedal_connector,
+            neuronavigation_api=self.neuronavigation_api,
         )
         self.robot = Robot(
             tracker=self.tracker,
@@ -177,7 +178,9 @@ class UpdateNavigationScene(threading.Thread):
                     trigger_on = self.serial_port_queue.get_nowait()
                     if trigger_on:
                         wx.CallAfter(
-                            Publisher.sendMessage, "Create marker", marker_type=MarkerType.COIL_POSE
+                            Publisher.sendMessage,
+                            "Create marker",
+                            marker_type=MarkerType.COIL_POSE,
                         )
                     self.serial_port_queue.task_done()
 
@@ -185,11 +188,15 @@ class UpdateNavigationScene(threading.Thread):
                 # see the red cross in the position of the offset marker
 
                 # Update the slice viewers to show the current position of the tracked object.
-                wx.CallAfter(Publisher.sendMessage, "Update slices position", position=coord[:3])
+                wx.CallAfter(
+                    Publisher.sendMessage, "Update slices position", position=coord[:3]
+                )
 
                 # Update the cross position to the current position of the tracked object, so that, e.g., when a
                 # new marker is created, it is created in the current position of the object.
-                wx.CallAfter(Publisher.sendMessage, "Set cross focal point", position=coord)
+                wx.CallAfter(
+                    Publisher.sendMessage, "Set cross focal point", position=coord
+                )
 
                 wx.CallAfter(
                     Publisher.sendMessage,
@@ -200,7 +207,10 @@ class UpdateNavigationScene(threading.Thread):
                 if coil_visible:
                     # Check pubsub "Update coil pose" dependencies
                     wx.CallAfter(
-                        Publisher.sendMessage, "Update coil poses", m_imgs=m_imgs, coords=coords
+                        Publisher.sendMessage,
+                        "Update coil poses",
+                        m_imgs=m_imgs,
+                        coords=coords,
                     )
                     wx.CallAfter(  # LUKATODO: this is just for viewer_volume... which will be updated later to support multicoil (target, tracts & efield)
                         Publisher.sendMessage,
@@ -270,7 +280,9 @@ class Navigation(metaclass=Singleton):
         self.main_coil = None  # Which coil to track with pointer
         self.m_change = None
         self.r_stylus = None
-        self.obj_datas = None  # This is accessed by the robot, gets value at StartNavigation
+        self.obj_datas = (
+            None  # This is accessed by the robot, gets value at StartNavigation
+        )
 
         self.all_fiducials = np.zeros((6, 6))
         self.event = threading.Event()
@@ -377,7 +389,9 @@ class Navigation(metaclass=Singleton):
                     if coil_name in saved_coil_registrations
                 }
                 if self.coil_registrations:
-                    self.main_coil = self.main_coil or next(iter(self.coil_registrations))
+                    self.main_coil = self.main_coil or next(
+                        iter(self.coil_registrations)
+                    )
 
             # Try to load stylus orientation data
             if "r_stylus" in state:
@@ -473,7 +487,10 @@ class Navigation(metaclass=Singleton):
         self.all_fiducials = np.vstack([image_fiducials, tracker_fiducials])
 
         self.m_change = tr.affine_matrix_from_points(
-            self.all_fiducials[3:, :].T, self.all_fiducials[:3, :].T, shear=False, scale=False
+            self.all_fiducials[3:, :].T,
+            self.all_fiducials[:3, :].T,
+            shear=False,
+            scale=False,
         )
 
     def OnRecordStylusOrientation(self, coord_raw):
@@ -499,7 +516,9 @@ class Navigation(metaclass=Singleton):
             x_flip[0] = -x_flip[0]
 
             # Rotation from tracker to VTK coordinate system (apply x_flip to orient stylus with NIFTI file)
-            self.r_stylus = x_flip @ up_vtk @ np.linalg.inv(R @ up_trk @ np.linalg.inv(R))
+            self.r_stylus = (
+                x_flip @ up_vtk @ np.linalg.inv(R @ up_trk @ np.linalg.inv(R))
+            )
             # Save r_stylus to config file
             self.SaveConfig("r_stylus", self.r_stylus.tolist())
             return True
@@ -528,7 +547,9 @@ class Navigation(metaclass=Singleton):
             self.e_field_IDs_queue,
         ]
 
-        Publisher.sendMessage("Navigation status", nav_status=True, vis_status=vis_components)
+        Publisher.sendMessage(
+            "Navigation status", nav_status=True, vis_status=vis_components
+        )
 
         if not self.CoilSelectionDone():
             wx.MessageBox(
@@ -543,7 +564,9 @@ class Navigation(metaclass=Singleton):
             obj_datas = {}
             for coil_name in self.coil_registrations:
                 if self.ref_mode_id:
-                    coord_raw, marker_visibilities = tracker.TrackerCoordinates.GetCoordinates()
+                    coord_raw, marker_visibilities = (
+                        tracker.TrackerCoordinates.GetCoordinates()
+                    )
                 else:
                     coord_raw = np.array([None])
 
@@ -647,15 +670,23 @@ class Navigation(metaclass=Singleton):
                 queues = [self.coord_tracts_queue, self.tracts_queue]
                 if self.enable_act:
                     jobs_list.append(
-                        dti.ComputeTractsACTThread(self.trk_inp, queues, self.event, self.sleep_nav)
+                        dti.ComputeTractsACTThread(
+                            self.trk_inp, queues, self.event, self.sleep_nav
+                        )
                     )
                 else:
                     jobs_list.append(
-                        dti.ComputeTractsThread(self.trk_inp, queues, self.event, self.sleep_nav)
+                        dti.ComputeTractsThread(
+                            self.trk_inp, queues, self.event, self.sleep_nav
+                        )
                     )
 
             if self.e_field_loaded:
-                queues = [self.efield_queue, self.e_field_norms_queue, self.e_field_IDs_queue]
+                queues = [
+                    self.efield_queue,
+                    self.e_field_norms_queue,
+                    self.e_field_IDs_queue,
+                ]
                 jobs_list.append(
                     e_field.Visualize_E_field_Thread(
                         queues,
@@ -723,4 +754,6 @@ class Navigation(metaclass=Singleton):
             self.e_field_loaded,
             self.plot_efield_vectors,
         ]
-        Publisher.sendMessage("Navigation status", nav_status=False, vis_status=vis_components)
+        Publisher.sendMessage(
+            "Navigation status", nav_status=False, vis_status=vis_components
+        )

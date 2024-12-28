@@ -187,14 +187,19 @@ class Ruler(ABC):
         camera_position = np.array(direction_matrix[1])
         direction = np.array(self.slice_data.renderer.GetActiveCamera().GetViewUp())
         direction_matrix = np.array(
-            [abs(initial_direction), const_direction - abs(initial_direction + camera_position)]
+            [
+                abs(initial_direction),
+                const_direction - abs(initial_direction + camera_position),
+            ]
         )
         image_size_matrix = np.dot(direction_matrix, bounds_matrix)
         image_size = (
             abs(image_size_matrix[1][1] - image_size_matrix[1][0]),
             abs(image_size_matrix[0][1] - image_size_matrix[0][0]),
         )
-        initial_direction_unit_vector = initial_direction / np.linalg.norm(initial_direction)
+        initial_direction_unit_vector = initial_direction / np.linalg.norm(
+            initial_direction
+        )
         direction_unit_vector = direction / np.linalg.norm(direction)
         dot_product = np.dot(initial_direction_unit_vector, direction_unit_vector)
         angle = np.arccos(dot_product)
@@ -244,7 +249,9 @@ class Ruler(ABC):
             pixel_data.SetNumberOfComponents(4)
             pixel_data.SetNumberOfTuples(width * height)
             # TODO: Optimize to only get the pixel data of the area the ruler was drawn instead of the whole window
-            pixel_data = renderer_window.GetRGBAPixelData(0, 0, width - 1, height - 1, vtk.VTK_RGBA)
+            pixel_data = renderer_window.GetRGBAPixelData(
+                0, 0, width - 1, height - 1, vtk.VTK_RGBA
+            )
             # TODO: Create an algorithm to check for a suitable contrasting colour by examining the pixel data
 
     @abstractmethod
@@ -321,9 +328,13 @@ class GenericLeftRuler(Ruler):
         pixel_size = self.GetPixelSize()
         window_size = self.GetWindowSize()
         ruler_min_y = (
-            slice_number_prop[1] + dummy_scale_text_size[1] + 2 * self.scale_text_padding
+            slice_number_prop[1]
+            + dummy_scale_text_size[1]
+            + 2 * self.scale_text_padding
         ) * window_size[1]
-        ruler_min_x = (left_text_prop[0] + left_text_prop[2] + self.left_padding) * window_size[0]
+        ruler_min_x = (
+            left_text_prop[0] + left_text_prop[2] + self.left_padding
+        ) * window_size[0]
         max_ruler_height = window_size[1] - 2 * ruler_min_y
         image_size_in_pixels = image_height / pixel_size
         if image_size_in_pixels < max_ruler_height:
@@ -362,10 +373,16 @@ class GenericLeftRuler(Ruler):
         ]
         r, g, b = self.colour
         for line in lines:
-            canvas.draw_line(line[0], line[1], colour=(r * 255, g * 255, b * 255, 255), width=1)
-        text_size = self.GetTextSize("{:.{}f} mm".format(ruler_height, decimals), self.font_size)
+            canvas.draw_line(
+                line[0], line[1], colour=(r * 255, g * 255, b * 255, 255), width=1
+            )
+        text_size = self.GetTextSize(
+            "{:.{}f} mm".format(ruler_height, decimals), self.font_size
+        )
         x_text = (
-            2 * ruler_min_x + self.edge_mark * window_size[0] - (text_size[0] * window_size[0])
+            2 * ruler_min_x
+            + self.edge_mark * window_size[0]
+            - (text_size[0] * window_size[0])
         ) / 2
         y_text = (window_size[1] - ruler_height_pixels) / 2 - self.scale_text_padding
         canvas.draw_text(

@@ -100,14 +100,21 @@ class InnerPanel(wx.Panel):
         btnsizer.Realize()
 
         self.combo_interval = wx.ComboBox(
-            panel, -1, "", choices=const.IMPORT_INTERVAL, style=wx.CB_DROPDOWN | wx.CB_READONLY
+            panel,
+            -1,
+            "",
+            choices=const.IMPORT_INTERVAL,
+            style=wx.CB_DROPDOWN | wx.CB_READONLY,
         )
         self.combo_interval.SetSelection(0)
 
         inner_sizer = wx.BoxSizer(wx.HORIZONTAL)
         inner_sizer.Add(btnsizer, 0, wx.LEFT | wx.TOP, 5)
         inner_sizer.Add(
-            self.combo_interval, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT | wx.TOP, 5
+            self.combo_interval,
+            0,
+            wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT | wx.TOP,
+            5,
         )
         panel.SetSizer(inner_sizer)
         inner_sizer.Fit(panel)
@@ -221,12 +228,9 @@ class TextPanel(wx.Panel):
         tree = gizmos.TreeListCtrl(
             self,
             -1,
-            style=wx.TR_DEFAULT_STYLE
-            | wx.TR_HIDE_ROOT
-            | wx.TR_ROW_LINES
+            style=wx.TR_DEFAULT_STYLE | wx.TR_HIDE_ROOT | wx.TR_ROW_LINES
             #  | wx.TR_COLUMN_LINES
-            | wx.TR_FULL_ROW_HIGHLIGHT
-            | wx.TR_SINGLE,
+            | wx.TR_FULL_ROW_HIGHLIGHT | wx.TR_SINGLE,
         )
 
         tree.AddColumn(_("Patient name"))
@@ -306,7 +310,9 @@ class TextPanel(wx.Panel):
                 tree.SetItemText(child, f"{date_time}", 6)
                 tree.SetItemText(child, f"{group.nslices}", 7)
 
-                self.idserie_treeitem[(dicom.patient.id, dicom.acquisition.serie_number)] = child
+                self.idserie_treeitem[
+                    (dicom.patient.id, dicom.acquisition.serie_number)
+                ] = child
 
         tree.Expand(self.root)
         tree.SelectItem(parent_select)

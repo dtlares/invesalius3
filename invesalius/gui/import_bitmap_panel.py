@@ -99,7 +99,11 @@ class InnerPanel(wx.Panel):
         btnsizer.Realize()
 
         self.combo_interval = wx.ComboBox(
-            panel, -1, "", choices=const.IMPORT_INTERVAL, style=wx.CB_DROPDOWN | wx.CB_READONLY
+            panel,
+            -1,
+            "",
+            choices=const.IMPORT_INTERVAL,
+            style=wx.CB_DROPDOWN | wx.CB_READONLY,
         )
         self.combo_interval.SetSelection(0)
 
@@ -191,9 +195,7 @@ class TextPanel(wx.Panel):
         tree = gizmos.TreeListCtrl(
             self,
             -1,
-            style=wx.TR_DEFAULT_STYLE
-            | wx.TR_HIDE_ROOT
-            | wx.TR_ROW_LINES
+            style=wx.TR_DEFAULT_STYLE | wx.TR_HIDE_ROOT | wx.TR_ROW_LINES
             #  | wx.TR_COLUMN_LINES
             | wx.TR_FULL_ROW_HIGHLIGHT
             # | wx.TR_MULTIPLE
@@ -230,11 +232,15 @@ class TextPanel(wx.Panel):
                     if index >= 0 and index < data_size:
                         Publisher.sendMessage("Set bitmap in preview panel", pos=index)
                     elif index == data_size and data_size > 0:
-                        Publisher.sendMessage("Set bitmap in preview panel", pos=index - 1)
+                        Publisher.sendMessage(
+                            "Set bitmap in preview panel", pos=index - 1
+                        )
                     elif data_size == 1:
                         Publisher.sendMessage("Set bitmap in preview panel", pos=0)
                     else:
-                        Publisher.sendMessage("Show black slice in single preview image")
+                        Publisher.sendMessage(
+                            "Show black slice in single preview image"
+                        )
 
                     self.tree.Delete(selected_item)
                     self.tree.Update()

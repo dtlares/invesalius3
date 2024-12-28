@@ -44,7 +44,9 @@ class TaskPanel(wx.Panel):
         inner_panel = InnerTaskPanel(self)
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add(inner_panel, 1, wx.EXPAND | wx.GROW | wx.BOTTOM | wx.RIGHT | wx.LEFT, 7)
+        sizer.Add(
+            inner_panel, 1, wx.EXPAND | wx.GROW | wx.BOTTOM | wx.RIGHT | wx.LEFT, 7
+        )
         sizer.Fit(self)
 
         self.SetSizer(sizer)
@@ -112,10 +114,12 @@ class InnerTaskPanel(wx.Panel):
 
         # Image(s) for buttons
         BMP_IMPORT = wx.Bitmap(
-            str(inv_paths.ICON_DIR.joinpath("file_import_original.png")), wx.BITMAP_TYPE_PNG
+            str(inv_paths.ICON_DIR.joinpath("file_import_original.png")),
+            wx.BITMAP_TYPE_PNG,
         )
         BMP_OPEN_PROJECT = wx.Bitmap(
-            str(inv_paths.ICON_DIR.joinpath("file_open_original.png")), wx.BITMAP_TYPE_PNG
+            str(inv_paths.ICON_DIR.joinpath("file_open_original.png")),
+            wx.BITMAP_TYPE_PNG,
         )
 
         # Buttons related to hyperlinks
@@ -251,7 +255,9 @@ class InnerTaskPanel(wx.Panel):
         Publisher.sendMessage("Show import directory dialog")
 
     def ImportNifti(self):
-        Publisher.sendMessage("Show import other files dialog", id_type=const.ID_NIFTI_IMPORT)
+        Publisher.sendMessage(
+            "Show import other files dialog", id_type=const.ID_NIFTI_IMPORT
+        )
 
     def OpenProject(self, path=None):
         if path:

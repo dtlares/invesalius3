@@ -59,7 +59,9 @@ class TaskPanel(wx.Panel):
         inner_panel = InnerTaskPanel(self)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(inner_panel, 0, wx.EXPAND | wx.GROW | wx.BOTTOM | wx.RIGHT | wx.LEFT, 7)
+        sizer.Add(
+            inner_panel, 0, wx.EXPAND | wx.GROW | wx.BOTTOM | wx.RIGHT | wx.LEFT, 7
+        )
         sizer.Fit(self)
 
         self.SetSizer(sizer)
@@ -81,13 +83,19 @@ class InnerTaskPanel(scrolled.ScrolledPanel):
         self.SetBackgroundColour(backgroud_colour)
         self.SetAutoLayout(1)
 
-        BMP_ADD = wx.Bitmap(os.path.join(inv_paths.ICON_DIR, "object_add.png"), wx.BITMAP_TYPE_PNG)
+        BMP_ADD = wx.Bitmap(
+            os.path.join(inv_paths.ICON_DIR, "object_add.png"), wx.BITMAP_TYPE_PNG
+        )
         # BMP_ADD.SetWidth(25)
         # BMP_ADD.SetHeight(25)
 
         # Button for creating new surface
         button_new_surface = pbtn.PlateButton(
-            self, BTN_NEW, "", BMP_ADD, style=pbtn.PB_STYLE_SQUARE | pbtn.PB_STYLE_DEFAULT
+            self,
+            BTN_NEW,
+            "",
+            BMP_ADD,
+            style=pbtn.PB_STYLE_SQUARE | pbtn.PB_STYLE_DEFAULT,
         )
         button_new_surface.SetBackgroundColour(self.GetBackgroundColour())
         self.Bind(wx.EVT_BUTTON, self.OnButton)
@@ -122,7 +130,9 @@ class InnerTaskPanel(scrolled.ScrolledPanel):
 
         # Add line sizers into main sizer
         main_sizer = wx.BoxSizer(wx.VERTICAL)
-        main_sizer.Add(line_new, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, 5)
+        main_sizer.Add(
+            line_new, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, 5
+        )
         main_sizer.Add(fold_panel, 0, wx.GROW | wx.EXPAND | wx.ALL, 5)
         main_sizer.Add(button_next, 0, wx.ALIGN_RIGHT | wx.RIGHT | wx.BOTTOM, 5)
         main_sizer.Fit(self)
@@ -198,7 +208,9 @@ class InnerTaskPanel(scrolled.ScrolledPanel):
 
             surface_options = dialog.GetValue()
 
-            Publisher.sendMessage("Create surface from index", surface_parameters=surface_options)
+            Publisher.sendMessage(
+                "Create surface from index", surface_parameters=surface_options
+            )
         dialog.Destroy()
         if evt:
             evt.Skip()
@@ -309,7 +321,9 @@ class SurfaceTools(wx.Panel):
         self.SetAutoLayout(1)
 
         # Fixed hyperlink items
-        tooltip = _("Automatically select largest disconnected region and create new surface")
+        tooltip = _(
+            "Automatically select largest disconnected region and create new surface"
+        )
         link_largest = hl.HyperLinkCtrl(self, -1, _("Select largest surface"))
         link_largest.SetUnderlines(False, False, False)
         link_largest.SetColours("BLACK", "BLACK", "BLACK")
@@ -318,8 +332,12 @@ class SurfaceTools(wx.Panel):
         link_largest.UpdateLink()
         link_largest.Bind(hl.EVT_HYPERLINK_LEFT, self.OnLinkLargest)
 
-        tooltip = _("Automatically select disconnected regions and create a new surface per region")
-        link_split_all = hl.HyperLinkCtrl(self, -1, _("Split all disconnected surfaces"))
+        tooltip = _(
+            "Automatically select disconnected regions and create a new surface per region"
+        )
+        link_split_all = hl.HyperLinkCtrl(
+            self, -1, _("Split all disconnected surfaces")
+        )
         link_split_all.SetUnderlines(False, False, False)
         link_split_all.SetColours("BLACK", "BLACK", "BLACK")
         link_split_all.SetToolTip(tooltip)
@@ -327,7 +345,9 @@ class SurfaceTools(wx.Panel):
         link_split_all.UpdateLink()
         link_split_all.Bind(hl.EVT_HYPERLINK_LEFT, self.OnLinkSplit)
 
-        tooltip = _("Manually insert seeds of regions of interest and create a new surface")
+        tooltip = _(
+            "Manually insert seeds of regions of interest and create a new surface"
+        )
         link_seeds = hl.HyperLinkCtrl(self, -1, _("Select regions of interest..."))
         link_seeds.SetUnderlines(False, False, False)
         link_seeds.SetColours("BLACK", "BLACK", "BLACK")
@@ -338,19 +358,22 @@ class SurfaceTools(wx.Panel):
 
         # Image(s) for buttons
         img_largest = wx.Image(
-            os.path.join(inv_paths.ICON_DIR, "connectivity_largest.png"), wx.BITMAP_TYPE_PNG
+            os.path.join(inv_paths.ICON_DIR, "connectivity_largest.png"),
+            wx.BITMAP_TYPE_PNG,
         )
         img_largest.Rescale(25, 25)
         bmp_largest = img_largest.ConvertToBitmap()
 
         img_split_all = wx.Image(
-            os.path.join(inv_paths.ICON_DIR, "connectivity_split_all.png"), wx.BITMAP_TYPE_PNG
+            os.path.join(inv_paths.ICON_DIR, "connectivity_split_all.png"),
+            wx.BITMAP_TYPE_PNG,
         )
         img_split_all.Rescale(25, 25)
         bmp_split_all = img_split_all.ConvertToBitmap()
 
         img_seeds = wx.Image(
-            os.path.join(inv_paths.ICON_DIR, "connectivity_manual.png"), wx.BITMAP_TYPE_PNG
+            os.path.join(inv_paths.ICON_DIR, "connectivity_manual.png"),
+            wx.BITMAP_TYPE_PNG,
         )
         img_seeds.Rescale(25, 25)
         bmp_seeds = img_seeds.ConvertToBitmap()
@@ -359,9 +382,15 @@ class SurfaceTools(wx.Panel):
         button_style = pbtn.PB_STYLE_SQUARE | pbtn.PB_STYLE_DEFAULT
         button_style_plus = button_style | pbtn.PB_STYLE_TOGGLE
 
-        button_split = pbtn.PlateButton(self, BTN_SPLIT, "", bmp_split_all, style=button_style)
-        button_largest = pbtn.PlateButton(self, BTN_LARGEST, "", bmp_largest, style=button_style)
-        button_seeds = pbtn.PlateButton(self, BTN_SEEDS, "", bmp_seeds, style=button_style_plus)
+        button_split = pbtn.PlateButton(
+            self, BTN_SPLIT, "", bmp_split_all, style=button_style
+        )
+        button_largest = pbtn.PlateButton(
+            self, BTN_LARGEST, "", bmp_largest, style=button_style
+        )
+        button_seeds = pbtn.PlateButton(
+            self, BTN_SEEDS, "", bmp_seeds, style=button_style_plus
+        )
 
         self.button_seeds = button_seeds
 
@@ -460,7 +489,9 @@ class SurfaceProperties(scrolled.ScrolledPanel):
         ## LINE 1
 
         # Combo related to mask naem
-        combo_surface_name = wx.ComboBox(self, -1, style=wx.CB_DROPDOWN | wx.CB_READONLY)
+        combo_surface_name = wx.ComboBox(
+            self, -1, style=wx.CB_DROPDOWN | wx.CB_READONLY
+        )
         # combo_surface_name.SetSelection(0)
         if sys.platform != "win32":
             combo_surface_name.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
@@ -474,7 +505,9 @@ class SurfaceProperties(scrolled.ScrolledPanel):
 
         # Sizer which represents the first line
         line1 = wx.BoxSizer(wx.HORIZONTAL)
-        line1.Add(combo_surface_name, 1, wx.LEFT | wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT, 7)
+        line1.Add(
+            combo_surface_name, 1, wx.LEFT | wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT, 7
+        )
         line1.Add(button_colour, 0, wx.TOP | wx.RIGHT, 7)
 
         ## LINE 2
@@ -495,7 +528,10 @@ class SurfaceProperties(scrolled.ScrolledPanel):
 
         fixed_sizer = wx.BoxSizer(wx.HORIZONTAL)
         fixed_sizer.AddMany(
-            [(text_transparency, 0, flag_link, 0), (slider_transparency, 1, flag_slider, 4)]
+            [
+                (text_transparency, 0, flag_link, 0),
+                (slider_transparency, 1, flag_slider, 4),
+            ]
         )
 
         # LINE 4
@@ -505,7 +541,12 @@ class SurfaceProperties(scrolled.ScrolledPanel):
         # Add all lines into main sizer
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(line1, 1, wx.GROW | wx.EXPAND | wx.TOP, 10)
-        sizer.Add(fixed_sizer, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP | wx.BOTTOM, 10)
+        sizer.Add(
+            fixed_sizer,
+            0,
+            wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP | wx.BOTTOM,
+            10,
+        )
         # sizer.Add(cb, 0, wx.GROW|wx.EXPAND|wx.RIGHT|wx.LEFT|wx.TOP|wx.BOTTOM, 5)
         sizer.Fit(self)
 
@@ -642,7 +683,9 @@ class QualityAdjustment(wx.Panel):
 
         text_decimate = wx.StaticText(self, -1, _("Decimate resolution:"))
 
-        spin_decimate = InvSpinCtrl(self, -1, value=30, min_value=1, max_value=100, size=(30, 50))
+        spin_decimate = InvSpinCtrl(
+            self, -1, value=30, min_value=1, max_value=100, size=(30, 50)
+        )
         # spin_decimate.Bind(wx.EVT_TEXT, self.OnDecimate)
 
         # LINE 3
@@ -650,7 +693,9 @@ class QualityAdjustment(wx.Panel):
 
         text_smooth = wx.StaticText(self, -1, _("Smooth iterations:"))
 
-        spin_smooth = InvSpinCtrl(self, -1, value=0, min_value=1, max_values=100, size=(30, 50))
+        spin_smooth = InvSpinCtrl(
+            self, -1, value=0, min_value=1, max_values=100, size=(30, 50)
+        )
 
         # MIXED LINE 2 AND 3
         flag_link = wx.EXPAND | wx.GROW | wx.RIGHT | wx.LEFT
@@ -671,7 +716,9 @@ class QualityAdjustment(wx.Panel):
         fixed_sizer.AddGrowableCol(2)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(combo_quality, 1, wx.EXPAND | wx.GROW | wx.LEFT | wx.RIGHT | wx.TOP, 5)
+        sizer.Add(
+            combo_quality, 1, wx.EXPAND | wx.GROW | wx.LEFT | wx.RIGHT | wx.TOP, 5
+        )
         sizer.Add(fixed_sizer, 0, wx.LEFT | wx.RIGHT, 5)
         sizer.Fit(self)
 

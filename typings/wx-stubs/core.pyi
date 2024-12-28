@@ -28,31 +28,17 @@ import os
 import sys as _sys
 import warnings
 from collections import namedtuple
-from typing import Any, Callable, Iterable, Iterator, Literal, NoReturn, Sequence, overload
+from typing import (Any, Callable, Iterable, Iterator, Literal, NoReturn,
+                    Sequence, overload)
 
 import numpy as np
 
-from .type_defs import (
-    ArtClient,
-    ArtID,
-    BitmapType,
-    ClientData,
-    ColourType,
-    Coord,
-    EventType,
-    GBPositionType,
-    GBSpanType,
-    MDIChildFrameBase,
-    PenCap,
-    PenStyle,
-    PolygonFillMode,
-    SizeType,
-    SystemFont,
-    WindowID,
-    WindowVariant,
-)
+from .type_defs import (ArtClient, ArtID, BitmapType, ClientData, ColourType,
+                        Coord, EventType, GBPositionType, GBSpanType,
+                        MDIChildFrameBase, PenCap, PenStyle, PolygonFillMode)
 from .type_defs import PyAssertionError as PyAssertionError
 from .type_defs import PyNoAppError as PyNoAppError
+from .type_defs import SizeType, SystemFont, WindowID, WindowVariant
 from .type_defs import wxAssertionError as wxAssertionError
 
 # Load version numbers from __version__ and some other initialization tasks...
@@ -177,7 +163,6 @@ class CallLater:
         :param kw: keywords to be passed to the callable object
         """
         pass
-
     Restart = Start
 
     def Stop(self):
@@ -234,7 +219,9 @@ FutureCall = deprecated(CallLater, "Use CallLater instead.")
 def GetDefaultPyEncoding():
     return "utf-8"
 
-GetDefaultPyEncoding = deprecated(GetDefaultPyEncoding, msg="wxPython now always uses utf-8")
+GetDefaultPyEncoding = deprecated(
+    GetDefaultPyEncoding, msg="wxPython now always uses utf-8"
+)
 
 def IsMainThread(self):
     """
@@ -2837,7 +2824,9 @@ def DateTimeFromHMS(hour, minute=0, second=0, millisecond=0):
     pass
 
 @wx.deprecated
-def DateTimeFromDMY(day, month, year=DateTime.Inv_Year, hour=0, minute=0, second=0, millisecond=0):
+def DateTimeFromDMY(
+    day, month, year=DateTime.Inv_Year, hour=0, minute=0, second=0, millisecond=0
+):
     """
     Compatibility wrapper for :meth:`DateTime.FromDMY`
     """
@@ -5818,6 +5807,7 @@ class Point:
 
     A wxPoint is a useful data structure for graphics operations.
     """
+
     @overload
     def __init__(
         self,
@@ -5829,6 +5819,7 @@ class Point:
 
         A wxPoint is a useful data structure for graphics operations.
         """
+
     @overload
     def __init__(self, x: int, y: int): ...
     @overload
@@ -5901,7 +5892,6 @@ class Point:
     def __iter__(self) -> Iterator[int]: ...
     def __setitem__(self, idx, val):
         """ """
-
     __safe_for_unpickling__ = True
     IM: _im_Point
 
@@ -5914,6 +5904,7 @@ class Size:
 
     A wxSize is a useful data structure for graphics operations.
     """
+
     @overload
     def __init__(self) -> None:
         """
@@ -5922,6 +5913,7 @@ class Size:
 
         A wxSize is a useful data structure for graphics operations.
         """
+
     @overload
     def __init__(self, width: int, height: int) -> None: ...
     @overload
@@ -5934,6 +5926,7 @@ class Size:
 
         Decreases the size in both x and y directions.
         """
+
     @overload
     def DecBy(self, size: Size) -> None: ...
     @overload
@@ -5950,6 +5943,7 @@ class Size:
 
         Increases the size in both x and y directions.
         """
+
     @overload
     def IncBy(self, size: Size) -> None: ...
     @overload
@@ -6100,6 +6094,7 @@ class Size:
 
     def __reduce__(self):
         """ """
+
     @overload
     def __getitem__(self, idx: int) -> int: ...
     @overload
@@ -6496,7 +6491,6 @@ class Rect:
 
     def __setitem__(self, idx, val):
         """ """
-
     __safe_for_unpickling__ = True
 
 # end of class Rect
@@ -6581,7 +6575,6 @@ class RealPoint:
 
     def __setitem__(self, idx, val):
         """ """
-
     __safe_for_unpickling__ = True
     IM = property(None, None)
 
@@ -6863,7 +6856,6 @@ class Point2D:
 
     def __setitem__(self, idx, val):
         """ """
-
     __safe_for_unpickling__ = True
     IM = property(None, None)
     VectorAngle = property(None, None)
@@ -7156,7 +7148,6 @@ class Rect2D:
 
     def __setitem__(self, idx, val):
         """ """
-
     __safe_for_unpickling__ = True
     Bottom = property(None, None)
     Centre = property(None, None)
@@ -7523,7 +7514,6 @@ class Position:
 
     def __setitem__(self, idx, val):
         """ """
-
     __safe_for_unpickling__ = True
     Col = property(None, None)
     Column = property(None, None)
@@ -7552,6 +7542,7 @@ class Colour(Object):
     Blue (RGB) intensity values and an Alpha value, and is used to
     determine drawing colours.
     """
+
     @overload
     def __init__(self):
         """
@@ -7564,6 +7555,7 @@ class Colour(Object):
         Blue (RGB) intensity values and an Alpha value, and is used to
         determine drawing colours.
         """
+
     @overload
     def __init__(self, red: int, green: int, blue: int, alpha: int = ALPHA_OPAQUE): ...
     @overload
@@ -7758,18 +7750,22 @@ class Colour(Object):
 
         For internal use only.
         """
+
     @overload
     def Get(self, includeAlpha: Literal[False]) -> tuple[int, int, int]: ...
     @overload
     def Get(self, includeAlpha: Literal[True] = True) -> tuple[int, int, int, int]: ...
     @overload
-    def Get(self, includeAlpha: bool = True) -> tuple[int, int, int] | tuple[int, int, int, int]:
+    def Get(
+        self, includeAlpha: bool = True
+    ) -> tuple[int, int, int] | tuple[int, int, int, int]:
         """
         Get(includeAlpha=True) -> (r,g,b) or (r,g,b,a)
 
         Returns the RGB intensity values as a tuple, optionally the alpha
         value as well.
         """
+
     def GetIM(self):
         """
         Returns an immutable representation of the ``wx.Colour`` object, based on ``namedtuple``.
@@ -7796,7 +7792,6 @@ class Colour(Object):
 
     def __setitem__(self, idx, val):
         """ """
-
     __safe_for_unpickling__ = True
 
     def __nonzero__(self):
@@ -8710,7 +8705,9 @@ class Image(Object):
         either a border with the given colour or cropping as necessary.
         """
 
-    def Rotate(self, angle, rotationCentre, interpolating=True, offsetAfterRotation=None):
+    def Rotate(
+        self, angle, rotationCentre, interpolating=True, offsetAfterRotation=None
+    ):
         """
         Rotate(angle, rotationCentre, interpolating=True, offsetAfterRotation=None) -> Image
 
@@ -10393,7 +10390,12 @@ class Bitmap(GDIObject):
 
     @staticmethod
     def FromRGBA(
-        width: int, height: int, red: int = 0, green: int = 0, blue: int = 0, alpha: int = 0
+        width: int,
+        height: int,
+        red: int = 0,
+        green: int = 0,
+        blue: int = 0,
+        alpha: int = 0,
     ) -> Bitmap:
         """
         FromRGBA(width, height, red=0, green=0, blue=0, alpha=0) -> Bitmap
@@ -10760,6 +10762,7 @@ class Icon(GDIObject):
     An icon is a small rectangular bitmap usually used for denoting a
     minimized application.
     """
+
     @overload
     def __init__(self):
         """
@@ -10772,6 +10775,7 @@ class Icon(GDIObject):
         An icon is a small rectangular bitmap usually used for denoting a
         minimized application.
         """
+
     @overload
     def __init__(self, icon: Icon): ...
     @overload
@@ -12193,6 +12197,7 @@ class Pen(GDIObject):
 
     A pen is a drawing tool for drawing outlines.
     """
+
     @overload
     def __init__(self):
         """
@@ -12203,10 +12208,13 @@ class Pen(GDIObject):
 
         A pen is a drawing tool for drawing outlines.
         """
+
     @overload
     def __init__(self, info: PenInfo): ...
     @overload
-    def __init__(self, colour: ColourType, width: int = 1, style: PenStyle = PENSTYLE_SOLID): ...
+    def __init__(
+        self, colour: ColourType, width: int = 1, style: PenStyle = PENSTYLE_SOLID
+    ): ...
     def SetColour(self, *args, **kw):
         """
         SetColour(colour)
@@ -12938,6 +12946,7 @@ class Region(GDIObject):
         def __init__(self, region):
             self._region = region
             self._iterator = wx.RegionIterator(region)
+
         def next(self):
             if not self._iterator:
                 raise StopIteration
@@ -13904,7 +13913,6 @@ class DC(Object):
 
         .. seealso:: :meth:`~wx.DC.GetFullMultiLineTextExtent`
         """
-
     DrawImageLabel = wx.deprecated(DrawLabel, "Use DrawLabel instead.")
 
     def __nonzero__(self):
@@ -13938,7 +13946,6 @@ class DC(Object):
         """
         GetGdkDrawable() -> UIntPtr
         """
-
     GetHDC = wx.deprecated(GetHDC, "Use GetHandle instead.")
 
     GetCGContext = wx.deprecated(GetCGContext, "Use GetHandle instead.")
@@ -15335,6 +15342,7 @@ class GraphicsContext(GraphicsObject):
         """
         Creates a wxGraphicsContext from a wxWindow.
         """
+
     @overload
     @staticmethod
     def Create(windowDC: WindowDC) -> GraphicsContext: ...
@@ -15479,6 +15487,7 @@ class GraphicsContext(GraphicsObject):
 
         Creates a native brush with a linear gradient.
         """
+
     @overload
     def CreateLinearGradientBrush(
         self,
@@ -15512,6 +15521,7 @@ class GraphicsContext(GraphicsObject):
 
         Sets the brush for filling paths.
         """
+
     @overload
     def SetBrush(self, brush: GraphicsBrush) -> None: ...
     def CreatePen(self, *args, **kw):
@@ -15530,20 +15540,25 @@ class GraphicsContext(GraphicsObject):
 
         Sets the pen used for stroking.
         """
+
     @overload
     def SetPen(self, pen: GraphicsPen) -> None: ...
     @overload
-    def DrawBitmap(self, bmp: GraphicsBitmap, x: float, y: float, w: float, h: float) -> None:
+    def DrawBitmap(
+        self, bmp: GraphicsBitmap, x: float, y: float, w: float, h: float
+    ) -> None:
         """
         Draws the bitmap.
 
         In case of a mono bitmap, this is treated as a mask and the current brushed is used for filling.
         """
+
     @overload
     def DrawBitmap(self, bmp: Bitmap, x: float, y: float, w: float, h: float) -> None:
         """
         This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
         """
+
     def DrawEllipse(self, x, y, w, h):
         """
         DrawEllipse(x, y, w, h)
@@ -15603,7 +15618,9 @@ class GraphicsContext(GraphicsObject):
         Creates a native graphics path which is initially empty.
         """
 
-    def FillPath(self, path: GraphicsPath, fillStyle: PolygonFillMode = ODDEVEN_RULE) -> None:
+    def FillPath(
+        self, path: GraphicsPath, fillStyle: PolygonFillMode = ODDEVEN_RULE
+    ) -> None:
         """
         FillPath(path, fillStyle=ODDEVEN_RULE)
 
@@ -15630,6 +15647,7 @@ class GraphicsContext(GraphicsObject):
 
         Strokes along a path with the current pen.
         """
+
     @overload
     def CreateFont(
         self,
@@ -15642,6 +15660,7 @@ class GraphicsContext(GraphicsObject):
 
         Creates a native graphics font from a wxFont and a text colour.
         """
+
     @overload
     def CreateFont(
         self,
@@ -15658,6 +15677,7 @@ class GraphicsContext(GraphicsObject):
 
         Sets the font for drawing text.
         """
+
     @overload
     def SetFont(self, font: GraphicsFont) -> None: ...
     def GetPartialTextExtents(self, text):
@@ -15895,7 +15915,6 @@ class GraphicsContext(GraphicsObject):
         Convert pixel values of the current graphics context to DPI-
         independent pixel values.
         """
-
     DrawRotatedText = wx.deprecated(DrawText, "Use DrawText instead.")
 
     def StrokeLineSegments(self, beginPoint2Ds, endPoint2Ds):
@@ -16047,9 +16066,16 @@ class GraphicsPath(GraphicsObject):
     """
     A wxGraphicsPath is a native representation of a geometric path.
     """
+
     @overload
     def AddArc(
-        self, x: float, y: float, r: float, startAngle: float, endAngle: float, clockwise: bool
+        self,
+        x: float,
+        y: float,
+        r: float,
+        startAngle: float,
+        endAngle: float,
+        clockwise: bool,
     ) -> None:
         """
         AddArc(x, y, r, startAngle, endAngle, clockwise)
@@ -16057,6 +16083,7 @@ class GraphicsPath(GraphicsObject):
 
         Adds an arc of a circle.
         """
+
     @overload
     def AddArc(
         self, c: Point2D, r: float, startAngle: float, endAngle: float, clockwise: bool
@@ -16102,6 +16129,7 @@ class GraphicsPath(GraphicsObject):
 
         Adds a straight line from the current point to (x,y).
         """
+
     @overload
     def AddLineToPoint(
         self, p: tuple[float, float] | list[float] | np.ndarray[Any, Any] | Point2D
@@ -16179,6 +16207,7 @@ class GraphicsPath(GraphicsObject):
 
         Begins a new subpath at (x,y).
         """
+
     @overload
     def MoveToPoint(
         self, p: tuple[float, float] | list[float] | np.ndarray[Any, Any] | Point2D
@@ -16285,7 +16314,9 @@ class GraphicsRenderer(Object):
         Creates a native graphics font from a wxFont and a text colour.
         """
 
-    def CreateLinearGradientBrush(self, x1, y1, x2, y2, stops, matrix=NullGraphicsMatrix):
+    def CreateLinearGradientBrush(
+        self, x1, y1, x2, y2, stops, matrix=NullGraphicsMatrix
+    ):
         """
         CreateLinearGradientBrush(x1, y1, x2, y2, stops, matrix=NullGraphicsMatrix) -> GraphicsBrush
 
@@ -16376,6 +16407,7 @@ class GraphicsRenderer(Object):
 
         Returns Direct2D renderer (MSW and Python3 only).
         """
+
     @overload
     def CreateContext(self, window: Window) -> GraphicsContext: ...
     @overload
@@ -16390,6 +16422,7 @@ class GraphicsRenderer(Object):
 
         Creates a wxGraphicsContext associated with a wxImage.
         """
+
     def CreateContextFromUnknownDC(self, dc: DC) -> GraphicsContext:
         """
         CreateContextFromUnknownDC(dc) -> GraphicsContext
@@ -16760,7 +16793,9 @@ class RendererNative:
         Draw a progress bar in the specified rectangle.
         """
 
-    def DrawHeaderButton(self, win, dc, rect, flags=0, sortArrow=HDR_SORT_ICON_NONE, params=None):
+    def DrawHeaderButton(
+        self, win, dc, rect, flags=0, sortArrow=HDR_SORT_ICON_NONE, params=None
+    ):
         """
         DrawHeaderButton(win, dc, rect, flags=0, sortArrow=HDR_SORT_ICON_NONE, params=None) -> int
 
@@ -16801,7 +16836,11 @@ class RendererNative:
         """
 
     def DrawPushButton(
-        self, win: Window, dc: DC, rect: tuple[int, int, int, int] | Rect, flags: int = 0
+        self,
+        win: Window,
+        dc: DC,
+        rect: tuple[int, int, int, int] | Rect,
+        flags: int = 0,
     ) -> None:
         """
         DrawPushButton(win, dc, rect, flags=0)
@@ -17009,7 +17048,9 @@ class DelegateRendererNative(RendererNative):
         all of them.
         """
 
-    def DrawHeaderButton(self, win, dc, rect, flags=0, sortArrow=HDR_SORT_ICON_NONE, params=None):
+    def DrawHeaderButton(
+        self, win, dc, rect, flags=0, sortArrow=HDR_SORT_ICON_NONE, params=None
+    ):
         """
         DrawHeaderButton(win, dc, rect, flags=0, sortArrow=HDR_SORT_ICON_NONE, params=None) -> int
 
@@ -19641,23 +19682,26 @@ class _wxPyDelayedInitWrapper:
         self._args = args
         self._kwargs = kwargs
         self._instance = None
+
     def _checkInstance(self):
         if self._instance is None:
             if wx.GetApp():
                 self._instance = self._initfunc(*self._args, **self._kwargs)
+
     def __getattr__(self, name):
         self._checkInstance()
         return getattr(self._instance, name)
+
     def __repr__(self):
         self._checkInstance()
         return repr(self._instance)
-
     # context manager methods
     def __enter__(self):
         self._checkInstance()
         if not self.Open():
             raise RuntimeError("Unable to open clipboard.")
         return self
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.Close()
 
@@ -20211,7 +20255,9 @@ class KeyboardState:
     Provides methods for testing the state of the keyboard modifier keys.
     """
 
-    def __init__(self, controlDown=False, shiftDown=False, altDown=False, metaDown=False):
+    def __init__(
+        self, controlDown=False, shiftDown=False, altDown=False, metaDown=False
+    ):
         """
         KeyboardState(controlDown=False, shiftDown=False, altDown=False, metaDown=False)
 
@@ -21476,7 +21522,9 @@ class ActivateEvent(Event):
     Reason_Mouse = 0
     Reason_Unknown = 0
 
-    def __init__(self, eventType=wxEVT_NULL, active=True, id=0, ActivationReason=Reason_Unknown):
+    def __init__(
+        self, eventType=wxEVT_NULL, active=True, id=0, ActivationReason=Reason_Unknown
+    ):
         """
         ActivateEvent(eventType=wxEVT_NULL, active=True, id=0, ActivationReason=Reason_Unknown)
 
@@ -21824,7 +21872,9 @@ class HelpEvent(CommandEvent):
     Origin_Keyboard = 0
     Origin_HelpButton = 0
 
-    def __init__(self, type=wxEVT_NULL, winid=0, pt=DefaultPosition, origin=Origin_Unknown):
+    def __init__(
+        self, type=wxEVT_NULL, winid=0, pt=DefaultPosition, origin=Origin_Unknown
+    ):
         """
         HelpEvent(type=wxEVT_NULL, winid=0, pt=DefaultPosition, origin=Origin_Unknown)
 
@@ -24539,6 +24589,7 @@ class Sizer(Object):
 
         Set an item's minimum size by window, sizer, or position.
         """
+
     @overload
     def Add(self, window: Window, flags: SizerFlags) -> SizerItem:
         """
@@ -24554,6 +24605,7 @@ class Sizer(Object):
 
         Appends a child to the sizer.
         """
+
     @overload
     def Add(
         self,
@@ -24925,7 +24977,6 @@ class Sizer(Object):
         """
         A Python convenience method that allows Sizers to act as iterables that will yield their wx.SizerItems.
         """
-
     __bool__ = __nonzero__
     Children = property(None, None)
     ContainingWindow = property(None, None)
@@ -25002,6 +25053,7 @@ class StaticBoxSizer(BoxSizer):
     wxStaticBoxSizer is a sizer derived from wxBoxSizer but adds a static
     box around the sizer.
     """
+
     @overload
     def __init__(self, box: StaticBox, orient: int = HORIZONTAL):
         """
@@ -25011,6 +25063,7 @@ class StaticBoxSizer(BoxSizer):
         wxStaticBoxSizer is a sizer derived from wxBoxSizer but adds a static
         box around the sizer.
         """
+
     @overload
     def __init__(self, orient: int, parent: Window, label: str = ""): ...
     def GetStaticBox(self):
@@ -25174,6 +25227,7 @@ class FlexGridSizer(GridSizer):
     rows or all columns are not necessarily the same height or width as in
     the wxGridSizer.
     """
+
     @overload
     def __init__(self, cols: int, vgap: int, hgap: int):
         """
@@ -25188,6 +25242,7 @@ class FlexGridSizer(GridSizer):
         rows or all columns are not necessarily the same height or width as in
         the wxGridSizer.
         """
+
     @overload
     def __init__(self, cols: int, gap: SizeType = Size(0, 0)): ...
     @overload
@@ -25494,7 +25549,6 @@ class GBPosition:
 
     def __setitem__(self, idx, val):
         """ """
-
     __safe_for_unpickling__ = True
     Row = property(None, None)
     Col = property(None, None)
@@ -25597,7 +25651,6 @@ class GBSpan:
 
     def __setitem__(self, idx, val):
         """ """
-
     __safe_for_unpickling__ = True
     Rowspan = property(None, None)
     Colspan = property(None, None)
@@ -25709,6 +25762,7 @@ class GridBagSizer(FlexGridSizer):
         allowed using wxGBPosition, and items can optionally span more than
         one row and/or column using wxGBSpan.
         """
+
     @overload
     def Add(
         self,
@@ -25728,6 +25782,7 @@ class GridBagSizer(FlexGridSizer):
 
         Adds the given item to the given position.
         """
+
     @overload
     def Add(
         self,
@@ -25875,7 +25930,6 @@ class GridBagSizer(FlexGridSizer):
 
         Set the size used for cells in the grid with no item.
         """
-
     CheckForIntersectionPos = wx.deprecated(
         CheckForIntersection, "Use CheckForIntersection instead."
     )
@@ -26378,6 +26432,7 @@ class GUIEventLoop(EventLoopBase):
 @wx.deprecatedMsg("Use GUIEventLoop instead.")
 class EventLoop(GUIEventLoop):
     """A class using the old name for compatibility."""
+
     def __init__(self):
         GUIEventLoop.__init__(self)
 
@@ -27121,7 +27176,9 @@ class App(PyApp):
 
     outputWindowClass = PyOnDemandOutputWindow
 
-    def __init__(self, redirect=False, filename=None, useBestVisual=False, clearSigInt=True):
+    def __init__(
+        self, redirect=False, filename=None, useBestVisual=False, clearSigInt=True
+    ):
         """
         Construct a ``wx.App`` object.
 
@@ -27392,6 +27449,7 @@ EVT_TIMER = wx.PyEventBinder(wxEVT_TIMER)
 
 class PyTimer(Timer):
     """This timer class is passed the callable object to be called when the timer expires."""
+
     def __init__(self, notify):
         Timer.__init__(self)
         self.notify = notify
@@ -28132,8 +28190,11 @@ class Window(WindowBase):
         Sets the minimum size of the window, to indicate to the sizer layout
         mechanism that this is the minimum required size.
         """
+
     @overload
-    def SetSize(self, x: int, y: int, width: int, height: int, sizeFlags: int = SIZE_AUTO) -> None:
+    def SetSize(
+        self, x: int, y: int, width: int, height: int, sizeFlags: int = SIZE_AUTO
+    ) -> None:
         """
         SetSize(x, y, width, height, sizeFlags=SIZE_AUTO)
         SetSize(rect)
@@ -28142,6 +28203,7 @@ class Window(WindowBase):
 
         Sets the size of the window in pixels.
         """
+
     @overload
     def SetSize(self, rect: Rect) -> None: ...
     @overload
@@ -28888,6 +28950,7 @@ class Window(WindowBase):
 
         Get the text of the associated tooltip or empty string if none.
         """
+
     @overload
     def SetToolTip(self, tipString: str) -> None:
         """
@@ -28896,6 +28959,7 @@ class Window(WindowBase):
 
         Attach a tooltip to the window.
         """
+
     @overload
     def SetToolTip(self, tip: ToolTip) -> None: ...
     def UnsetToolTip(self):
@@ -29448,7 +29512,13 @@ class Window(WindowBase):
         """
 
     def Create(
-        self, parent, id=ID_ANY, pos=DefaultPosition, size=DefaultSize, style=0, name=PanelNameStr
+        self,
+        parent,
+        id=ID_ANY,
+        pos=DefaultPosition,
+        size=DefaultSize,
+        style=0,
+        name=PanelNameStr,
     ):
         """
         Create(parent, id=ID_ANY, pos=DefaultPosition, size=DefaultSize, style=0, name=PanelNameStr) -> bool
@@ -29502,7 +29572,6 @@ class Window(WindowBase):
         """
         SetDimensions(x, y, width, height, sizeFlags=SIZE_AUTO)
         """
-
     SetDimensions = wx.deprecated(SetDimensions, "Use SetSize instead.")
 
     def __nonzero__(self):
@@ -29513,7 +29582,6 @@ class Window(WindowBase):
             if theWindow:
                 doSomething()
         """
-
     __bool__ = __nonzero__
 
     def DestroyLater(self):
@@ -29691,11 +29759,14 @@ class FrozenWindow:
     that will freeze the given window for the duration of the
     with block.
     """
+
     def __init__(self, window):
         self._win = window
+
     def __enter__(self):
         self._win.Freeze()
         return self
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         self._win.Thaw()
 
@@ -29864,6 +29935,7 @@ class Panel(Window):
 
     A panel is a window on which controls are placed.
     """
+
     @overload
     def __init__(self):
         """
@@ -29872,6 +29944,7 @@ class Panel(Window):
 
         A panel is a window on which controls are placed.
         """
+
     @overload
     def __init__(
         self,
@@ -30306,7 +30379,11 @@ class Menu(EvtHandler):
 
     @overload
     def Append(
-        self, id: int | WindowIDRef, item: str = "", helpString: str = "", kind: int = ITEM_NORMAL
+        self,
+        id: int | WindowIDRef,
+        item: str = "",
+        helpString: str = "",
+        kind: int = ITEM_NORMAL,
     ) -> MenuItem:
         """
         Append(id, item=EmptyString, helpString=EmptyString, kind=ITEM_NORMAL) -> MenuItem
@@ -30315,6 +30392,7 @@ class Menu(EvtHandler):
 
         Adds a menu item.
         """
+
     @overload
     def Append(
         self, id: int | WindowIDRef, item: str, subMenu: Menu, helpString: str = ""
@@ -31040,7 +31118,14 @@ class Scrolled:
         """
 
     def SetScrollbars(
-        self, pixelsPerUnitX, pixelsPerUnitY, noUnitsX, noUnitsY, xPos=0, yPos=0, noRefresh=False
+        self,
+        pixelsPerUnitX,
+        pixelsPerUnitY,
+        noUnitsX,
+        noUnitsY,
+        xPos=0,
+        yPos=0,
+        noRefresh=False,
     ):
         """
         SetScrollbars(pixelsPerUnitX, pixelsPerUnitY, noUnitsX, noUnitsY, xPos=0, yPos=0, noRefresh=False)
@@ -31760,7 +31845,13 @@ class VScrolledWindow(Panel, VarVScrollHelper):
         """
 
     def Create(
-        self, parent, id=ID_ANY, pos=DefaultPosition, size=DefaultSize, style=0, name=PanelNameStr
+        self,
+        parent,
+        id=ID_ANY,
+        pos=DefaultPosition,
+        size=DefaultSize,
+        style=0,
+        name=PanelNameStr,
     ):
         """
         Create(parent, id=ID_ANY, pos=DefaultPosition, size=DefaultSize, style=0, name=PanelNameStr) -> bool
@@ -31867,7 +31958,13 @@ class HScrolledWindow(Panel, VarHScrollHelper):
         """
 
     def Create(
-        self, parent, id=ID_ANY, pos=DefaultPosition, size=DefaultSize, style=0, name=PanelNameStr
+        self,
+        parent,
+        id=ID_ANY,
+        pos=DefaultPosition,
+        size=DefaultSize,
+        style=0,
+        name=PanelNameStr,
     ):
         """
         Create(parent, id=ID_ANY, pos=DefaultPosition, size=DefaultSize, style=0, name=PanelNameStr) -> bool
@@ -31903,7 +32000,13 @@ class HVScrolledWindow(Panel, VarHVScrollHelper):
         """
 
     def Create(
-        self, parent, id=ID_ANY, pos=DefaultPosition, size=DefaultSize, style=0, name=PanelNameStr
+        self,
+        parent,
+        id=ID_ANY,
+        pos=DefaultPosition,
+        size=DefaultSize,
+        style=0,
+        name=PanelNameStr,
     ):
         """
         Create(parent, id=ID_ANY, pos=DefaultPosition, size=DefaultSize, style=0, name=PanelNameStr) -> bool
@@ -32162,6 +32265,7 @@ class ItemContainer(ItemContainerImmutable):
     contain several items such as wxListBox, wxCheckListBox, wxComboBox or
     wxChoice.
     """
+
     @overload
     def Append(self, item: str) -> int:
         """
@@ -32171,6 +32275,7 @@ class ItemContainer(ItemContainerImmutable):
 
         Appends item into the control.
         """
+
     @overload
     def Append(self, item: str, clientData: ClientData) -> int: ...
     @overload
@@ -32192,6 +32297,7 @@ class ItemContainer(ItemContainerImmutable):
         explicitly by using Delete() or implicitly when the control itself is
         destroyed).
         """
+
     @overload
     def Insert(self, item: str, pos: int) -> int:
         """
@@ -32201,6 +32307,7 @@ class ItemContainer(ItemContainerImmutable):
 
         Inserts item into the control.
         """
+
     @overload
     def Insert(self, item: str, pos: int, clientData: ClientData) -> int: ...
     @overload
@@ -32319,6 +32426,7 @@ class StaticBitmap(Control):
 
         A static bitmap control displays a bitmap.
         """
+
     @overload
     def __init__(
         self,
@@ -32502,6 +32610,7 @@ class StaticText(Control):
 
     A static text control displays one or more lines of read-only text.
     """
+
     @overload
     def __init__(self):
         """
@@ -32510,6 +32619,7 @@ class StaticText(Control):
 
         A static text control displays one or more lines of read-only text.
         """
+
     @overload
     def __init__(
         self,
@@ -33103,6 +33213,7 @@ class Button(AnyButton):
     A button is a control that contains a text string, and is one of the
     most common elements of a GUI.
     """
+
     @overload
     def __init__(self):
         """
@@ -33112,6 +33223,7 @@ class Button(AnyButton):
         A button is a control that contains a text string, and is one of the
         most common elements of a GUI.
         """
+
     @overload
     def __init__(
         self,
@@ -33496,7 +33608,13 @@ class BookCtrlBase(Control, WithImages):
         """
 
     def Create(
-        self, parent, winid, pos=DefaultPosition, size=DefaultSize, style=0, name=EmptyString
+        self,
+        parent,
+        winid,
+        pos=DefaultPosition,
+        size=DefaultSize,
+        style=0,
+        name=EmptyString,
     ):
         """
         Create(parent, winid, pos=DefaultPosition, size=DefaultSize, style=0, name=EmptyString) -> bool
@@ -35535,6 +35653,7 @@ class TextCtrl(Control, TextEntry):
 
     A text control allows text to be displayed and edited.
     """
+
     @overload
     def __init__(self):
         """
@@ -35543,6 +35662,7 @@ class TextCtrl(Control, TextEntry):
 
         A text control allows text to be displayed and edited.
         """
+
     @overload
     def __init__(
         self,
@@ -35882,6 +36002,7 @@ class ComboBox(Control, ItemContainer, TextEntry):
 
     A combobox is like a combination of an edit control and a listbox.
     """
+
     @overload
     def __init__(self):
         """
@@ -35890,6 +36011,7 @@ class ComboBox(Control, ItemContainer, TextEntry):
 
         A combobox is like a combination of an edit control and a listbox.
         """
+
     @overload
     def __init__(
         self,
@@ -35948,6 +36070,7 @@ class ComboBox(Control, ItemContainer, TextEntry):
 
         Returns true if the text of the combobox is empty.
         """
+
     @overload
     def SetSelection(self, from_: int, to_: int) -> None:
         """
@@ -35956,6 +36079,7 @@ class ComboBox(Control, ItemContainer, TextEntry):
 
         Same as wxTextEntry::SetSelection().
         """
+
     @overload
     def SetSelection(self, n: int) -> None: ...
     def SetTextSelection(self, from_, to_):
@@ -36041,7 +36165,6 @@ class ComboBox(Control, ItemContainer, TextEntry):
         """
         GetClassDefaultAttributes(variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
         """
-
     SetMark = wx.deprecated(SetTextSelection, "Use SetTextSelection instead.")
 
     GetMark = wx.deprecated(GetTextSelection, "Use GetTextSelection instead.")
@@ -36071,6 +36194,7 @@ class CheckBox(Control):
     A checkbox is a labelled box which by default is either on (checkmark
     is visible) or off (no checkmark).
     """
+
     @overload
     def __init__(self):
         """
@@ -36080,6 +36204,7 @@ class CheckBox(Control):
         A checkbox is a labelled box which by default is either on (checkmark
         is visible) or off (no checkmark).
         """
+
     @overload
     def __init__(
         self,
@@ -36498,6 +36623,7 @@ class Gauge(Control):
     A gauge is a horizontal or vertical bar which shows a quantity (often
     time).
     """
+
     @overload
     def __init__(self):
         """
@@ -36507,6 +36633,7 @@ class Gauge(Control):
         A gauge is a horizontal or vertical bar which shows a quantity (often
         time).
         """
+
     @overload
     def __init__(
         self,
@@ -37844,6 +37971,7 @@ class RadioBox(Control, ItemContainerImmutable):
         A radio box item is used to select one of number of mutually exclusive
         choices.
         """
+
     @overload
     def __init__(
         self,
@@ -38039,6 +38167,7 @@ class RadioButton(Control):
     A radio button item is a button which usually denotes one of several
     mutually exclusive options.
     """
+
     @overload
     def __init__(self):
         """
@@ -38048,6 +38177,7 @@ class RadioButton(Control):
         A radio button item is a button which usually denotes one of several
         mutually exclusive options.
         """
+
     @overload
     def __init__(
         self,
@@ -38160,6 +38290,7 @@ class Slider(Control):
     A slider is a control with a handle which can be pulled back and forth
     to change the value.
     """
+
     @overload
     def __init__(self):
         """
@@ -38169,6 +38300,7 @@ class Slider(Control):
         A slider is a control with a handle which can be pulled back and forth
         to change the value.
         """
+
     @overload
     def __init__(
         self,
@@ -39666,7 +39798,9 @@ class ToolBar(Control):
         GetClassDefaultAttributes(variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
         """
 
-    def AddSimpleTool(self, toolId, bitmap, shortHelpString="", longHelpString="", isToggle=0):
+    def AddSimpleTool(
+        self, toolId, bitmap, shortHelpString="", longHelpString="", isToggle=0
+    ):
         """
         Old style method to add a tool to the toolbar.
         """
@@ -40925,7 +41059,6 @@ class ListCtrl(Control):
         Determines which item (if any) is at the specified point, giving
         details in flags.
         """
-
     FindItemData = wx.deprecated(FindItem, "Use FindItem instead.")
 
     FindItemAtPos = wx.deprecated(FindItem, "Use FindItem instead.")
@@ -42114,7 +42247,6 @@ class TreeCtrl(Control, WithImages):
         Can be used to disable the system theme of controls using it by
         default.
         """
-
     GetItemPyData = wx.deprecated(GetItemData, "Use GetItemData instead.")
     SetItemPyData = wx.deprecated(SetItemData, "Use SetItemData instead.")
     GetPyData = wx.deprecated(GetItemData, "Use GetItemData instead.")
@@ -42876,8 +43008,12 @@ class FontPickerEvent(CommandEvent):
 # end of class FontPickerEvent
 
 EVT_COLOURPICKER_CHANGED = wx.PyEventBinder(wxEVT_COLOURPICKER_CHANGED, 1)
-EVT_COLOURPICKER_CURRENT_CHANGED = wx.PyEventBinder(wxEVT_COLOURPICKER_CURRENT_CHANGED, 1)
-EVT_COLOURPICKER_DIALOG_CANCELLED = wx.PyEventBinder(wxEVT_COLOURPICKER_DIALOG_CANCELLED, 1)
+EVT_COLOURPICKER_CURRENT_CHANGED = wx.PyEventBinder(
+    wxEVT_COLOURPICKER_CURRENT_CHANGED, 1
+)
+EVT_COLOURPICKER_DIALOG_CANCELLED = wx.PyEventBinder(
+    wxEVT_COLOURPICKER_DIALOG_CANCELLED, 1
+)
 
 # deprecated wxEVT alias
 wxEVT_COMMAND_COLOURPICKER_CHANGED = wxEVT_COLOURPICKER_CHANGED
@@ -42998,7 +43134,9 @@ if "wxMac" in wx.PlatformInfo:
                     fg = BestLabelColour(bg)
                     dc.SetTextForeground(fg)
                     dc.DrawText(
-                        bg.GetAsString(wx.C2S_HTML_SYNTAX), (width - w) / 2, (height - h) / 2
+                        bg.GetAsString(wx.C2S_HTML_SYNTAX),
+                        (width - w) / 2,
+                        (height - h) / 2,
                     )
                 return bmp
 
@@ -43955,7 +44093,13 @@ class Choicebook(BookCtrlBase):
         """
 
     def Create(
-        self, parent, id=ID_ANY, pos=DefaultPosition, size=DefaultSize, style=0, name=EmptyString
+        self,
+        parent,
+        id=ID_ANY,
+        pos=DefaultPosition,
+        size=DefaultSize,
+        style=0,
+        name=EmptyString,
     ):
         """
         Create(parent, id=ID_ANY, pos=DefaultPosition, size=DefaultSize, style=0, name=EmptyString) -> bool
@@ -44017,7 +44161,13 @@ class Listbook(BookCtrlBase):
         """
 
     def Create(
-        self, parent, id=ID_ANY, pos=DefaultPosition, size=DefaultSize, style=0, name=EmptyString
+        self,
+        parent,
+        id=ID_ANY,
+        pos=DefaultPosition,
+        size=DefaultSize,
+        style=0,
+        name=EmptyString,
     ):
         """
         Create(parent, id=ID_ANY, pos=DefaultPosition, size=DefaultSize, style=0, name=EmptyString) -> bool
@@ -44075,7 +44225,13 @@ class Toolbook(BookCtrlBase):
         """
 
     def Create(
-        self, parent, id=ID_ANY, pos=DefaultPosition, size=DefaultSize, style=0, name=EmptyString
+        self,
+        parent,
+        id=ID_ANY,
+        pos=DefaultPosition,
+        size=DefaultSize,
+        style=0,
+        name=EmptyString,
     ):
         """
         Create(parent, id=ID_ANY, pos=DefaultPosition, size=DefaultSize, style=0, name=EmptyString) -> bool
@@ -44273,7 +44429,13 @@ class Simplebook(BookCtrlBase):
         """
 
     def Create(
-        self, parent, id=ID_ANY, pos=DefaultPosition, size=DefaultSize, style=0, name=EmptyString
+        self,
+        parent,
+        id=ID_ANY,
+        pos=DefaultPosition,
+        size=DefaultSize,
+        style=0,
+        name=EmptyString,
     ):
         """
         Create(parent, id=ID_ANY, pos=DefaultPosition, size=DefaultSize, style=0, name=EmptyString) -> bool
@@ -45138,6 +45300,7 @@ class Dialog(TopLevelWindow):
     A dialog box is a window with a title bar and sometimes a system menu,
     which can be moved around the screen.
     """
+
     @overload
     def __init__(self):
         """
@@ -45147,6 +45310,7 @@ class Dialog(TopLevelWindow):
         A dialog box is a window with a title bar and sometimes a system menu,
         which can be moved around the screen.
         """
+
     @overload
     def __init__(
         self,
@@ -46440,7 +46604,9 @@ class Frame(TopLevelWindow):
         Used in two-step frame construction.
         """
 
-    def CreateStatusBar(self, number=1, style=STB_DEFAULT_STYLE, id=0, name=StatusBarNameStr):
+    def CreateStatusBar(
+        self, number=1, style=STB_DEFAULT_STYLE, id=0, name=StatusBarNameStr
+    ):
         """
         CreateStatusBar(number=1, style=STB_DEFAULT_STYLE, id=0, name=StatusBarNameStr) -> StatusBar
 
@@ -46768,7 +46934,12 @@ class GenericMessageDialog(Dialog):
     """
 
     def __init__(
-        self, parent, message, caption=MessageBoxCaptionStr, style=OK | CENTRE, pos=DefaultPosition
+        self,
+        parent,
+        message,
+        caption=MessageBoxCaptionStr,
+        style=OK | CENTRE,
+        pos=DefaultPosition,
     ):
         """
         GenericMessageDialog(parent, message, caption=MessageBoxCaptionStr, style=OK|CENTRE, pos=DefaultPosition)
@@ -46933,7 +47104,9 @@ class RichMessageDialog(GenericMessageDialog):
     Extension of wxMessageDialog with additional functionality.
     """
 
-    def __init__(self, parent, message, caption=MessageBoxCaptionStr, style=OK | CENTRE):
+    def __init__(
+        self, parent, message, caption=MessageBoxCaptionStr, style=OK | CENTRE
+    ):
         """
         RichMessageDialog(parent, message, caption=MessageBoxCaptionStr, style=OK|CENTRE)
 
@@ -47044,7 +47217,14 @@ class GenericProgressDialog(Dialog):
     progress bar.
     """
 
-    def __init__(self, title, message, maximum=100, parent=None, style=PD_AUTO_HIDE | PD_APP_MODAL):
+    def __init__(
+        self,
+        title,
+        message,
+        maximum=100,
+        parent=None,
+        style=PD_AUTO_HIDE | PD_APP_MODAL,
+    ):
         """
         GenericProgressDialog(title, message, maximum=100, parent=None, style=PD_AUTO_HIDE|PD_APP_MODAL)
 
@@ -47625,7 +47805,13 @@ class SingleChoiceDialog(Dialog):
     """
 
     def __init__(
-        self, parent, message, caption, choices, style=CHOICEDLG_STYLE, pos=DefaultPosition
+        self,
+        parent,
+        message,
+        caption,
+        choices,
+        style=CHOICEDLG_STYLE,
+        pos=DefaultPosition,
     ):
         """
         PySingleChoiceDialog(parent, message, caption, choices, style=CHOICEDLG_STYLE, pos=DefaultPosition)
@@ -48555,6 +48741,7 @@ class TextEntryDialog(Dialog):
     This class represents a dialog that requests a one-line text string
     from the user.
     """
+
     @overload
     def __init__(self):
         """
@@ -48564,6 +48751,7 @@ class TextEntryDialog(Dialog):
         This class represents a dialog that requests a one-line text string
         from the user.
         """
+
     @overload
     def __init__(
         self,
@@ -48720,7 +48908,9 @@ class NumberEntryDialog(Dialog):
         user.
         """
 
-    def Create(self, parent, message, prompt, caption, value, min, max, pos=DefaultPosition):
+    def Create(
+        self, parent, message, prompt, caption, value, min, max, pos=DefaultPosition
+    ):
         """
         Create(parent, message, prompt, caption, value, min, max, pos=DefaultPosition) -> bool
         """
@@ -49304,7 +49494,14 @@ class VersionInfo:
     """
 
     def __init__(
-        self, name="", major=0, minor=0, micro=0, revision=0, description="", copyright=""
+        self,
+        name="",
+        major=0,
+        minor=0,
+        micro=0,
+        revision=0,
+        description="",
+        copyright="",
     ):
         """
         VersionInfo(name="", major=0, minor=0, micro=0, revision=0, description="", copyright="")
@@ -49848,7 +50045,9 @@ class HelpControllerBase(Object):
         If the viewer is running, quits it by disconnecting.
         """
 
-    def SetFrameParameters(self, titleFormat, size, pos=DefaultPosition, newFrameEachTime=False):
+    def SetFrameParameters(
+        self, titleFormat, size, pos=DefaultPosition, newFrameEachTime=False
+    ):
         """
         SetFrameParameters(titleFormat, size, pos=DefaultPosition, newFrameEachTime=False)
 
@@ -50029,7 +50228,9 @@ class ContextHelpButton(BitmapButton):
     when pressed, puts the application into context-help mode.
     """
 
-    def __init__(self, parent, id=ID_CONTEXT_HELP, pos=DefaultPosition, size=DefaultSize, style=0):
+    def __init__(
+        self, parent, id=ID_CONTEXT_HELP, pos=DefaultPosition, size=DefaultSize, style=0
+    ):
         """
         ContextHelpButton(parent, id=ID_CONTEXT_HELP, pos=DefaultPosition, size=DefaultSize, style=0)
 
@@ -50388,7 +50589,9 @@ class ArtProvider(Object):
 
     @staticmethod
     def GetBitmap(
-        id: ArtID, client: ArtClient = ART_OTHER, size: SizeType | tuple[float, float] = DefaultSize
+        id: ArtID,
+        client: ArtClient = ART_OTHER,
+        size: SizeType | tuple[float, float] = DefaultSize,
     ) -> Bitmap:
         """
         GetBitmap(id, client=ART_OTHER, size=DefaultSize) -> Bitmap
@@ -50724,7 +50927,14 @@ class PreviewControlBar(Panel):
     """
 
     def __init__(
-        self, preview, buttons, parent, pos=DefaultPosition, size=DefaultSize, style=0, name="panel"
+        self,
+        preview,
+        buttons,
+        parent,
+        pos=DefaultPosition,
+        size=DefaultSize,
+        style=0,
+        name="panel",
     ):
         """
         PreviewControlBar(preview, buttons, parent, pos=DefaultPosition, size=DefaultSize, style=0, name="panel")
@@ -50780,7 +50990,13 @@ class PreviewCanvas(ScrolledWindow):
     """
 
     def __init__(
-        self, preview, parent, pos=DefaultPosition, size=DefaultSize, style=0, name="canvas"
+        self,
+        preview,
+        parent,
+        pos=DefaultPosition,
+        size=DefaultSize,
+        style=0,
+        name="canvas",
     ):
         """
         PreviewCanvas(preview, parent, pos=DefaultPosition, size=DefaultSize, style=0, name="canvas")
@@ -51018,7 +51234,6 @@ class PrintPreview(Object):
         """
         __bool__() -> int
         """
-
     Ok = wx.deprecated(IsOk, "Use IsOk instead.")
     Canvas = property(None, None)
     CurrentPage = property(None, None)

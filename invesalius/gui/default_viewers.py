@@ -32,12 +32,10 @@ import invesalius.project as project
 import invesalius.session as ses
 from invesalius import inv_paths
 from invesalius.constants import ID_TO_BMP
-from invesalius.gui.widgets.clut_raycasting import (
-    EVT_CLUT_CURVE_SELECT,
-    EVT_CLUT_CURVE_WL_CHANGE,
-    EVT_CLUT_POINT_RELEASE,
-    CLUTRaycastingWidget,
-)
+from invesalius.gui.widgets.clut_raycasting import (EVT_CLUT_CURVE_SELECT,
+                                                    EVT_CLUT_CURVE_WL_CHANGE,
+                                                    EVT_CLUT_POINT_RELEASE,
+                                                    CLUTRaycastingWidget)
 from invesalius.i18n import tr as _
 from invesalius.pubsub import pub as Publisher
 
@@ -216,7 +214,11 @@ class VolumeInteraction(wx.Panel):
 
         p1 = volume_viewer.Viewer(self)
         s1 = (
-            wx.aui.AuiPaneInfo().Centre().CloseButton(False).MaximizeButton(False).CaptionVisible(0)
+            wx.aui.AuiPaneInfo()
+            .Centre()
+            .CloseButton(False)
+            .MaximizeButton(False)
+            .CaptionVisible(0)
         )
         self.s1 = s1
 
@@ -336,7 +338,8 @@ class VolumeToolPanel(wx.Panel):
 
         # VOLUME RAYCASTING BUTTON
         BMP_RAYCASTING = wx.Bitmap(
-            str(inv_paths.ICON_DIR.joinpath("volume_raycasting.png")), wx.BITMAP_TYPE_PNG
+            str(inv_paths.ICON_DIR.joinpath("volume_raycasting.png")),
+            wx.BITMAP_TYPE_PNG,
         )
         BMP_SLICE_PLANE = wx.Bitmap(
             str(inv_paths.ICON_DIR.joinpath("slice_plane.png")), wx.BITMAP_TYPE_PNG
@@ -586,11 +589,15 @@ class VolumeToolPanel(wx.Panel):
             #        if i is not item:
             #            i.Check(0)
             if not TOOL_STATE[id]:
-                Publisher.sendMessage("Enable raycasting tool", tool_name=ID_TO_TOOL[id], flag=1)
+                Publisher.sendMessage(
+                    "Enable raycasting tool", tool_name=ID_TO_TOOL[id], flag=1
+                )
                 TOOL_STATE[id] = True
                 item.Check(1)
             else:
-                Publisher.sendMessage("Enable raycasting tool", tool_name=ID_TO_TOOL[id], flag=0)
+                Publisher.sendMessage(
+                    "Enable raycasting tool", tool_name=ID_TO_TOOL[id], flag=0
+                )
                 TOOL_STATE[id] = False
                 item.Check(0)
 

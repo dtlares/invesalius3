@@ -18,20 +18,17 @@
 # --------------------------------------------------------------------------
 import os
 import sys
-from typing import TYPE_CHECKING, Any, Callable, List, Optional, Sequence, SupportsInt, Tuple, Union
+from typing import (TYPE_CHECKING, Any, Callable, List, Optional, Sequence,
+                    SupportsInt, Tuple, Union)
 
 import wx
 from vtkmodules.vtkCommonMath import vtkMatrix4x4
 from vtkmodules.vtkIOGeometry import vtkOBJReader, vtkSTLReader
 from vtkmodules.vtkIOPLY import vtkPLYReader
 from vtkmodules.vtkIOXML import vtkXMLPolyDataReader
-from vtkmodules.vtkRenderingCore import (
-    vtkActor2D,
-    vtkCoordinate,
-    vtkTextActor,
-    vtkTextMapper,
-    vtkTextProperty,
-)
+from vtkmodules.vtkRenderingCore import (vtkActor2D, vtkCoordinate,
+                                         vtkTextActor, vtkTextMapper,
+                                         vtkTextProperty)
 
 import invesalius.constants as const
 import invesalius.utils as utils
@@ -66,7 +63,9 @@ class ProgressDialog:
     def Cancel(self, evt: wx.CommandEvent) -> None:
         Publisher.sendMessage("Cancel DICOM load")
 
-    def Update(self, value: SupportsInt, message: str) -> Union[Tuple[bool, bool], bool]:
+    def Update(
+        self, value: SupportsInt, message: str
+    ) -> Union[Tuple[bool, bool], bool]:
         if int(value) != self.maximum:
             try:
                 return self.dlg.Update(int(value), message)
@@ -123,7 +122,9 @@ def ShowProgress(
     number_of_filters = max(number_of_filters, 1)
     ratio = 100.0 / number_of_filters
 
-    def UpdateProgress(obj: Union[float, int, "vtkAlgorithm"], label: str = "") -> float:
+    def UpdateProgress(
+        obj: Union[float, int, "vtkAlgorithm"], label: str = ""
+    ) -> float:
         """
         Show progress on GUI according to pipeline execution.
         """
@@ -148,7 +149,9 @@ def ShowProgress(
         progress[0] = progress[0] + ratio * difference
         # Tell GUI to update progress status value
         if dialog_type == "GaugeProgress":
-            Publisher.sendMessage("Update status in GUI", value=progress[0], label=label)
+            Publisher.sendMessage(
+                "Update status in GUI", value=progress[0], label=label
+            )
         else:
             if progress[0] >= 99.999:
                 progress[0] = 100
@@ -348,7 +351,9 @@ class TextZero:
     def Hide(self) -> None:
         self.actor.VisibilityOff()
 
-    def draw_to_canvas(self, gc: wx.GraphicsContext, canvas: "CanvasRendererCTX") -> None:
+    def draw_to_canvas(
+        self, gc: wx.GraphicsContext, canvas: "CanvasRendererCTX"
+    ) -> None:
         coord = vtkCoordinate()
         coord.SetCoordinateSystemToNormalizedDisplay()
         coord.SetValue(*self.position)
@@ -399,7 +404,9 @@ def CreateObjectPolyData(filename: str) -> Any:
         elif filename.lower().endswith(".vtp"):
             reader = vtkXMLPolyDataReader()
         else:
-            wx.MessageBox(_("File format not reconized by InVesalius"), _("Import surface error"))
+            wx.MessageBox(
+                _("File format not reconized by InVesalius"), _("Import surface error")
+            )
             return
     else:
         filename = os.path.join(inv_paths.OBJ_DIR, "magstim_fig8_coil.stl")
@@ -416,7 +423,8 @@ def CreateObjectPolyData(filename: str) -> Any:
 
     if obj_polydata.GetNumberOfPoints() == 0:
         wx.MessageBox(
-            _("InVesalius was not able to import this surface"), _("Import surface error")
+            _("InVesalius was not able to import this surface"),
+            _("Import surface error"),
         )
         obj_polydata = None
 

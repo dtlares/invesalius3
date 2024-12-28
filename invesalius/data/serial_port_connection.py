@@ -48,7 +48,9 @@ class SerialPortConnection(threading.Thread):
         try:
             import serial
 
-            self.connection = serial.Serial(self.com_port, baudrate=self.baud_rate, timeout=0)
+            self.connection = serial.Serial(
+                self.com_port, baudrate=self.baud_rate, timeout=0
+            )
             print(f"Connection to port {self.com_port} opened.")
 
             Publisher.sendMessage("Serial port connection", state=True)

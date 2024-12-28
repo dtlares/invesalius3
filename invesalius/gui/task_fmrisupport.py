@@ -40,7 +40,9 @@ class TaskPanel(wx.Panel):
         inner_panel = InnerTaskPanel(self)
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add(inner_panel, 1, wx.EXPAND | wx.GROW | wx.BOTTOM | wx.RIGHT | wx.LEFT, 7)
+        sizer.Add(
+            inner_panel, 1, wx.EXPAND | wx.GROW | wx.BOTTOM | wx.RIGHT | wx.LEFT, 7
+        )
         sizer.Fit(self)
 
         self.SetSizer(sizer)
@@ -113,7 +115,9 @@ class InnerTaskPanel(wx.Panel):
         cmap = plt.get_cmap(self.current_colormap)
         colors_gradient = self.GenerateColormapColors(cmap)
 
-        self.gradient = grad.GradientDisp(self, -1, -5000, 5000, -5000, 5000, colors_gradient)
+        self.gradient = grad.GradientDisp(
+            self, -1, -5000, 5000, -5000, 5000, colors_gradient
+        )
 
         # Add all lines into main sizer
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -149,7 +153,9 @@ class InnerTaskPanel(wx.Panel):
         self.UpdateGradient(self.gradient, colors)
 
         if isinstance(self.cluster_volume, np.ndarray):
-            self.apply_colormap(self.current_colormap, self.cluster_volume, self.zero_value)
+            self.apply_colormap(
+                self.current_colormap, self.cluster_volume, self.zero_value
+            )
 
     def GenerateColormapColors(self, colormap_name, number_colors=10):
         cmap = plt.get_cmap(colormap_name)
@@ -184,9 +190,9 @@ class InnerTaskPanel(wx.Panel):
 
         cluster_volume_original = fmri_data.get_fdata().T[:, ::-1].copy()
         # Normalize the data to 0-1 range
-        cluster_volume_normalized = (cluster_volume_original - np.min(cluster_volume_original)) / (
-            np.max(cluster_volume_original) - np.min(cluster_volume_original)
-        )
+        cluster_volume_normalized = (
+            cluster_volume_original - np.min(cluster_volume_original)
+        ) / (np.max(cluster_volume_original) - np.min(cluster_volume_original))
         # Convert data to 8-bit integer
         self.cluster_volume = (cluster_volume_normalized * 255).astype(np.uint8)
 
@@ -206,7 +212,9 @@ class InnerTaskPanel(wx.Panel):
             self.slc.aux_matrices["color_overlay"] = self.cluster_volume
             # 3. Show colors
             self.slc.to_show_aux = "color_overlay"
-            self.apply_colormap(self.current_colormap, self.cluster_volume, self.zero_value)
+            self.apply_colormap(
+                self.current_colormap, self.cluster_volume, self.zero_value
+            )
 
     def apply_colormap(self, colormap, cluster_volume, zero_value):
         # 2. Attribute different hue accordingly
@@ -218,13 +226,22 @@ class InnerTaskPanel(wx.Panel):
         # Map the scaled data to colors
         colors = cmap(cluster_volume_unique / 255)
         # Create a dictionary where keys are scaled data and values are colors
-        color_dict = {val: color for val, color in zip(cluster_volume_unique, map(tuple, colors))}
+        color_dict = {
+            val: color for val, color in zip(cluster_volume_unique, map(tuple, colors))
+        }
 
         self.slc.aux_matrices_colours["color_overlay"] = color_dict
         # add transparent color for nans and non GM voxels
         if zero_value in self.slc.aux_matrices_colours["color_overlay"]:
-            self.slc.aux_matrices_colours["color_overlay"][zero_value] = (0.0, 0.0, 0.0, 0.0)
+            self.slc.aux_matrices_colours["color_overlay"][zero_value] = (
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+            )
         else:
-            print("Zero value not found in color_overlay. No data is set as transparent.")
+            print(
+                "Zero value not found in color_overlay. No data is set as transparent."
+            )
 
         Publisher.sendMessage("Reload actual slice")

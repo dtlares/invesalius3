@@ -305,9 +305,15 @@ class DrawCrop2DRetangle:
         x, y, z = self.viewer.get_voxel_coord_by_screen_pos(x, y)
 
         if self.viewer.orientation == "AXIAL":
-            if self.status_move == const.AXIAL_UPPER or self.status_move == const.AXIAL_BOTTOM:
+            if (
+                self.status_move == const.AXIAL_UPPER
+                or self.status_move == const.AXIAL_BOTTOM
+            ):
                 Publisher.sendMessage("Set interactor resize NS cursor")
-            elif self.status_move == const.AXIAL_LEFT or self.status_move == const.AXIAL_RIGHT:
+            elif (
+                self.status_move == const.AXIAL_LEFT
+                or self.status_move == const.AXIAL_RIGHT
+            ):
                 Publisher.sendMessage("Set interactor resize WE cursor")
             elif self.crop_pan == const.CROP_PAN:
                 Publisher.sendMessage("Set interactor resize NSWE cursor")
@@ -315,9 +321,15 @@ class DrawCrop2DRetangle:
                 Publisher.sendMessage("Set interactor default cursor")
 
         if self.viewer.orientation == "SAGITAL":
-            if self.status_move == const.SAGITAL_UPPER or self.status_move == const.SAGITAL_BOTTOM:
+            if (
+                self.status_move == const.SAGITAL_UPPER
+                or self.status_move == const.SAGITAL_BOTTOM
+            ):
                 Publisher.sendMessage("Set interactor resize NS cursor")
-            elif self.status_move == const.SAGITAL_LEFT or self.status_move == const.SAGITAL_RIGHT:
+            elif (
+                self.status_move == const.SAGITAL_LEFT
+                or self.status_move == const.SAGITAL_RIGHT
+            ):
                 Publisher.sendMessage("Set interactor resize WE cursor")
             elif self.crop_pan == const.CROP_PAN:
                 Publisher.sendMessage("Set interactor resize NSWE cursor")
@@ -325,9 +337,15 @@ class DrawCrop2DRetangle:
                 Publisher.sendMessage("Set interactor default cursor")
 
         if self.viewer.orientation == "CORONAL":
-            if self.status_move == const.CORONAL_UPPER or self.status_move == const.CORONAL_BOTTOM:
+            if (
+                self.status_move == const.CORONAL_UPPER
+                or self.status_move == const.CORONAL_BOTTOM
+            ):
                 Publisher.sendMessage("Set interactor resize NS cursor")
-            elif self.status_move == const.CORONAL_LEFT or self.status_move == const.CORONAL_RIGHT:
+            elif (
+                self.status_move == const.CORONAL_LEFT
+                or self.status_move == const.CORONAL_RIGHT
+            ):
                 Publisher.sendMessage("Set interactor resize WE cursor")
             elif self.crop_pan == const.CROP_PAN:
                 Publisher.sendMessage("Set interactor resize NSWE cursor")
@@ -591,7 +609,9 @@ class DrawCrop2DRetangle:
 
                 sn = slice_number * zs
                 if sn >= box.zi and sn <= box.zf:
-                    canvas.draw_line((s_cxi, s_cyi), (s_cxf, s_cyf), colour=(255, 255, 255, 255))
+                    canvas.draw_line(
+                        (s_cxi, s_cyi), (s_cxf, s_cyf), colour=(255, 255, 255, 255)
+                    )
 
         elif canvas.orientation == "CORONAL":
             for points in box.coronal.values():
@@ -604,7 +624,9 @@ class DrawCrop2DRetangle:
                 sn = slice_number * ys
 
                 if sn >= box.yi and sn <= box.yf:
-                    canvas.draw_line((s_cxi, s_cyi), (s_cxf, s_cyf), colour=(255, 255, 255, 255))
+                    canvas.draw_line(
+                        (s_cxi, s_cyi), (s_cxf, s_cyf), colour=(255, 255, 255, 255)
+                    )
 
         elif canvas.orientation == "SAGITAL":
             for points in box.sagital.values():
@@ -616,7 +638,9 @@ class DrawCrop2DRetangle:
 
                 sn = slice_number * xs
                 if sn >= box.xi and sn <= box.xf:
-                    canvas.draw_line((s_cxi, s_cyi), (s_cxf, s_cyf), colour=(255, 255, 255, 255))
+                    canvas.draw_line(
+                        (s_cxi, s_cyi), (s_cxf, s_cyf), colour=(255, 255, 255, 255)
+                    )
 
     def SetViewer(self, viewer):
         self.viewer = viewer

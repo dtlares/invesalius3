@@ -19,10 +19,15 @@
 
 from vtkmodules.vtkFiltersSources import vtkPlaneSource
 from vtkmodules.vtkInteractionWidgets import vtkImagePlaneWidget
-from vtkmodules.vtkRenderingCore import vtkActor, vtkCellPicker, vtkPolyDataMapper
+from vtkmodules.vtkRenderingCore import (vtkActor, vtkCellPicker,
+                                         vtkPolyDataMapper)
 
 AXIAL, SAGITAL, CORONAL = 0, 1, 2
-PLANE_DATA = {AXIAL: ["z", (0, 0, 1)], SAGITAL: ["x", (1, 0, 0)], CORONAL: ["y", (0, 1, 0)]}
+PLANE_DATA = {
+    AXIAL: ["z", (0, 0, 1)],
+    SAGITAL: ["x", (1, 0, 0)],
+    CORONAL: ["y", (0, 1, 0)],
+}
 
 
 class Plane:

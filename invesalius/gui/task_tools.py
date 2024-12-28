@@ -40,7 +40,9 @@ class TaskPanel(wx.Panel):
         inner_panel = InnerTaskPanel(self)
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add(inner_panel, 1, wx.EXPAND | wx.GROW | wx.BOTTOM | wx.RIGHT | wx.LEFT, 7)
+        sizer.Add(
+            inner_panel, 1, wx.EXPAND | wx.GROW | wx.BOTTOM | wx.RIGHT | wx.LEFT, 7
+        )
         sizer.Fit(self)
 
         self.SetSizer(sizer)
@@ -79,10 +81,12 @@ class InnerTaskPanel(wx.Panel):
             os.path.join(inv_paths.ICON_DIR, "annotation.png"), wx.BITMAP_TYPE_PNG
         )
         BMP_ANGLE = wx.Bitmap(
-            os.path.join(inv_paths.ICON_DIR, "measure_angle_original.png"), wx.BITMAP_TYPE_PNG
+            os.path.join(inv_paths.ICON_DIR, "measure_angle_original.png"),
+            wx.BITMAP_TYPE_PNG,
         )
         BMP_DISTANCE = wx.Bitmap(
-            os.path.join(inv_paths.ICON_DIR, "measure_line_original.png"), wx.BITMAP_TYPE_PNG
+            os.path.join(inv_paths.ICON_DIR, "measure_line_original.png"),
+            wx.BITMAP_TYPE_PNG,
         )
         BMP_ANNOTATE.SetWidth(25)
         BMP_ANNOTATE.SetHeight(25)

@@ -130,14 +130,38 @@ IMPORT_INTERVAL = [
 # Camera according to slice's orientation
 # CAM_POSITION = {"AXIAL":(0, 0, 1), "CORONAL":(0, -1, 0), "SAGITAL":(1, 0, 0)}
 # CAM_VIEW_UP =  {"AXIAL":(0, 1, 0), "CORONAL":(0, 0, 1), "SAGITAL":(0, 0, 1)}
-AXIAL_SLICE_CAM_POSITION = {"AXIAL": (0, 0, 1), "CORONAL": (0, -1, 0), "SAGITAL": (1, 0, 0)}
-AXIAL_SLICE_CAM_VIEW_UP = {"AXIAL": (0, 1, 0), "CORONAL": (0, 0, 1), "SAGITAL": (0, 0, 1)}
+AXIAL_SLICE_CAM_POSITION = {
+    "AXIAL": (0, 0, 1),
+    "CORONAL": (0, -1, 0),
+    "SAGITAL": (1, 0, 0),
+}
+AXIAL_SLICE_CAM_VIEW_UP = {
+    "AXIAL": (0, 1, 0),
+    "CORONAL": (0, 0, 1),
+    "SAGITAL": (0, 0, 1),
+}
 
-SAGITAL_SLICE_CAM_POSITION = {"AXIAL": (0, 0, 1), "CORONAL": (0, 1, 0), "SAGITAL": (-1, 0, 0)}
-SAGITAL_SLICE_CAM_VIEW_UP = {"AXIAL": (0, -1, 0), "CORONAL": (0, 0, 1), "SAGITAL": (0, 0, 1)}
+SAGITAL_SLICE_CAM_POSITION = {
+    "AXIAL": (0, 0, 1),
+    "CORONAL": (0, 1, 0),
+    "SAGITAL": (-1, 0, 0),
+}
+SAGITAL_SLICE_CAM_VIEW_UP = {
+    "AXIAL": (0, -1, 0),
+    "CORONAL": (0, 0, 1),
+    "SAGITAL": (0, 0, 1),
+}
 
-CORONAL_SLICE_CAM_POSITION = {"AXIAL": (0, 0, 1), "CORONAL": (0, 1, 0), "SAGITAL": (-1, 0, 0)}
-CORONAL_SLICE_CAM_VIEW_UP = {"AXIAL": (0, -1, 0), "CORONAL": (0, 0, 1), "SAGITAL": (0, 0, 1)}
+CORONAL_SLICE_CAM_POSITION = {
+    "AXIAL": (0, 0, 1),
+    "CORONAL": (0, 1, 0),
+    "SAGITAL": (-1, 0, 0),
+}
+CORONAL_SLICE_CAM_VIEW_UP = {
+    "AXIAL": (0, -1, 0),
+    "CORONAL": (0, 0, 1),
+    "SAGITAL": (0, 0, 1),
+}
 
 SLICE_POSITION = {
     AXIAL: [AXIAL_SLICE_CAM_VIEW_UP, AXIAL_SLICE_CAM_POSITION],
@@ -310,7 +334,9 @@ MASK_COLOUR: List[List[float]] = [
 # (0.66666666666666663, 0.792156862745098, 1.0)]
 
 
-MEASURE_COLOUR = itertools.cycle([[1, 0, 0], [1, 0.4, 0], [0, 0, 1], [1, 0, 1], [0, 0.6, 0]])
+MEASURE_COLOUR = itertools.cycle(
+    [[1, 0, 0], [1, 0.4, 0], [0, 0, 1], [1, 0, 1], [0, 0.6, 0]]
+)
 
 SURFACE_COLOUR: List[Tuple[float, float, float]] = [
     (0.33, 1, 0.33),
@@ -584,7 +610,9 @@ ID_ABOUT = wx.ID_ABOUT
     wx.NewIdRef() for number in range(4)
 ]
 [ID_TASK_BAR, ID_VIEW_FOUR] = [wx.NewIdRef() for number in range(2)]
-[ID_VIEW_FULL, ID_VIEW_TEXT, ID_VIEW_3D_BACKGROUND] = [wx.NewIdRef() for number in range(3)]
+[ID_VIEW_FULL, ID_VIEW_TEXT, ID_VIEW_3D_BACKGROUND] = [
+    wx.NewIdRef() for number in range(3)
+]
 
 ID_START = wx.NewIdRef()
 ID_PLUGINS_SHOW_PATH = wx.NewIdRef()
@@ -862,7 +890,13 @@ DYNAMIC_REF = 1
 DEFAULT_REF_MODE = DYNAMIC_REF
 REF_MODE = [_("Static ref."), _("Dynamic ref.")]
 FT_SENSOR_MODE = [_("Sensor 3"), _("Sensor 4")]
-TRACKERS_WITH_SENSOR_OPTIONS = [FASTRAK, ISOTRAKII, PATRIOT, DEBUGTRACKRANDOM, DEBUGTRACKAPPROACH]
+TRACKERS_WITH_SENSOR_OPTIONS = [
+    FASTRAK,
+    ISOTRAKII,
+    PATRIOT,
+    DEBUGTRACKRANDOM,
+    DEBUGTRACKAPPROACH,
+]
 
 DEFAULT_COIL = SELECT
 COIL = [_("Select coil:"), _("Neurosoft Figure-8"), _("Magstim 70 mm"), _("Nexstim")]

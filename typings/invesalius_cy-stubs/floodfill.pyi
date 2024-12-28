@@ -21,7 +21,11 @@ def floodfill_threshold(
     out: np.ndarray | None,
 ) -> np.ndarray | None: ...
 def floodfill_auto_threshold(
-    data: np.ndarray, seeds: list[Iterable[int]], p: float, fill: int, out: np.ndarray | None
+    data: np.ndarray,
+    seeds: list[Iterable[int]],
+    p: float,
+    fill: int,
+    out: np.ndarray | None,
 ) -> np.ndarray | None: ...
 def fill_holes_automatically(
     mask: np.ndarray, labels: np.ndarray, nlabels: int, max_size: int

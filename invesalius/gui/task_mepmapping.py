@@ -43,7 +43,9 @@ class TaskPanel(wx.Panel):
         inner_panel = InnerTaskPanel(self)
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add(inner_panel, 1, wx.EXPAND | wx.GROW | wx.BOTTOM | wx.RIGHT | wx.LEFT, 7)
+        sizer.Add(
+            inner_panel, 1, wx.EXPAND | wx.GROW | wx.BOTTOM | wx.RIGHT | wx.LEFT, 7
+        )
         sizer.Fit(self)
 
         self.SetSizer(sizer)
@@ -86,7 +88,9 @@ class InnerTaskPanel(wx.Panel):
 
         # add surface panel window
         self.surface_panel = SurfaceProperties(self)
-        line1.Add(self.surface_panel, 5, wx.LEFT | wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT, 2)
+        line1.Add(
+            self.surface_panel, 5, wx.LEFT | wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT, 2
+        )
         line1.AddSpacer(5)
         # line1.Add(btn_load, 5, wx.LEFT | wx.TOP | wx.RIGHT, 1)
 
@@ -119,7 +123,9 @@ class InnerTaskPanel(wx.Panel):
         self.UpdateGradient(self.gradient, colors)
 
         if isinstance(self.cluster_volume, np.ndarray):
-            self.apply_colormap(self.current_colormap, self.cluster_volume, self.zero_value)
+            self.apply_colormap(
+                self.current_colormap, self.cluster_volume, self.zero_value
+            )
 
     def GenerateColormapColors(self, colormap_name, number_colors=10):
         cmap = plt.get_cmap(colormap_name)
@@ -154,9 +160,9 @@ class InnerTaskPanel(wx.Panel):
 
         cluster_volume_original = fmri_data.get_fdata().T[:, ::-1].copy()
         # Normalize the data to 0-1 range
-        cluster_volume_normalized = (cluster_volume_original - np.min(cluster_volume_original)) / (
-            np.max(cluster_volume_original) - np.min(cluster_volume_original)
-        )
+        cluster_volume_normalized = (
+            cluster_volume_original - np.min(cluster_volume_original)
+        ) / (np.max(cluster_volume_original) - np.min(cluster_volume_original))
         # Convert data to 8-bit integer
         self.cluster_volume = (cluster_volume_normalized * 255).astype(np.uint8)
 
@@ -176,7 +182,9 @@ class InnerTaskPanel(wx.Panel):
             self.slc.aux_matrices["color_overlay"] = self.cluster_volume
             # 3. Show colors
             self.slc.to_show_aux = "color_overlay"
-            self.apply_colormap(self.current_colormap, self.cluster_volume, self.zero_value)
+            self.apply_colormap(
+                self.current_colormap, self.cluster_volume, self.zero_value
+            )
 
     def apply_colormap(self, colormap, cluster_volume, zero_value):
         # 2. Attribute different hue accordingly
@@ -188,14 +196,23 @@ class InnerTaskPanel(wx.Panel):
         # Map the scaled data to colors
         colors = cmap(cluster_volume_unique / 255)
         # Create a dictionary where keys are scaled data and values are colors
-        color_dict = {val: color for val, color in zip(cluster_volume_unique, map(tuple, colors))}
+        color_dict = {
+            val: color for val, color in zip(cluster_volume_unique, map(tuple, colors))
+        }
 
         self.slc.aux_matrices_colours["color_overlay"] = color_dict
         # add transparent color for nans and non GM voxels
         if zero_value in self.slc.aux_matrices_colours["color_overlay"]:
-            self.slc.aux_matrices_colours["color_overlay"][zero_value] = (0.0, 0.0, 0.0, 0.0)
+            self.slc.aux_matrices_colours["color_overlay"][zero_value] = (
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+            )
         else:
-            print("Zero value not found in color_overlay. No data is set as transparent.")
+            print(
+                "Zero value not found in color_overlay. No data is set as transparent."
+            )
 
         Publisher.sendMessage("Reload actual slice")
 
@@ -214,7 +231,9 @@ class SurfaceProperties(scrolled.ScrolledPanel):
         # LINE 1
 
         # Combo related to mask name
-        combo_surface_name = wx.ComboBox(self, -1, style=wx.CB_DROPDOWN | wx.CB_READONLY)
+        combo_surface_name = wx.ComboBox(
+            self, -1, style=wx.CB_DROPDOWN | wx.CB_READONLY
+        )
         # combo_surface_name.SetSelection(0)
         if sys.platform != "win32":
             combo_surface_name.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
@@ -228,7 +247,9 @@ class SurfaceProperties(scrolled.ScrolledPanel):
 
         # Sizer which represents the first line
         line1 = wx.BoxSizer(wx.HORIZONTAL)
-        line1.Add(combo_surface_name, 1, wx.LEFT | wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT, 7)
+        line1.Add(
+            combo_surface_name, 1, wx.LEFT | wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT, 7
+        )
         line1.Add(button_colour, 0, wx.TOP | wx.RIGHT, 7)
 
         # LINE 2
@@ -238,14 +259,21 @@ class SurfaceProperties(scrolled.ScrolledPanel):
         # flag_link = wx.EXPAND | wx.GROW | wx.RIGHT
         fixed_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        fixed_sizer.Add(text_transparency, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT, 5)
+        fixed_sizer.Add(
+            text_transparency, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT, 5
+        )
         # fixed_sizer.AddSpacer(7)
         fixed_sizer.Add(line1, 0, wx.EXPAND | wx.GROW | wx.LEFT | wx.RIGHT, 5)
 
         # LINE 4
         # # Add all lines into main sizer
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(fixed_sizer, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP | wx.BOTTOM, 10)
+        sizer.Add(
+            fixed_sizer,
+            0,
+            wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP | wx.BOTTOM,
+            10,
+        )
         # sizer.Add(line1, 1, wx.GROW | wx.EXPAND | wx.TOP, 10)
 
         sizer.Fit(self)

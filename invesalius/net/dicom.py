@@ -80,7 +80,9 @@ class DicomNet:
         theQuery = cnf.ConstructQuery(gdcm.ePatientRootType, gdcm.eImageOrFrame, ds)
         ret = gdcm.DataSetArrayType()
 
-        cnf.CFind(self.address, int(self.port), theQuery, ret, self.aetitle, self.aetitle_call)
+        cnf.CFind(
+            self.address, int(self.port), theQuery, ret, self.aetitle, self.aetitle_call
+        )
 
         patients = {}
 
@@ -102,12 +104,18 @@ class DicomNet:
                 study_description = self.GetValueFromDICOM(rt, (0x0008, 0x1030))
                 modality = self.GetValueFromDICOM(rt, (0x0008, 0x0060))
                 institution = self.GetValueFromDICOM(rt, (0x0008, 0x0080))
-                date_of_birth = utils.format_date(self.GetValueFromDICOM(rt, (0x0010, 0x0030)))
+                date_of_birth = utils.format_date(
+                    self.GetValueFromDICOM(rt, (0x0010, 0x0030))
+                )
                 acession_number = self.GetValueFromDICOM(rt, (0x0008, 0x0050))
                 ref_physician = self.GetValueFromDICOM(rt, (0x0008, 0x0090))
                 serie_description = self.GetValueFromDICOM(rt, (0x0008, 0x103E))
-                acquisition_time = utils.format_time(self.GetValueFromDICOM(rt, (0x0008, 0x0032)))
-                acquisition_date = utils.format_date(self.GetValueFromDICOM(rt, (0x0008, 0x0022)))
+                acquisition_time = utils.format_time(
+                    self.GetValueFromDICOM(rt, (0x0008, 0x0032))
+                )
+                acquisition_date = utils.format_date(
+                    self.GetValueFromDICOM(rt, (0x0008, 0x0022))
+                )
 
                 teste = self.GetValueFromDICOM(rt, (0x0020, 0x000D))
 

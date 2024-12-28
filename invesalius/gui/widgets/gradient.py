@@ -19,7 +19,8 @@
 #    detalhes.
 # --------------------------------------------------------------------------
 import sys
-from typing import Iterable, List, Literal, Optional, Sequence, SupportsInt, Tuple, Union
+from typing import (Iterable, List, Literal, Optional, Sequence, SupportsInt,
+                    Tuple, Union)
 
 import wx
 
@@ -51,7 +52,13 @@ EVT_THRESHOLD_CHANGING = wx.PyEventBinder(myEVT_THRESHOLD_CHANGING, 1)
 
 class SliderEvent(wx.PyCommandEvent):
     def __init__(
-        self, evtType: int, id: int, minRange: int, maxRange: int, minValue: int, maxValue: int
+        self,
+        evtType: int,
+        id: int,
+        minRange: int,
+        maxRange: int,
+        minValue: int,
+        maxValue: int,
     ):
         wx.PyCommandEvent.__init__(self, evtType, id)
         self.min_range = minRange
@@ -185,9 +192,15 @@ class GradientSlider(wx.Panel):
             gc.FillPath(path)
             gc.StrokePath(path)
         else:
-            for i, (c1, c2) in enumerate(zip(self._gradient_colours, self._gradient_colours[1:])):
-                p1 = self.min_position + i * width_transparency / len(self._gradient_colours)
-                p2 = self.min_position + (i + 1) * width_transparency / len(self._gradient_colours)
+            for i, (c1, c2) in enumerate(
+                zip(self._gradient_colours, self._gradient_colours[1:])
+            ):
+                p1 = self.min_position + i * width_transparency / len(
+                    self._gradient_colours
+                )
+                p2 = self.min_position + (i + 1) * width_transparency / len(
+                    self._gradient_colours
+                )
                 brush = gc.CreateLinearGradientBrush(p1, 0, p2, h, c1, c2)
                 gc.SetBrush(brush)
                 path = gc.CreatePath()
@@ -314,8 +327,12 @@ class GradientSlider(wx.Panel):
         window_width = w - 2 * PUSH_WIDTH
         proportion = window_width / float(self.max_range - self.min_range)
 
-        self.min_position = int(round((self.minimun - self.min_range) * proportion)) + PUSH_WIDTH
-        self.max_position = int(round((self.maximun - self.min_range) * proportion)) + PUSH_WIDTH
+        self.min_position = (
+            int(round((self.minimun - self.min_range) * proportion)) + PUSH_WIDTH
+        )
+        self.max_position = (
+            int(round((self.maximun - self.min_range) * proportion)) + PUSH_WIDTH
+        )
 
     def _max_position_to_maximun(self, max_position: int) -> int:
         """
@@ -558,8 +575,12 @@ class GradientNoSlide(wx.Panel):
         window_width = w - 2 * PUSH_WIDTH
         proportion = window_width / float(self.max_range - self.min_range)
 
-        self.min_position = int(round((self.minimun - self.min_range) * proportion)) + PUSH_WIDTH
-        self.max_position = int(round((self.maximun - self.min_range) * proportion)) + PUSH_WIDTH
+        self.min_position = (
+            int(round((self.minimun - self.min_range) * proportion)) + PUSH_WIDTH
+        )
+        self.max_position = (
+            int(round((self.maximun - self.min_range) * proportion)) + PUSH_WIDTH
+        )
 
     def _max_position_to_maximun(self, max_position: int) -> int:
         """
@@ -850,7 +871,13 @@ class GradientDisp(wx.Panel):
 
     def _draw_controls(self) -> None:
         self.gradient_slider = GradientNoSlide(
-            self, -1, self.min_range, self.max_range, self.minimun, self.maximun, self.colours
+            self,
+            -1,
+            self.min_range,
+            self.max_range,
+            self.minimun,
+            self.maximun,
+            self.colours,
         )
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)

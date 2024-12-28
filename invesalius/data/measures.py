@@ -6,31 +6,19 @@ import sys
 import numpy as np
 from vtkmodules.vtkCommonCore import vtkMath
 from vtkmodules.vtkFiltersCore import vtkAppendPolyData
-from vtkmodules.vtkFiltersSources import (
-    vtkArcSource,
-    vtkLineSource,
-    vtkSphereSource,
-    vtkTextSource,
-)
-from vtkmodules.vtkRenderingCore import (
-    vtkActor,
-    vtkActor2D,
-    vtkCoordinate,
-    vtkPolyDataMapper,
-    vtkPolyDataMapper2D,
-)
+from vtkmodules.vtkFiltersSources import (vtkArcSource, vtkLineSource,
+                                          vtkSphereSource, vtkTextSource)
+from vtkmodules.vtkRenderingCore import (vtkActor, vtkActor2D, vtkCoordinate,
+                                         vtkPolyDataMapper,
+                                         vtkPolyDataMapper2D)
 
 import invesalius.constants as const
 import invesalius.project as prj
 import invesalius.session as ses
 import invesalius.utils as utils
 from invesalius import math_utils
-from invesalius.gui.widgets.canvas_renderer import (
-    CanvasHandlerBase,
-    Ellipse,
-    Polygon,
-    TextBox,
-)
+from invesalius.gui.widgets.canvas_renderer import (CanvasHandlerBase, Ellipse,
+                                                    Polygon, TextBox)
 from invesalius.i18n import tr as _
 from invesalius.pubsub import pub as Publisher
 
@@ -150,8 +138,12 @@ class MeasurementManager:
         Publisher.subscribe(self._remove_measurements, "Remove measurements")
         Publisher.subscribe(self._set_visibility, "Show measurement")
         Publisher.subscribe(self._load_measurements, "Load measurement dict")
-        Publisher.subscribe(self._rm_incomplete_measurements, "Remove incomplete measurements")
-        Publisher.subscribe(self._change_measure_point_pos, "Change measurement point position")
+        Publisher.subscribe(
+            self._rm_incomplete_measurements, "Remove incomplete measurements"
+        )
+        Publisher.subscribe(
+            self._change_measure_point_pos, "Change measurement point position"
+        )
         Publisher.subscribe(self._add_density_measure, "Add density measurement")
         Publisher.subscribe(self.OnCloseProject, "Close project data")
 
@@ -206,7 +198,9 @@ class MeasurementManager:
                     actors = mr.AddPoint(x, y, z)
 
                 if m.location == const.SURFACE:
-                    Publisher.sendMessage(("Add actors " + str(m.location)), actors=actors)
+                    Publisher.sendMessage(
+                        ("Add actors " + str(m.location)), actors=actors
+                    )
 
             self.current = None
 
@@ -217,7 +211,9 @@ class MeasurementManager:
                 else:
                     Publisher.sendMessage("Redraw canvas")
 
-    def _add_point(self, position, type, location, slice_number=0, radius=const.PROP_MEASURE):
+    def _add_point(
+        self, position, type, location, slice_number=0, radius=const.PROP_MEASURE
+    ):
         to_remove = False
         if self.current is None:
             to_create = True
@@ -344,7 +340,9 @@ class MeasurementManager:
                 pass
             prj.Project().RemoveMeasurement(index)
             if m.location == const.SURFACE:
-                Publisher.sendMessage("Remove actors " + str(m.location), actors=mr.GetActors())
+                Publisher.sendMessage(
+                    "Remove actors " + str(m.location), actors=mr.GetActors()
+                )
         Publisher.sendMessage("Redraw canvas")
         Publisher.sendMessage("Render volume viewer")
 
@@ -669,12 +667,18 @@ class LinearMeasure:
             self.points[0] = (x, y, z)
             if len(self.points) == 2:
                 self.Remove()
-                self.point_actor1 = self.representation.GetRepresentation(*self.points[0])
-                self.point_actor2 = self.representation.GetRepresentation(*self.points[1])
+                self.point_actor1 = self.representation.GetRepresentation(
+                    *self.points[0]
+                )
+                self.point_actor2 = self.representation.GetRepresentation(
+                    *self.points[1]
+                )
                 self.CreateMeasure()
             else:
                 self.Remove()
-                self.point_actor1 = self.representation.GetRepresentation(*self.points[0])
+                self.point_actor1 = self.representation.GetRepresentation(
+                    *self.points[0]
+                )
 
     def SetPoint2(self, x, y, z):
         if len(self.points) == 1:
@@ -858,14 +862,24 @@ class AngularMeasure:
             self.points[0] = (x, y, z)
             if len(self.points) == 3:
                 self.Remove()
-                self.point_actor1 = self.representation.GetRepresentation(*self.points[0])
-                self.point_actor2 = self.representation.GetRepresentation(*self.points[1])
-                self.point_actor3 = self.representation.GetRepresentation(*self.points[2])
+                self.point_actor1 = self.representation.GetRepresentation(
+                    *self.points[0]
+                )
+                self.point_actor2 = self.representation.GetRepresentation(
+                    *self.points[1]
+                )
+                self.point_actor3 = self.representation.GetRepresentation(
+                    *self.points[2]
+                )
                 self.CreateMeasure()
             else:
                 self.Remove()
-                self.point_actor1 = self.representation.GetRepresentation(*self.points[0])
-                self.point_actor2 = self.representation.GetRepresentation(*self.points[1])
+                self.point_actor1 = self.representation.GetRepresentation(
+                    *self.points[0]
+                )
+                self.point_actor2 = self.representation.GetRepresentation(
+                    *self.points[1]
+                )
 
     def SetPoint2(self, x, y, z):
         if self.number_of_points == 1:
@@ -876,14 +890,24 @@ class AngularMeasure:
             self.points[1] = (x, y, z)
             if len(self.points) == 3:
                 self.Remove()
-                self.point_actor1 = self.representation.GetRepresentation(*self.points[0])
-                self.point_actor2 = self.representation.GetRepresentation(*self.points[1])
-                self.point_actor3 = self.representation.GetRepresentation(*self.points[2])
+                self.point_actor1 = self.representation.GetRepresentation(
+                    *self.points[0]
+                )
+                self.point_actor2 = self.representation.GetRepresentation(
+                    *self.points[1]
+                )
+                self.point_actor3 = self.representation.GetRepresentation(
+                    *self.points[2]
+                )
                 self.CreateMeasure()
             else:
                 self.Remove()
-                self.point_actor1 = self.representation.GetRepresentation(*self.points[0])
-                self.point_actor2 = self.representation.GetRepresentation(*self.points[1])
+                self.point_actor1 = self.representation.GetRepresentation(
+                    *self.points[0]
+                )
+                self.point_actor2 = self.representation.GetRepresentation(
+                    *self.points[1]
+                )
 
     def SetPoint3(self, x, y, z):
         if self.number_of_points == 2:
@@ -895,14 +919,24 @@ class AngularMeasure:
             self.points[2] = (x, y, z)
             if len(self.points) == 3:
                 self.Remove()
-                self.point_actor1 = self.representation.GetRepresentation(*self.points[0])
-                self.point_actor2 = self.representation.GetRepresentation(*self.points[1])
-                self.point_actor3 = self.representation.GetRepresentation(*self.points[2])
+                self.point_actor1 = self.representation.GetRepresentation(
+                    *self.points[0]
+                )
+                self.point_actor2 = self.representation.GetRepresentation(
+                    *self.points[1]
+                )
+                self.point_actor3 = self.representation.GetRepresentation(
+                    *self.points[2]
+                )
                 self.CreateMeasure()
             else:
                 self.Remove()
-                self.point_actor1 = self.representation.GetRepresentation(*self.points[0])
-                self.point_actor2 = self.representation.GetRepresentation(*self.points[1])
+                self.point_actor1 = self.representation.GetRepresentation(
+                    *self.points[0]
+                )
+                self.point_actor2 = self.representation.GetRepresentation(
+                    *self.points[1]
+                )
 
     def CreateMeasure(self):
         self._draw_line()
@@ -1101,7 +1135,9 @@ class AngularMeasure:
 
 
 class CircleDensityMeasure(CanvasHandlerBase):
-    def __init__(self, orientation, slice_number, colour=(255, 0, 0, 255), interactive=True):
+    def __init__(
+        self, orientation, slice_number, colour=(255, 0, 0, 255), interactive=True
+    ):
         super().__init__(None)
         self.parent = None
         self.children = []
@@ -1400,7 +1436,9 @@ class CircleDensityMeasure(CanvasHandlerBase):
         self.set_point2(self.ellipse.point2)
 
         diff = tuple((i - j for i, j in zip(self.center, old_center)))
-        self.text_box.position = tuple((i + j for i, j in zip(self.text_box.position, diff)))
+        self.text_box.position = tuple(
+            (i + j for i, j in zip(self.text_box.position, diff))
+        )
 
         if self._measurement:
             self._measurement.points = [self.center, self.point1, self.point2]
@@ -1421,7 +1459,9 @@ class CircleDensityMeasure(CanvasHandlerBase):
 
 
 class PolygonDensityMeasure(CanvasHandlerBase):
-    def __init__(self, orientation, slice_number, colour=(255, 0, 0, 255), interactive=True):
+    def __init__(
+        self, orientation, slice_number, colour=(255, 0, 0, 255), interactive=True
+    ):
         super().__init__(None)
         self.parent = None
         self.children = []
@@ -1507,7 +1547,9 @@ class PolygonDensityMeasure(CanvasHandlerBase):
         p = [bounds[3], bounds[4], bounds[5]]
         if self.text_box is None:
             p[0] += 5
-            self.text_box = TextBox(self, "", p, MEASURE_TEXT_COLOUR, MEASURE_TEXTBOX_COLOUR)
+            self.text_box = TextBox(
+                self, "", p, MEASURE_TEXT_COLOUR, MEASURE_TEXTBOX_COLOUR
+            )
             self.text_box.layer = 2
             self.add_child(self.text_box)
 

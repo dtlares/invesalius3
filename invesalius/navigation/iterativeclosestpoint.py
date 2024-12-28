@@ -72,7 +72,9 @@ class IterativeClosestPoint(metaclass=Singleton):
         dialog = dlg.ICPCorregistrationDialog(navigation=navigation, tracker=tracker)
 
         success = dialog.ShowModal()
-        self.m_icp, point_coord, transformed_points, prev_error, final_error = dialog.GetValue()
+        self.m_icp, point_coord, transformed_points, prev_error, final_error = (
+            dialog.GetValue()
+        )
 
         dialog.Destroy()
 

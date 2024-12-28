@@ -73,7 +73,9 @@ class NeuronavigationApi(metaclass=Singleton):
         Publisher.subscribe(self.stop_navigation, "Stop navigation")
         Publisher.subscribe(self.update_target_mode, "Set target mode")
         Publisher.subscribe(self.update_coil_at_target, "Coil at target")
-        Publisher.subscribe(self.update_tracker_poses, "From Neuronavigation: Update tracker poses")
+        Publisher.subscribe(
+            self.update_tracker_poses, "From Neuronavigation: Update tracker poses"
+        )
         Publisher.subscribe(self.update_target_orientation, "Update target orientation")
         # Publisher.subscribe(self.connect_to_robot, "Neuronavigation to Robot: Connect to robot")
         # Publisher.subscribe(self.set_target, "Neuronavigation to Robot: Set target")
@@ -125,7 +127,9 @@ class NeuronavigationApi(metaclass=Singleton):
 
     def update_target_orientation(self, target_id, orientation):
         if self.connection is not None:
-            self.connection.update_target_orientation(target_id=target_id, orientation=orientation)
+            self.connection.update_target_orientation(
+                target_id=target_id, orientation=orientation
+            )
 
     # Functions for InVesalius to send updates.
 
@@ -159,7 +163,9 @@ class NeuronavigationApi(metaclass=Singleton):
 
     def set_tracker_fiducials(self, tracker_fiducials):
         if self.connection is not None:
-            self.connection.update_set_tracker_fiducials(tracker_fiducials=tracker_fiducials)
+            self.connection.update_set_tracker_fiducials(
+                tracker_fiducials=tracker_fiducials
+            )
 
     def collect_robot_pose(self, data):
         if self.connection is not None:
@@ -175,7 +181,9 @@ class NeuronavigationApi(metaclass=Singleton):
 
     def set_robot_transformation_matrix(self, data):
         if self.connection is not None:
-            self.connection.set_robot_transformation_matrix(matrix_tracker_to_robot=data)
+            self.connection.set_robot_transformation_matrix(
+                matrix_tracker_to_robot=data
+            )
 
     def update_displacement_to_target(self, displacement):
         if self.connection is not None:
@@ -221,7 +229,8 @@ class NeuronavigationApi(metaclass=Singleton):
             # Assert that all polygons have an equal number of vertices, reshape the array, and drop n_i's.
             #
             assert np.all(
-                polygons_raw[0 :: self.N_VERTICES_IN_POLYGON + 1] == self.N_VERTICES_IN_POLYGON
+                polygons_raw[0 :: self.N_VERTICES_IN_POLYGON + 1]
+                == self.N_VERTICES_IN_POLYGON
             )
 
             polygons = polygons_raw.reshape(-1, self.N_VERTICES_IN_POLYGON + 1)[:, 1:]
@@ -264,7 +273,9 @@ class NeuronavigationApi(metaclass=Singleton):
 
     def efield_coil(self, coil_model_path, coil_set):
         if self.connection is not None:
-            return self.connection.set_coil(coil_model_path=coil_model_path, coil_set=coil_set)
+            return self.connection.set_coil(
+                coil_model_path=coil_model_path, coil_set=coil_set
+            )
 
     def set_dIperdt(self, dIperdt):
         if self.connection is not None:
@@ -308,7 +319,9 @@ class NeuronavigationApi(metaclass=Singleton):
 
     def __set_callbacks(self, connection):
         connection.set_callback__open_orientation_dialog(self.open_orientation_dialog)
-        connection.set_callback__stimulation_pulse_received(self.stimulation_pulse_received)
+        connection.set_callback__stimulation_pulse_received(
+            self.stimulation_pulse_received
+        )
         # connection.set_callback__update_robot_status(self.update_robot_status)
         # connection.set_callback__robot_connection_status(self.robot_connection_status)
         # connection.set_callback__robot_pose_collected(self.robot_pose_collected)
@@ -332,7 +345,9 @@ class NeuronavigationApi(metaclass=Singleton):
             self.connection.remove_pedal_callback(name=name)
 
     def open_orientation_dialog(self, target_id):
-        wx.CallAfter(Publisher.sendMessage, "Open marker orientation dialog", marker_id=target_id)
+        wx.CallAfter(
+            Publisher.sendMessage, "Open marker orientation dialog", marker_id=target_id
+        )
 
     def stimulation_pulse_received(self, targets):
         # TODO: If marker should not be created always when receiving a stimulation pulse, add the logic here.
@@ -352,8 +367,12 @@ class NeuronavigationApi(metaclass=Singleton):
                     ],
                 }
             )
-        wx.CallAfter(Publisher.sendMessage, "Set brain targets", brain_targets=brain_targets)
-        wx.CallAfter(Publisher.sendMessage, "Create marker", marker_type=MarkerType.COIL_POSE)
+        wx.CallAfter(
+            Publisher.sendMessage, "Set brain targets", brain_targets=brain_targets
+        )
+        wx.CallAfter(
+            Publisher.sendMessage, "Create marker", marker_type=MarkerType.COIL_POSE
+        )
 
     def set_vector_field(self, vector_field):
         # Modify vector_field to swap x and y coordinates and adjust z orientation to match mTMS
@@ -365,7 +384,9 @@ class NeuronavigationApi(metaclass=Singleton):
             )
             # Reverse the z orientation
             vector["orientation"][2] = -vector["orientation"][2]
-        wx.CallAfter(Publisher.sendMessage, "Set vector field", vector_field=vector_field)
+        wx.CallAfter(
+            Publisher.sendMessage, "Set vector field", vector_field=vector_field
+        )
 
     def update_robot_status(self, status):
         wx.CallAfter(
@@ -376,7 +397,9 @@ class NeuronavigationApi(metaclass=Singleton):
 
     def robot_connection_status(self, status):
         wx.CallAfter(
-            Publisher.sendMessage, "Robot to Neuronavigation: Robot connection status", data=status
+            Publisher.sendMessage,
+            "Robot to Neuronavigation: Robot connection status",
+            data=status,
         )
 
     def robot_pose_collected(self, status):
@@ -387,11 +410,15 @@ class NeuronavigationApi(metaclass=Singleton):
 
     def set_objective_to_neuronavigation(self, objective):
         wx.CallAfter(
-            Publisher.sendMessage, "Robot to Neuronavigation: Set objective", objective=objective
+            Publisher.sendMessage,
+            "Robot to Neuronavigation: Set objective",
+            objective=objective,
         )
 
     def close_robot_dialog(self, status):
-        wx.CallAfter(Publisher.sendMessage, "Robot to Neuronavigation: Close robot dialog")
+        wx.CallAfter(
+            Publisher.sendMessage, "Robot to Neuronavigation: Close robot dialog"
+        )
 
     def update_robot_transformation_matrix(self, matrix):
         wx.CallAfter(

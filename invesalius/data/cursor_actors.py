@@ -24,12 +24,8 @@ from vtkmodules.util import numpy_support
 from vtkmodules.vtkCommonCore import vtkLookupTable, vtkVersion
 from vtkmodules.vtkCommonDataModel import vtkImageData
 from vtkmodules.vtkImagingCore import vtkImageMapToColors
-from vtkmodules.vtkRenderingCore import (
-    vtkImageActor,
-    vtkImageProperty,
-    vtkImageSlice,
-    vtkImageSliceMapper,
-)
+from vtkmodules.vtkRenderingCore import (vtkImageActor, vtkImageProperty,
+                                         vtkImageSlice, vtkImageSliceMapper)
 
 import invesalius.constants as const
 

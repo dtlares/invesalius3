@@ -27,11 +27,8 @@ import time
 
 import numpy as np
 from vtkmodules.vtkCommonCore import vtkPoints, vtkUnsignedCharArray
-from vtkmodules.vtkCommonDataModel import (
-    vtkCellArray,
-    vtkMultiBlockDataSet,
-    vtkPolyData,
-)
+from vtkmodules.vtkCommonDataModel import (vtkCellArray, vtkMultiBlockDataSet,
+                                           vtkPolyData)
 from vtkmodules.vtkFiltersCore import vtkTubeFilter
 
 import invesalius.constants as const
@@ -149,7 +146,8 @@ def compute_tracts(trk_list, n_tract=0, alpha=255):
     trk_dir = [compute_directions(trk_n, alpha) for trk_n in trk_arr]
     # Compute the vtk tubes
     out_list = [
-        compute_tubes(trk_arr_n, trk_dir_n) for trk_arr_n, trk_dir_n in zip(trk_arr, trk_dir)
+        compute_tubes(trk_arr_n, trk_dir_n)
+        for trk_arr_n, trk_dir_n in zip(trk_arr, trk_dir)
     ]
     # create a branch and add the tracts
     branch = create_branch(out_list, n_tract)
@@ -342,7 +340,9 @@ class ComputeTractsThread(threading.Thread):
                 # be more evident in slow computer or for heavier tract computations, it is better slow update
                 # than visualizing old data
                 # self.visualization_queue.put_nowait([coord, m_img, bundle])
-                self.tracts_queue.put_nowait((bundle, affine_vtk, coord_offset, coord_offset_w))
+                self.tracts_queue.put_nowait(
+                    (bundle, affine_vtk, coord_offset, coord_offset_w)
+                )
                 # print('ComputeTractsThread: put {}'.format(count))
 
                 self.coord_tracts_queue.task_done()
@@ -465,7 +465,9 @@ class ComputeTractsACTThread(threading.Thread):
                 # Spherical sampling of seed coordinates ---
                 # compute the samples of a sphere centered on seed coordinate offset by the grid
                 # given in the invesalius-vtk space
-                samples = np.random.default_rng().choice(coord_list_sphere.shape[1], size=100)
+                samples = np.random.default_rng().choice(
+                    coord_list_sphere.shape[1], size=100
+                )
                 m_seed[:-1, -1] = coord_offset.copy()
                 # translate the spherical grid samples to the coil location in invesalius-vtk space
                 seed_trk_r_inv = m_seed @ coord_list_sphere[:, samples]
@@ -481,7 +483,9 @@ class ComputeTractsACTThread(threading.Thread):
                         [[0, img_shift, 0]], dtype=np.int32
                     )
                     labs = act_data[
-                        seed_trk_r_mri[..., 0], seed_trk_r_mri[..., 1], seed_trk_r_mri[..., 2]
+                        seed_trk_r_mri[..., 0],
+                        seed_trk_r_mri[..., 1],
+                        seed_trk_r_mri[..., 2],
                     ]
                     # find all samples in the white matter
                     labs_id = np.where(labs == 1)
@@ -498,7 +502,9 @@ class ComputeTractsACTThread(threading.Thread):
                     seed_trk_r_inv_sampled = coord_offset_w.copy()
 
                 # convert to the world coordinate system for trekker
-                seed_trk_r_world_sampled = np.linalg.inv(affine) @ seed_trk_r_inv_sampled
+                seed_trk_r_world_sampled = (
+                    np.linalg.inv(affine) @ seed_trk_r_inv_sampled
+                )
                 seed_trk_r_world_sampled = seed_trk_r_world_sampled.T[:, :3]
 
                 # convert to the world coordinate system for saving in the marker list
@@ -577,7 +583,9 @@ class ComputeTractsACTThread(threading.Thread):
                 # use "nowait" to ensure maximum speed and avoid visualizing old tracts in the queue, this might
                 # be more evident in slow computer or for heavier tract computations, it is better slow update
                 # than visualizing old data
-                self.tracts_queue.put_nowait((bundle, affine_vtk, coord_offset, coord_offset_w))
+                self.tracts_queue.put_nowait(
+                    (bundle, affine_vtk, coord_offset, coord_offset_w)
+                )
                 self.coord_tracts_queue.task_done()
 
             # if no coordinates pass
@@ -634,7 +642,9 @@ def set_trekker_parameters(trekker, params):
 
 def grid_offset(data, coord_list_w_tr, img_shift):
     # convert to int so coordinates can be used as indices in the MRI image space
-    coord_list_w_tr_mri = coord_list_w_tr[:3, :].T.astype(int) + np.array([[0, img_shift, 0]])
+    coord_list_w_tr_mri = coord_list_w_tr[:3, :].T.astype(int) + np.array(
+        [[0, img_shift, 0]]
+    )
 
     # FIX: IndexError: index 269 is out of bounds for axis 2 with size 256
     # error occurs when running line "labs = data[coord..."
@@ -642,7 +652,9 @@ def grid_offset(data, coord_list_w_tr, img_shift):
 
     # extract the first occurrence of a specific label from the MRI image
     labs = data[
-        coord_list_w_tr_mri[..., 0], coord_list_w_tr_mri[..., 1], coord_list_w_tr_mri[..., 2]
+        coord_list_w_tr_mri[..., 0],
+        coord_list_w_tr_mri[..., 1],
+        coord_list_w_tr_mri[..., 2],
     ]
     lab_first = np.where(labs == 1)
     if not lab_first:

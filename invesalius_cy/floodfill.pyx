@@ -7,18 +7,20 @@
 # cython: language_level=3
 
 import numpy as np
-cimport numpy as np
+
 cimport cython
+cimport numpy as np
 
 from collections import deque
 
 from cython.parallel cimport prange
-from libc.math cimport floor, ceil
+from libc.math cimport ceil, floor
 from libcpp cimport bool
 from libcpp.deque cimport deque as cdeque
 from libcpp.vector cimport vector
 
 from .cy_my_types cimport image_t, mask_t
+
 
 cdef struct s_coord:
     int x

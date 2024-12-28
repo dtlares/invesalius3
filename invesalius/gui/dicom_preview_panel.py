@@ -29,7 +29,8 @@ from vtkmodules.vtkImagingCore import vtkImageFlip
 from vtkmodules.vtkInteractionStyle import vtkInteractorStyleImage
 from vtkmodules.vtkIOImage import vtkPNGReader
 from vtkmodules.vtkRenderingCore import vtkImageActor, vtkRenderer
-from vtkmodules.wx.wxVTKRenderWindowInteractor import wxVTKRenderWindowInteractor
+from vtkmodules.wx.wxVTKRenderWindowInteractor import \
+    wxVTKRenderWindowInteractor
 
 import invesalius.constants as const
 import invesalius.data.vtk_utils as vtku
@@ -133,7 +134,9 @@ class DicomInfo:
     def preview(self):
         if not self._preview:
             if isinstance(self.dicom.image.thumbnail_path, list):
-                bmp = wx.Bitmap(self.dicom.image.thumbnail_path[self._slice], wx.BITMAP_TYPE_PNG)
+                bmp = wx.Bitmap(
+                    self.dicom.image.thumbnail_path[self._slice], wx.BITMAP_TYPE_PNG
+                )
             else:
                 bmp = wx.Bitmap(self.dicom.image.thumbnail_path, wx.BITMAP_TYPE_PNG)
             self._preview = bmp.ConvertToImage()
@@ -211,7 +214,9 @@ class Preview(wx.Panel):
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         self.sizer.Add(self.title, 0, wx.ALIGN_CENTER_HORIZONTAL)
         self.sizer.Add(self.subtitle, 0, wx.ALIGN_CENTER_HORIZONTAL)
-        self.sizer.Add(self.image_viewer, 1, wx.ALIGN_CENTRE_HORIZONTAL | wx.SHAPED | wx.ALL, 5)
+        self.sizer.Add(
+            self.image_viewer, 1, wx.ALIGN_CENTRE_HORIZONTAL | wx.SHAPED | wx.ALL, 5
+        )
         self.sizer.Fit(self)
 
         self.SetSizer(self.sizer)
@@ -404,7 +409,9 @@ class DicomPreviewSeries(wx.Panel):
         my_evt.SetItemData(evt.GetItemData())
 
         if self.selected_dicom:
-            self.selected_dicom.selected = self.selected_dicom is evt.GetEventObject().dicom_info
+            self.selected_dicom.selected = (
+                self.selected_dicom is evt.GetEventObject().dicom_info
+            )
             self.selected_panel.select_on = self.selected_panel is evt.GetEventObject()
             self.selected_panel.Select()
         self.selected_panel = evt.GetEventObject()
@@ -555,7 +562,11 @@ class DicomPreviewSlice(wx.Panel):
                 for thumbnail in dicom.image.thumbnail_path:
                     print(thumbnail)
                     info = DicomInfo(
-                        n, dicom, _("Image %d") % (n), f"{dicom.image.position[2]:.2f}", _slice
+                        n,
+                        dicom,
+                        _("Image %d") % (n),
+                        f"{dicom.image.position[2]:.2f}",
+                        _slice,
                     )
                     self.files.append(info)
                     n += 1
@@ -590,7 +601,11 @@ class DicomPreviewSlice(wx.Panel):
                 for thumbnail in dicom.image.thumbnail_path:
                     print(thumbnail)
                     info = DicomInfo(
-                        n, dicom, _("Image %d") % int(n), f"{dicom.image.position[2]:.2f}", _slice
+                        n,
+                        dicom,
+                        _("Image %d") % int(n),
+                        f"{dicom.image.position[2]:.2f}",
+                        _slice,
                     )
                     self.files.append(info)
                     n += 1
@@ -669,7 +684,9 @@ class DicomPreviewSlice(wx.Panel):
         my_evt.SetItemData(evt.GetItemData())
 
         if self.selected_dicom:
-            self.selected_dicom.selected = self.selected_dicom is evt.GetEventObject().dicom_info
+            self.selected_dicom.selected = (
+                self.selected_dicom is evt.GetEventObject().dicom_info
+            )
             self.selected_panel.select_on = self.selected_panel is evt.GetEventObject()
 
             if self.first_selection != self.last_selection:
@@ -688,7 +705,8 @@ class DicomPreviewSlice(wx.Panel):
         self.GetEventHandler().ProcessEvent(my_evt)
 
         Publisher.sendMessage(
-            "Selected Import Images", selection=(self.first_selection, self.last_selection)
+            "Selected Import Images",
+            selection=(self.first_selection, self.last_selection),
         )
 
     def OnScroll(self, evt=None):
@@ -778,7 +796,12 @@ class SingleImagePreview(wx.Panel):
 
     def __init_gui(self):
         slider = wx.Slider(
-            self, id=-1, value=0, minValue=0, maxValue=99, style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS
+            self,
+            id=-1,
+            value=0,
+            minValue=0,
+            maxValue=99,
+            style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS,
         )
         slider.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
         slider.SetTickFreq(1)

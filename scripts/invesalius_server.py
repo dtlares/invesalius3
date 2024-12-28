@@ -31,9 +31,11 @@ import uvicorn
 nest_asyncio.apply()
 
 if len(sys.argv) != 2:
-    print("""This script allows sending events to InVesalius.
+    print(
+        """This script allows sending events to InVesalius.
 
-Usage:  python invesalius_server.py port""")
+Usage:  python invesalius_server.py port"""
+    )
     sys.exit(1)
 
 port = int(sys.argv[1])

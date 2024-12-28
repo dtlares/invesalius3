@@ -84,8 +84,12 @@ class Controller:
         Publisher.subscribe(self.OnImportMedicalImages, "Import directory")
         Publisher.subscribe(self.OnImportGroup, "Import group")
         Publisher.subscribe(self.OnImportFolder, "Import folder")
-        Publisher.subscribe(self.OnShowDialogImportDirectory, "Show import directory dialog")
-        Publisher.subscribe(self.OnShowDialogImportOtherFiles, "Show import other files dialog")
+        Publisher.subscribe(
+            self.OnShowDialogImportDirectory, "Show import directory dialog"
+        )
+        Publisher.subscribe(
+            self.OnShowDialogImportOtherFiles, "Show import other files dialog"
+        )
         Publisher.subscribe(self.OnShowDialogOpenProject, "Show open project dialog")
 
         Publisher.subscribe(self.OnShowDialogSaveProject, "Show save dialog")
@@ -115,7 +119,9 @@ class Controller:
 
         Publisher.subscribe(self.OnSaveProject, "Save project")
 
-        Publisher.subscribe(self.create_project_from_matrix, "Create project from matrix")
+        Publisher.subscribe(
+            self.create_project_from_matrix, "Create project from matrix"
+        )
 
         Publisher.subscribe(self.show_mask_preview, "Show mask preview")
 
@@ -126,7 +132,9 @@ class Controller:
         Publisher.subscribe(self.LoadProject, "Load project data")
 
         # for call cranioplasty implant by command line
-        Publisher.subscribe(segment.run_cranioplasty_implant, "Create implant for cranioplasty")
+        Publisher.subscribe(
+            segment.run_cranioplasty_implant, "Create implant for cranioplasty"
+        )
 
     def SetBitmapSpacing(self, spacing: Tuple[float, float, float]) -> None:
         proj = prj.Project()
@@ -363,7 +371,9 @@ class Controller:
         else:
             self.Slice.affine = np.identity(4)
 
-        Publisher.sendMessage("Update threshold limits list", threshold_range=proj.threshold_range)
+        Publisher.sendMessage(
+            "Update threshold limits list", threshold_range=proj.threshold_range
+        )
 
         self.LoadProject()
 
@@ -374,8 +384,12 @@ class Controller:
     def OnSaveProject(self, filepath: Optional["str | Path"]) -> None:
         self.SaveProject(filepath)
 
-    def SaveProject(self, path: Optional["str | Path"] = None, compress: bool = False) -> None:
-        dialog.ProgressBarHandler(self.frame, "Saving Project", "Initializing...", max_value=100)
+    def SaveProject(
+        self, path: Optional["str | Path"] = None, compress: bool = False
+    ) -> None:
+        dialog.ProgressBarHandler(
+            self.frame, "Saving Project", "Initializing...", max_value=100
+        )
 
         try:
             session = ses.Session()
@@ -410,7 +424,9 @@ class Controller:
                     dlg.Destroy()
             else:
                 # Update progress dialog
-                Publisher.sendMessage("Update Progress bar", value=70, msg="Saving project data...")
+                Publisher.sendMessage(
+                    "Update Progress bar", value=70, msg="Saving project data..."
+                )
 
                 session.SaveProject((dirpath, filename))
 
@@ -531,7 +547,9 @@ class Controller:
         if len(patients_groups):
             # OPTION 1: DICOM
             group = dcm.SelectLargerDicomGroup(patients_groups)
-            matrix, matrix_filename, dicom = self.OpenDicomGroup(group, 0, [0, 0], gui=gui)
+            matrix, matrix_filename, dicom = self.OpenDicomGroup(
+                group, 0, [0, 0], gui=gui
+            )
             if matrix is None:
                 return
             self.CreateDicomProject(dicom, matrix, matrix_filename)
@@ -584,7 +602,9 @@ class Controller:
         self.Slice.window_level = proj.level
         self.Slice.window_width = proj.window
 
-        Publisher.sendMessage("Update threshold limits list", threshold_range=proj.threshold_range)
+        Publisher.sendMessage(
+            "Update threshold limits list", threshold_range=proj.threshold_range
+        )
 
         filename = proj.name + ".inv3"
         filename = filename.replace("/", "")  # Fix problem case other/Skull_DICOM
@@ -619,7 +639,9 @@ class Controller:
         Publisher.sendMessage(
             "Bright and contrast adjustment image", window=proj.window, level=proj.level
         )
-        Publisher.sendMessage("Update window level value", window=proj.window, level=proj.level)
+        Publisher.sendMessage(
+            "Update window level value", window=proj.window, level=proj.level
+        )
 
         Publisher.sendMessage("Set project name", proj_name=proj.name)
         Publisher.sendMessage("Load surface dict", surface_dict=proj.surface_dict)
@@ -659,9 +681,15 @@ class Controller:
             spacing=self.Slice.spacing,
         )
 
-        Publisher.sendMessage(("Set scroll position", "AXIAL"), index=proj.matrix_shape[0] / 2)
-        Publisher.sendMessage(("Set scroll position", "SAGITAL"), index=proj.matrix_shape[1] / 2)
-        Publisher.sendMessage(("Set scroll position", "CORONAL"), index=proj.matrix_shape[2] / 2)
+        Publisher.sendMessage(
+            ("Set scroll position", "AXIAL"), index=proj.matrix_shape[0] / 2
+        )
+        Publisher.sendMessage(
+            ("Set scroll position", "SAGITAL"), index=proj.matrix_shape[1] / 2
+        )
+        Publisher.sendMessage(
+            ("Set scroll position", "CORONAL"), index=proj.matrix_shape[2] / 2
+        )
 
         # TODO: Check that this is needed with the new way of using affine
         #  now the affine should be at least the identity(4) and never None
@@ -674,7 +702,11 @@ class Controller:
         Publisher.sendMessage("Project loaded successfully")
 
     def CreateDicomProject(self, dicom, matrix, matrix_filename):
-        name_to_const = {"AXIAL": const.AXIAL, "CORONAL": const.CORONAL, "SAGITTAL": const.SAGITAL}
+        name_to_const = {
+            "AXIAL": const.AXIAL,
+            "CORONAL": const.CORONAL,
+            "SAGITTAL": const.SAGITAL,
+        }
 
         proj = prj.Project()
         proj.name = dicom.patient.name
@@ -700,7 +732,11 @@ class Controller:
         session.CreateProject(filename)
 
     def CreateBitmapProject(self, bmp_data, rec_data, matrix, matrix_filename):
-        name_to_const = {"AXIAL": const.AXIAL, "CORONAL": const.CORONAL, "SAGITTAL": const.SAGITAL}
+        name_to_const = {
+            "AXIAL": const.AXIAL,
+            "CORONAL": const.CORONAL,
+            "SAGITTAL": const.SAGITAL,
+        }
 
         name = rec_data[0]
         orientation = rec_data[1]
@@ -738,7 +774,11 @@ class Controller:
         session.CreateProject(filename)
 
     def CreateOtherProject(self, name, matrix, matrix_filename):
-        name_to_const = {"AXIAL": const.AXIAL, "CORONAL": const.CORONAL, "SAGITTAL": const.SAGITAL}
+        name_to_const = {
+            "AXIAL": const.AXIAL,
+            "CORONAL": const.CORONAL,
+            "SAGITTAL": const.SAGITAL,
+        }
 
         proj = prj.Project()
         proj.name = name
@@ -797,7 +837,11 @@ class Controller:
         window_width = int(window_width)
         window_level = int(window_level)
 
-        name_to_const = {"AXIAL": const.AXIAL, "CORONAL": const.CORONAL, "SAGITTAL": const.SAGITAL}
+        name_to_const = {
+            "AXIAL": const.AXIAL,
+            "CORONAL": const.CORONAL,
+            "SAGITTAL": const.SAGITAL,
+        }
 
         if new_instance:
             self.start_new_inv_instance(
@@ -857,7 +901,9 @@ class Controller:
             self.LoadProject()
             Publisher.sendMessage("Enable state project", state=True)
 
-    def OnOpenBitmapFiles(self, rec_data: Tuple[str, str, float, float, float, float]) -> None:
+    def OnOpenBitmapFiles(
+        self, rec_data: Tuple[str, str, float, float, float, float]
+    ) -> None:
         bmp_data = bmp.BitmapData()
 
         if bmp_data.IsAllBitmapSameSize():
@@ -871,7 +917,9 @@ class Controller:
             dialogs.BitmapNotSameSize()
 
     def OpenBitmapFiles(
-        self, bmp_data: "bmp.BitmapData", rec_data: Tuple[str, str, float, float, float, float]
+        self,
+        bmp_data: "bmp.BitmapData",
+        rec_data: Tuple[str, str, float, float, float, float],
     ):
         # name = rec_data[0]
         orientation = rec_data[1]
@@ -906,7 +954,10 @@ class Controller:
             else:
                 return
 
-        xyspacing = xyspacing[0] / resolution_percentage, xyspacing[1] / resolution_percentage
+        xyspacing = (
+            xyspacing[0] / resolution_percentage,
+            xyspacing[1] / resolution_percentage,
+        )
 
         self.matrix, scalar_range, self.filename = image_utils.bitmap2memmap(
             filelist, size, orientation, (sp_z, sp_y, sp_x), resolution_percentage
@@ -927,7 +978,9 @@ class Controller:
         self.Slice.window_width = float(self.matrix.max())
 
         scalar_range = int(self.matrix.min()), int(self.matrix.max())
-        Publisher.sendMessage("Update threshold limits list", threshold_range=scalar_range)
+        Publisher.sendMessage(
+            "Update threshold limits list", threshold_range=scalar_range
+        )
 
         return self.matrix, self.filename  # , dicom
 
@@ -945,7 +998,9 @@ class Controller:
             )
             if dlg.ShowModal() != wx.ID_YES:
                 return
-        matrix, matrix_filename, dicom = self.OpenDicomGroup(group, interval, file_range, gui=True)
+        matrix, matrix_filename, dicom = self.OpenDicomGroup(
+            group, interval, file_range, gui=True
+        )
         if matrix is None:
             return
         self.CreateDicomProject(dicom, matrix, matrix_filename)
@@ -981,9 +1036,15 @@ class Controller:
         filelist = dicom_group.GetFilenameList()[::interval]
         if not filelist:
             utils.debug("Not used the IPPSorter")
-            filelist = [i.image.file for i in dicom_group.GetHandSortedList()[::interval]]
+            filelist = [
+                i.image.file for i in dicom_group.GetHandSortedList()[::interval]
+            ]
 
-        if file_range is not None and file_range[0] is not None and file_range[1] > file_range[0]:
+        if (
+            file_range is not None
+            and file_range[0] is not None
+            and file_range[1] > file_range[0]
+        ):
             filelist = filelist[file_range[0] : file_range[1] + 1]
 
         zspacing = dicom_group.zspacing * interval
@@ -1024,7 +1085,10 @@ class Controller:
                 else:
                     return
 
-            xyspacing = xyspacing[0] / resolution_percentage, xyspacing[1] / resolution_percentage
+            xyspacing = (
+                xyspacing[0] / resolution_percentage,
+                xyspacing[1] / resolution_percentage,
+            )
 
             self.matrix, scalar_range, self.filename = image_utils.dcm2memmap(
                 filelist, size, orientation, resolution_percentage
@@ -1037,8 +1101,8 @@ class Controller:
             elif orientation == "SAGITTAL":
                 spacing = zspacing, xyspacing[1], xyspacing[0]
         else:
-            self.matrix, scalar_range, spacing, self.filename = image_utils.dcmmf2memmap(
-                filelist[0], orientation
+            self.matrix, scalar_range, spacing, self.filename = (
+                image_utils.dcmmf2memmap(filelist[0], orientation)
             )
 
         self.Slice = sl.Slice()
@@ -1072,7 +1136,9 @@ class Controller:
 
         scalar_range = int(self.matrix.min()), int(self.matrix.max())
 
-        Publisher.sendMessage("Update threshold limits list", threshold_range=scalar_range)
+        Publisher.sendMessage(
+            "Update threshold limits list", threshold_range=scalar_range
+        )
 
         return self.matrix, self.filename, dicom
 
@@ -1118,7 +1184,11 @@ class Controller:
             scale, shear, angs, trans, persp = tr.decompose_matrix(group.affine)
             self.Slice.affine = np.linalg.inv(
                 tr.compose_matrix(
-                    scale=None, shear=shear, angles=angs, translate=trans, perspective=persp
+                    scale=None,
+                    shear=shear,
+                    angles=angs,
+                    translate=trans,
+                    perspective=persp,
                 )
             )
         else:
@@ -1126,7 +1196,9 @@ class Controller:
 
         scalar_range = int(scalar_range[0]), int(scalar_range[1])
 
-        Publisher.sendMessage("Update threshold limits list", threshold_range=scalar_range)
+        Publisher.sendMessage(
+            "Update threshold limits list", threshold_range=scalar_range
+        )
 
         return self.matrix, self.filename
 
@@ -1150,20 +1222,26 @@ class Controller:
             [a, b] = default_threshold
             default_threshold = (a, b)
         Publisher.sendMessage(
-            "Set threshold modes", thresh_modes_names=thresh_modes, default_thresh=default_threshold
+            "Set threshold modes",
+            thresh_modes_names=thresh_modes,
+            default_thresh=default_threshold,
         )
 
     def LoadRaycastingPreset(self, preset_name):
         if preset_name != const.RAYCASTING_OFF_LABEL:
             if preset_name in const.RAYCASTING_FILES.keys():
                 path = os.path.join(
-                    inv_paths.RAYCASTING_PRESETS_DIRECTORY, const.RAYCASTING_FILES[preset_name]
+                    inv_paths.RAYCASTING_PRESETS_DIRECTORY,
+                    const.RAYCASTING_FILES[preset_name],
                 )
             else:
-                path = os.path.join(inv_paths.RAYCASTING_PRESETS_DIRECTORY, preset_name + ".plist")
+                path = os.path.join(
+                    inv_paths.RAYCASTING_PRESETS_DIRECTORY, preset_name + ".plist"
+                )
                 if not os.path.isfile(path):
                     path = os.path.join(
-                        inv_paths.USER_RAYCASTING_PRESETS_DIRECTORY, preset_name + ".plist"
+                        inv_paths.USER_RAYCASTING_PRESETS_DIRECTORY,
+                        preset_name + ".plist",
                     )
             with open(path, "rb") as f:
                 preset = plistlib.load(f, fmt=plistlib.FMT_XML)
@@ -1178,7 +1256,9 @@ class Controller:
     def SaveRaycastingPreset(self, preset_name):
         preset = prj.Project().raycasting_preset
         preset["name"] = preset_name
-        preset_dir = inv_paths.USER_RAYCASTING_PRESETS_DIRECTORY.joinpath(f"{preset_name}.plist")
+        preset_dir = inv_paths.USER_RAYCASTING_PRESETS_DIRECTORY.joinpath(
+            f"{preset_name}.plist"
+        )
         inv_paths.USER_RAYCASTING_PRESETS_DIRECTORY.mkdir(parents=True, exist_ok=True)
         with open(preset_dir, "w+b") as f:
             plistlib.dump(preset, f)
@@ -1225,7 +1305,9 @@ class Controller:
 
         if err_msg:
             dialog.MessageBox(
-                None, "It was not possible to launch new instance of InVesalius3", err_msg
+                None,
+                "It was not possible to launch new instance of InVesalius3",
+                err_msg,
             )
 
     def show_mask_preview(self, index, flag=True):
@@ -1233,7 +1315,9 @@ class Controller:
         mask = proj.mask_dict[index]
         self.Slice.do_threshold_to_all_slices(mask)
         mask.create_3d_preview()
-        Publisher.sendMessage("Load mask preview", mask_3d_actor=mask.volume._actor, flag=flag)
+        Publisher.sendMessage(
+            "Load mask preview", mask_3d_actor=mask.volume._actor, flag=flag
+        )
         Publisher.sendMessage("Reload actual slice")
 
     def enable_mask_preview(self):
@@ -1242,14 +1326,18 @@ class Controller:
         if mask is not None:
             self.Slice.do_threshold_to_all_slices(mask)
             mask.create_3d_preview()
-            Publisher.sendMessage("Load mask preview", mask_3d_actor=mask.volume._actor, flag=True)
+            Publisher.sendMessage(
+                "Load mask preview", mask_3d_actor=mask.volume._actor, flag=True
+            )
             Publisher.sendMessage("Render volume viewer")
 
     def disable_mask_preview(self):
         ses.Session().mask_3d_preview = False
         mask = self.Slice.current_mask
         if mask is not None:
-            Publisher.sendMessage("Remove mask preview", mask_3d_actor=mask.volume._actor)
+            Publisher.sendMessage(
+                "Remove mask preview", mask_3d_actor=mask.volume._actor
+            )
             Publisher.sendMessage("Render volume viewer")
 
     def update_mask_preview(self) -> None:

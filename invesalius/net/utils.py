@@ -8,7 +8,10 @@ from urllib.request import Request, urlopen
 
 
 def download_url_to_file(
-    url: str, dst: pathlib.Path, hash: str = None, callback: typing.Callable[[float], None] = None
+    url: str,
+    dst: pathlib.Path,
+    hash: str = None,
+    callback: typing.Callable[[float], None] = None,
 ):
     file_size = None
     total_downloaded = 0
@@ -41,7 +44,9 @@ def download_url_to_file(
         if hash is not None:
             digest = calc_hash.hexdigest()
             if digest != hash:
-                raise RuntimeError(f'Invalid hash value (expected "{hash}", got "{digest}")')
+                raise RuntimeError(
+                    f'Invalid hash value (expected "{hash}", got "{digest}")'
+                )
         shutil.move(f.name, dst)
     finally:
         f.close()

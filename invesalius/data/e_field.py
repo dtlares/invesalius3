@@ -34,7 +34,9 @@ def Get_coil_position(m_img):
 
 
 class Visualize_E_field_Thread(threading.Thread):
-    def __init__(self, queues, event, sle, neuronavigation_api, debug_efield_enorm, plot_vectors):
+    def __init__(
+        self, queues, event, sle, neuronavigation_api, debug_efield_enorm, plot_vectors
+    ):
         threading.Thread.__init__(self, name="Visualize_E_field_Thread")
         # self.inp = inp #list of inputs
         self.efield_queue = queues[0]

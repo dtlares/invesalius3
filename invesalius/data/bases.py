@@ -44,7 +44,9 @@ def base_creation_old(fiducials: np.ndarray) -> Tuple[np.matrix, np.ndarray, np.
 
     sub1 = p2 - p1
     sub2 = p3 - p1
-    lamb = (sub1[0] * sub2[0] + sub1[1] * sub2[1] + sub1[2] * sub2[2]) / np.dot(sub1, sub1)
+    lamb = (sub1[0] * sub2[0] + sub1[1] * sub2[1] + sub1[2] * sub2[2]) / np.dot(
+        sub1, sub1
+    )
 
     q = p1 + lamb * sub1
     g1 = p1 - q
@@ -137,8 +139,12 @@ def calculate_fre(
 
     dist = np.zeros([3, 1])
     for i in range(0, 6, 2):
-        p_m, _ = dcr.corregistrate_probe(m_change, None, fiducials_raw[i : i + 2], ref_mode_id, icp)
-        dist[int(i / 2)] = np.sqrt(np.sum(np.power((p_m[:3] - fiducials[int(i / 2), :]), 2)))
+        p_m, _ = dcr.corregistrate_probe(
+            m_change, None, fiducials_raw[i : i + 2], ref_mode_id, icp
+        )
+        dist[int(i / 2)] = np.sqrt(
+            np.sum(np.power((p_m[:3] - fiducials[int(i / 2), :]), 2))
+        )
 
     return float(np.sqrt(np.sum(dist**2) / 3))
 
@@ -188,7 +194,10 @@ def inverse_transform_icp(m_img: np.ndarray, m_icp: np.ndarray) -> np.ndarray:
 
 
 def object_registration(
-    fiducials: np.ndarray, orients: np.ndarray, coord_raw: np.ndarray, m_change: np.ndarray
+    fiducials: np.ndarray,
+    orients: np.ndarray,
+    coord_raw: np.ndarray,
+    m_change: np.ndarray,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
 

@@ -21,31 +21,17 @@ from copy import deepcopy
 import numpy as np
 import wx
 from vtk import vtkColorTransferFunction
-from vtkmodules.vtkCommonCore import (
-    vtkDoubleArray,
-    vtkPoints,
-)
-from vtkmodules.vtkCommonDataModel import (
-    vtkImageData,
-    vtkPolyData,
-)
-from vtkmodules.vtkFiltersCore import (
-    vtkDecimatePro,
-    vtkImplicitPolyDataDistance,
-    vtkPolyDataNormals,
-    vtkResampleWithDataSet,
-    vtkTriangleFilter,
-)
-from vtkmodules.vtkFiltersPoints import (
-    vtkGaussianKernel,
-    vtkPointInterpolator,
-)
+from vtkmodules.vtkCommonCore import vtkDoubleArray, vtkPoints
+from vtkmodules.vtkCommonDataModel import vtkImageData, vtkPolyData
+from vtkmodules.vtkFiltersCore import (vtkDecimatePro,
+                                       vtkImplicitPolyDataDistance,
+                                       vtkPolyDataNormals,
+                                       vtkResampleWithDataSet,
+                                       vtkTriangleFilter)
+from vtkmodules.vtkFiltersPoints import vtkGaussianKernel, vtkPointInterpolator
 from vtkmodules.vtkRenderingAnnotation import vtkScalarBarActor
-from vtkmodules.vtkRenderingCore import (
-    vtkActor,
-    vtkPointGaussianMapper,
-    vtkPolyDataMapper,
-)
+from vtkmodules.vtkRenderingCore import (vtkActor, vtkPointGaussianMapper,
+                                         vtkPolyDataMapper)
 
 import invesalius.constants as const
 import invesalius.data.transformations as transformations
@@ -67,7 +53,9 @@ class MEPVisualizer:
         self.bounds = None
 
         self.colorBarActor = None
-        self.actors_dict = {}  # Dictionary to store all actors created by the MEP visualizer
+        self.actors_dict = (
+            {}
+        )  # Dictionary to store all actors created by the MEP visualizer
         self.marker_storage = []
 
         self.is_navigating = False
@@ -85,7 +73,8 @@ class MEPVisualizer:
         # Publisher.subscribe(self.SetBrainSurface, "Set MEP brain surface")
         Publisher.subscribe(self.UpdateMEPPoints, "Redraw MEP mapping")
         Publisher.subscribe(
-            self.UpdateMEPPointsFromBrainTargets, "Redraw MEP mapping from brain targets"
+            self.UpdateMEPPointsFromBrainTargets,
+            "Redraw MEP mapping from brain targets",
         )
         Publisher.subscribe(self.UpdateNavigationStatus, "Navigation status")
         Publisher.subscribe(self.SetBrainSurface, "Load brain surface actor")
@@ -207,7 +196,9 @@ class MEPVisualizer:
 
         if choice in color_maps:
             for value, color in color_maps[choice].items():
-                color_function.AddRGBPoint(self._config_params["colormap_range_uv"][value], *color)
+                color_function.AddRGBPoint(
+                    self._config_params["colormap_range_uv"][value], *color
+                )
         else:
             raise ValueError(
                 f"Invalid choice '{choice}'. Choose from: {', '.join(color_maps.keys())}"
@@ -410,7 +401,8 @@ class MEPVisualizer:
         interpolated_data = self.InterpolateData()
         self.colored_surface_actor = self.CreateColoredSurface(interpolated_data)
         self.point_actor = self.CreatePointActor(
-            self.points, (self._config_params["threshold_down"], self._config_params["range_up"])
+            self.points,
+            (self._config_params["threshold_down"], self._config_params["range_up"]),
         )
         self.colorBarActor = self.CreateColorbarActor()
 
@@ -463,12 +455,18 @@ class MEPVisualizer:
         normals.ComputeCellNormalsOff()
         normals.Update()
 
-        data_range = (self._config_params["threshold_down"], self._config_params["range_up"])
+        data_range = (
+            self._config_params["threshold_down"],
+            self._config_params["range_up"],
+        )
 
         mapper = vtkPolyDataMapper()
         mapper.SetInputData(normals.GetOutput())
         if data_range is None:
-            data_range = (self._config_params["threshold_down"], self._config_params["range_up"])
+            data_range = (
+                self._config_params["threshold_down"],
+                self._config_params["range_up"],
+            )
         mapper.SetScalarRange(data_range)
 
         lut = self._CustomColormap()

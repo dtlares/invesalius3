@@ -61,7 +61,9 @@ class BuildPluginsCommand(setuptools.Command):
             plugin_folder = plugins_folder.joinpath(p)
             self.announce(f"Compiling plugin: {p}")
             os.chdir(plugin_folder)
-            subprocess.check_call([sys.executable, "setup.py", "build_ext", "--inplace"])
+            subprocess.check_call(
+                [sys.executable, "setup.py", "build_ext", "--inplace"]
+            )
             os.chdir(inv_folder)
 
 

@@ -136,7 +136,9 @@ def new_name_by_pattern(pattern: str) -> str:
 
     proj = Project()
     mask_dict = proj.mask_dict
-    names_list = [i.name for i in mask_dict.values() if i.name.startswith(pattern + "_")]
+    names_list = [
+        i.name for i in mask_dict.values() if i.name.startswith(pattern + "_")
+    ]
     count = len(names_list) + 1
     return f"{pattern}_{count}"
 
@@ -213,7 +215,9 @@ class TwoWaysDictionary(dict):
 
 
 # DEPRECATED
-def frange(start: float, end: Optional[float] = None, inc: Optional[float] = None) -> List[float]:
+def frange(
+    start: float, end: Optional[float] = None, inc: Optional[float] = None
+) -> List[float]:
     "A range function, that accepts float increments."
 
     if end is None:
@@ -263,7 +267,11 @@ def calculate_resizing_tofitmemory(x_size, y_size, n_slices, byte):
             ram_total = psutil.virtual_memory().total
             swap_free = psutil.swap_memory().free
         else:
-            ram_free = psutil.phymem_usage().free + psutil.cached_phymem() + psutil.phymem_buffers()
+            ram_free = (
+                psutil.phymem_usage().free
+                + psutil.cached_phymem()
+                + psutil.phymem_buffers()
+            )
             ram_total = psutil.phymem_usage().total
             swap_free = psutil.virtmem_usage().free
     except Exception:
@@ -311,7 +319,6 @@ def UpdateCheck() -> None:
         from urllib.request import Request, urlopen
     except ImportError:
         from urllib import urlencode
-
         from urllib2 import Request, urlopen
 
     import wx
@@ -320,8 +327,8 @@ def UpdateCheck() -> None:
 
     def _show_update_info():
         from invesalius.gui import dialogs
-        # from invesalius.i18n import tr as _
 
+        # from invesalius.i18n import tr as _
         # msg = _(
         #     "A new version of InVesalius is available. Do you want to open the download website now?"
         # )
@@ -418,7 +425,8 @@ def log_traceback(ex: Any) -> str:
     else:
         _, _, ex_traceback = sys.exc_info()
     tb_lines = [
-        line.rstrip("\n") for line in traceback.format_exception(ex.__class__, ex, ex_traceback)
+        line.rstrip("\n")
+        for line in traceback.format_exception(ex.__class__, ex, ex_traceback)
     ]
     return "".join(tb_lines)
 

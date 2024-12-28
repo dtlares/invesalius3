@@ -144,7 +144,9 @@ class MarkersControl(metaclass=Singleton):
         marker.is_target = True
 
         Publisher.sendMessage("Set target", marker=marker)
-        Publisher.sendMessage("Set target transparency", marker=marker, transparent=True)
+        Publisher.sendMessage(
+            "Set target transparency", marker=marker, transparent=True
+        )
 
         # When setting a new target, automatically switch into target mode. Note that the order is important here:
         # first set the target, then move into target mode.
@@ -176,7 +178,9 @@ class MarkersControl(metaclass=Singleton):
         marker = self.list[marker_id]
         marker.is_target = False
 
-        Publisher.sendMessage("Set target transparency", marker=marker, transparent=False)
+        Publisher.sendMessage(
+            "Set target transparency", marker=marker, transparent=False
+        )
         Publisher.sendMessage("Unset target", marker=marker)
 
         self.SaveState()
@@ -185,7 +189,9 @@ class MarkersControl(metaclass=Singleton):
         marker = self.list[marker_id]
         marker.is_point_of_interest = False
 
-        Publisher.sendMessage("Set target transparency", marker=marker, transparent=False)
+        Publisher.sendMessage(
+            "Set target transparency", marker=marker, transparent=False
+        )
         Publisher.sendMessage("Unset point of interest", marker=marker)
 
         self.SaveState()

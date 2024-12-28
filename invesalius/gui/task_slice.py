@@ -65,7 +65,9 @@ class TaskPanel(wx.Panel):
         inner_panel = InnerTaskPanel(self)
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add(inner_panel, 1, wx.EXPAND | wx.GROW | wx.BOTTOM | wx.RIGHT | wx.LEFT, 7)
+        sizer.Add(
+            inner_panel, 1, wx.EXPAND | wx.GROW | wx.BOTTOM | wx.RIGHT | wx.LEFT, 7
+        )
         sizer.Fit(self)
 
         self.SetSizer(sizer)
@@ -81,13 +83,19 @@ class InnerTaskPanel(wx.Panel):
         self.SetAutoLayout(1)
 
         # Image(s) for buttons
-        BMP_ADD = wx.Bitmap(os.path.join(inv_paths.ICON_DIR, "object_add.png"), wx.BITMAP_TYPE_PNG)
+        BMP_ADD = wx.Bitmap(
+            os.path.join(inv_paths.ICON_DIR, "object_add.png"), wx.BITMAP_TYPE_PNG
+        )
         # BMP_ADD.SetWidth(25)
         # BMP_ADD.SetHeight(25)
 
         # Button for creating new surface
         button_new_mask = pbtn.PlateButton(
-            self, BTN_NEW, "", BMP_ADD, style=pbtn.PB_STYLE_SQUARE | pbtn.PB_STYLE_DEFAULT
+            self,
+            BTN_NEW,
+            "",
+            BMP_ADD,
+            style=pbtn.PB_STYLE_SQUARE | pbtn.PB_STYLE_DEFAULT,
         )
         button_new_mask.SetBackgroundColour(self.GetBackgroundColour())
         self.Bind(wx.EVT_BUTTON, self.OnButton)
@@ -146,7 +154,9 @@ class InnerTaskPanel(wx.Panel):
 
         # Add line sizers into main sizer
         main_sizer = wx.BoxSizer(wx.VERTICAL)
-        main_sizer.Add(line_new, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, 5)
+        main_sizer.Add(
+            line_new, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, 5
+        )
         main_sizer.Add(fold_panel, 1, wx.GROW | wx.EXPAND | wx.ALL, 5)
         main_sizer.Add(line_sizer, 0, wx.GROW | wx.EXPAND)
         main_sizer.AddSpacer(5)
@@ -312,7 +322,9 @@ class InnerFoldPanel(wx.Panel):
         etw = EditionTools(item)
 
         fold_panel.ApplyCaptionStyle(item, style)
-        fold_panel.AddFoldPanelWindow(item, etw, spacing=0, leftSpacing=0, rightSpacing=0)
+        fold_panel.AddFoldPanelWindow(
+            item, etw, spacing=0, leftSpacing=0, rightSpacing=0
+        )
         self.__id_editor = item.GetId()
         self.last_panel_opened = None
 
@@ -321,7 +333,9 @@ class InnerFoldPanel(wx.Panel):
         wtw = WatershedTool(item)
 
         fold_panel.ApplyCaptionStyle(item, style)
-        fold_panel.AddFoldPanelWindow(item, wtw, spacing=0, leftSpacing=0, rightSpacing=0)
+        fold_panel.AddFoldPanelWindow(
+            item, wtw, spacing=0, leftSpacing=0, rightSpacing=0
+        )
         self.__id_watershed = item.GetId()
 
         sizer.Add(fold_panel, 1, wx.EXPAND)
@@ -391,7 +405,9 @@ class InnerFoldPanel(wx.Panel):
                 self.last_style = const.SLICE_STATE_EDITOR
         elif self.__id_watershed == id:
             if closed:
-                Publisher.sendMessage("Disable style", style=const.SLICE_STATE_WATERSHED)
+                Publisher.sendMessage(
+                    "Disable style", style=const.SLICE_STATE_WATERSHED
+                )
                 self.last_style = None
             else:
                 Publisher.sendMessage("Enable style", style=const.SLICE_STATE_WATERSHED)
@@ -461,7 +477,9 @@ class MaskProperties(wx.Panel):
         # Sizer which represents the first line
         line1 = wx.BoxSizer(wx.HORIZONTAL)
         line1.Add(combo_mask_name, 1, wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT, 2)
-        line1.Add(button_colour, 0, wx.TOP | wx.LEFT | wx.RIGHT | wx.ALIGN_CENTER_VERTICAL, 2)
+        line1.Add(
+            button_colour, 0, wx.TOP | wx.LEFT | wx.RIGHT | wx.ALIGN_CENTER_VERTICAL, 2
+        )
 
         ### LINE 2
         text_thresh = wx.StaticText(self, -1, _("Set predefined or manual threshold:"))
@@ -621,7 +639,9 @@ class MaskProperties(wx.Panel):
         proj = Project()
         if isinstance(default_thresh, int):
             self.combo_thresh.SetSelection(default_thresh)
-            (thresh_min, thresh_max) = self.threshold_modes[thresh_modes_names[default_thresh]]
+            (thresh_min, thresh_max) = self.threshold_modes[
+                thresh_modes_names[default_thresh]
+            ]
         elif default_thresh in proj.threshold_modes.keys():
             index = self.threshold_modes_names.index(default_thresh)
             self.combo_thresh.SetSelection(index)
@@ -663,14 +683,18 @@ class MaskProperties(wx.Panel):
     def OnSlideChanged(self, evt):
         thresh_min = self.gradient.GetMinValue()
         thresh_max = self.gradient.GetMaxValue()
-        Publisher.sendMessage("Set threshold values", threshold_range=(thresh_min, thresh_max))
+        Publisher.sendMessage(
+            "Set threshold values", threshold_range=(thresh_min, thresh_max)
+        )
         session = ses.Session()
         session.ChangeProject()
 
     def OnSlideChanging(self, evt):
         thresh_min = self.gradient.GetMinValue()
         thresh_max = self.gradient.GetMaxValue()
-        Publisher.sendMessage("Changing threshold values", threshold_range=(thresh_min, thresh_max))
+        Publisher.sendMessage(
+            "Changing threshold values", threshold_range=(thresh_min, thresh_max)
+        )
         session = ses.Session()
         session.ChangeProject()
 
@@ -709,7 +733,10 @@ class EditionTools(wx.Panel):
         item2 = menu.Append(MENU_BRUSH_SQUARE, _("Square"))
         item2.SetBitmap(SQUARE_BMP)
 
-        bmp_brush_format = {const.BRUSH_CIRCLE: CIRCLE_BMP, const.BRUSH_SQUARE: SQUARE_BMP}
+        bmp_brush_format = {
+            const.BRUSH_CIRCLE: CIRCLE_BMP,
+            const.BRUSH_SQUARE: SQUARE_BMP,
+        }
         selected_bmp = bmp_brush_format[const.DEFAULT_BRUSH_FORMAT]
 
         btn_brush_format = pbtn.PlateButton(
@@ -719,7 +746,12 @@ class EditionTools(wx.Panel):
         self.btn_brush_format = btn_brush_format
 
         spin_brush_size = InvSpinCtrl(
-            self, -1, value=const.BRUSH_SIZE, min_value=1, max_value=1000, spin_button=False
+            self,
+            -1,
+            value=const.BRUSH_SIZE,
+            min_value=1,
+            max_value=1000,
+            spin_button=False,
         )
         # To calculate best width to spinctrl
         spin_brush_size.CalcSizeFromTextSize("MMMM")
@@ -753,7 +785,9 @@ class EditionTools(wx.Panel):
         text_thresh = wx.StaticText(self, -1, _("Brush threshold range:"))
 
         ## LINE 4
-        gradient_thresh = grad.GradientCtrl(self, -1, 0, 5000, 0, 5000, (0, 0, 255, 100))
+        gradient_thresh = grad.GradientCtrl(
+            self, -1, 0, 5000, 0, 5000, (0, 0, 255, 100)
+        )
         self.gradient_thresh = gradient_thresh
         self.bind_evt_gradient = True
 
@@ -779,7 +813,9 @@ class EditionTools(wx.Panel):
 
     def __bind_events_wx(self):
         self.btn_brush_format.Bind(wx.EVT_MENU, self.OnMenu)
-        self.Bind(grad.EVT_THRESHOLD_CHANGED, self.OnGradientChanged, self.gradient_thresh)
+        self.Bind(
+            grad.EVT_THRESHOLD_CHANGED, self.OnGradientChanged, self.gradient_thresh
+        )
         self.combo_brush_op.Bind(wx.EVT_COMBOBOX, self.OnComboBrushOp)
 
     def __bind_events(self):
@@ -828,7 +864,10 @@ class EditionTools(wx.Panel):
             os.path.join(inv_paths.ICON_DIR, "brush_circle.png"), wx.BITMAP_TYPE_PNG
         )
 
-        brush = {MENU_BRUSH_CIRCLE: const.BRUSH_CIRCLE, MENU_BRUSH_SQUARE: const.BRUSH_SQUARE}
+        brush = {
+            MENU_BRUSH_CIRCLE: const.BRUSH_CIRCLE,
+            MENU_BRUSH_SQUARE: const.BRUSH_SQUARE,
+        }
         bitmap = {MENU_BRUSH_CIRCLE: CIRCLE_BMP, MENU_BRUSH_SQUARE: SQUARE_BMP}
 
         self.btn_brush_format.SetBitmap(bitmap[evt.GetId()])
@@ -914,7 +953,10 @@ class WatershedTool(EditionTools):
         item2 = menu.Append(MENU_BRUSH_SQUARE, _("Square"))
         item2.SetBitmap(SQUARE_BMP)
 
-        bmp_brush_format = {const.BRUSH_CIRCLE: CIRCLE_BMP, const.BRUSH_SQUARE: SQUARE_BMP}
+        bmp_brush_format = {
+            const.BRUSH_CIRCLE: CIRCLE_BMP,
+            const.BRUSH_SQUARE: SQUARE_BMP,
+        }
         selected_bmp = bmp_brush_format[const.DEFAULT_BRUSH_FORMAT]
 
         btn_brush_format = pbtn.PlateButton(
@@ -924,7 +966,12 @@ class WatershedTool(EditionTools):
         self.btn_brush_format = btn_brush_format
 
         spin_brush_size = InvSpinCtrl(
-            self, -1, value=const.BRUSH_SIZE, min_value=1, max_value=1000, spin_button=False
+            self,
+            -1,
+            value=const.BRUSH_SIZE,
+            min_value=1,
+            max_value=1000,
+            spin_button=False,
         )
         # To calculate best width to spinctrl
         spin_brush_size.CalcSizeFromTextSize("MMMM")
@@ -966,14 +1013,18 @@ class WatershedTool(EditionTools):
         self.ww_wl_cbox = ww_wl_cbox
 
         # Line 6
-        bmp = wx.Bitmap(os.path.join(inv_paths.ICON_DIR, "configuration.png"), wx.BITMAP_TYPE_PNG)
+        bmp = wx.Bitmap(
+            os.path.join(inv_paths.ICON_DIR, "configuration.png"), wx.BITMAP_TYPE_PNG
+        )
         self.btn_wconfig = wx.BitmapButton(
             self, -1, bitmap=bmp, size=(bmp.GetWidth() + 10, bmp.GetHeight() + 10)
         )
         self.btn_exp_watershed = wx.Button(self, -1, _("Expand watershed to 3D"))
 
         sizer_btns = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_btns.Add(self.btn_wconfig, 0, wx.ALIGN_LEFT | wx.LEFT | wx.TOP | wx.DOWN, 5)
+        sizer_btns.Add(
+            self.btn_wconfig, 0, wx.ALIGN_LEFT | wx.LEFT | wx.TOP | wx.DOWN, 5
+        )
         sizer_btns.Add(self.btn_exp_watershed, 0, wx.GROW | wx.EXPAND | wx.ALL, 5)
 
         # Add lines into main sizer
@@ -1040,12 +1091,17 @@ class WatershedTool(EditionTools):
             os.path.join(inv_paths.ICON_DIR, "brush_circle.png"), wx.BITMAP_TYPE_PNG
         )
 
-        brush = {MENU_BRUSH_CIRCLE: const.BRUSH_CIRCLE, MENU_BRUSH_SQUARE: const.BRUSH_SQUARE}
+        brush = {
+            MENU_BRUSH_CIRCLE: const.BRUSH_CIRCLE,
+            MENU_BRUSH_SQUARE: const.BRUSH_SQUARE,
+        }
         bitmap = {MENU_BRUSH_CIRCLE: CIRCLE_BMP, MENU_BRUSH_SQUARE: SQUARE_BMP}
 
         self.btn_brush_format.SetBitmap(bitmap[evt.GetId()])
 
-        Publisher.sendMessage("Set watershed brush format", brush_format=brush[evt.GetId()])
+        Publisher.sendMessage(
+            "Set watershed brush format", brush_format=brush[evt.GetId()]
+        )
 
     def OnBrushSize(self, evt):
         """ """

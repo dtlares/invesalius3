@@ -93,7 +93,9 @@ def gen_patches(
     sub_image = np.empty(shape=(patch_size, patch_size, patch_size), dtype="float32")
     for idx, (iz, iy, ix) in enumerate(i_cuts):
         sub_image[:] = 0
-        _sub_image = image[iz : iz + patch_size, iy : iy + patch_size, ix : ix + patch_size]
+        _sub_image = image[
+            iz : iz + patch_size, iy : iy + patch_size, ix : ix + patch_size
+        ]
         sz, sy, sx = _sub_image.shape
         sub_image[0:sz, 0:sy, 0:sx] = _sub_image
         ez = iz + sz
@@ -105,7 +107,9 @@ def gen_patches(
 
 def predict_patch(sub_image, patch, nn_model, patch_size):
     (iz, ez), (iy, ey), (ix, ex) = patch
-    sub_mask = nn_model.predict(sub_image.reshape(1, patch_size, patch_size, patch_size, 1))
+    sub_mask = nn_model.predict(
+        sub_image.reshape(1, patch_size, patch_size, patch_size, 1)
+    )
     return sub_mask.reshape(patch_size, patch_size, patch_size)[
         0 : ez - iz, 0 : ey - iy, 0 : ex - ix
     ]
@@ -118,9 +122,9 @@ def predict_patch_torch(sub_image, patch, nn_model, device, patch_size):
         (iz, ez), (iy, ey), (ix, ex) = patch
         sub_mask = (
             nn_model(
-                torch.from_numpy(sub_image.reshape(1, 1, patch_size, patch_size, patch_size)).to(
-                    device
-                )
+                torch.from_numpy(
+                    sub_image.reshape(1, 1, patch_size, patch_size, patch_size)
+                ).to(device)
             )
             .cpu()
             .numpy()
@@ -130,7 +134,9 @@ def predict_patch_torch(sub_image, patch, nn_model, device, patch_size):
     ]
 
 
-def segment_keras(image, weights_file, overlap, probability_array, comm_array, patch_size):
+def segment_keras(
+    image, weights_file, overlap, probability_array, comm_array, patch_size
+):
     import keras
 
     # Loading model
@@ -286,7 +292,9 @@ class SegmentProcess(ctx.Process):
         self._prob_array_fd = fd
 
         fd, fname = tempfile.mkstemp()
-        self._comm_array = np.memmap(filename=fname, shape=(1,), dtype=np.float32, mode="w+")
+        self._comm_array = np.memmap(
+            filename=fname, shape=(1,), dtype=np.float32, mode="w+"
+        )
         self._comm_array_filename = self._comm_array.filename
         self._comm_array_fd = fd
 
@@ -331,7 +339,9 @@ class SegmentProcess(ctx.Process):
         )
 
         if self.apply_wwwl:
-            image = imagedata_utils.get_LUT_value(image, self.window_width, self.window_level)
+            image = imagedata_utils.get_LUT_value(
+                image, self.window_width, self.window_level
+            )
 
         probability_array = np.memmap(
             self._prob_array_filename,
@@ -339,14 +349,20 @@ class SegmentProcess(ctx.Process):
             shape=self._image_shape,
             mode="r+",
         )
-        comm_array = np.memmap(self._comm_array_filename, dtype=np.float32, shape=(1,), mode="r+")
+        comm_array = np.memmap(
+            self._comm_array_filename, dtype=np.float32, shape=(1,), mode="r+"
+        )
 
         if self.backend.lower() == "pytorch":
             if not self.torch_weights_file_name:
                 raise FileNotFoundError("Weights file not specified.")
-            folder = inv_paths.MODELS_DIR.joinpath(self.torch_weights_file_name.split(".")[0])
+            folder = inv_paths.MODELS_DIR.joinpath(
+                self.torch_weights_file_name.split(".")[0]
+            )
             system_state_dict_file = folder.joinpath(self.torch_weights_file_name)
-            user_state_dict_file = inv_paths.USER_DL_WEIGHTS.joinpath(self.torch_weights_file_name)
+            user_state_dict_file = inv_paths.USER_DL_WEIGHTS.joinpath(
+                self.torch_weights_file_name
+            )
             if system_state_dict_file.exists():
                 weights_file = system_state_dict_file
             elif user_state_dict_file.exists():
@@ -441,12 +457,14 @@ class BrainSegmentProcess(SegmentProcess):
             patch_size=patch_size,
         )
         self.torch_weights_file_name = "brain_mri_t1.pt"
-        self.torch_weights_url = (
-            "https://github.com/tfmoraes/deepbrain_torch/releases/download/v1.1.0/weights.pt"
+        self.torch_weights_url = "https://github.com/tfmoraes/deepbrain_torch/releases/download/v1.1.0/weights.pt"
+        self.torch_weights_hash = (
+            "194b0305947c9326eeee9da34ada728435a13c7b24015cbd95971097fc178f22"
         )
-        self.torch_weights_hash = "194b0305947c9326eeee9da34ada728435a13c7b24015cbd95971097fc178f22"
 
-        self.keras_weight_file = inv_paths.MODELS_DIR.joinpath("brain_mri_t1/model.json")
+        self.keras_weight_file = inv_paths.MODELS_DIR.joinpath(
+            "brain_mri_t1/model.json"
+        )
 
 
 class TracheaSegmentProcess(SegmentProcess):
@@ -476,10 +494,10 @@ class TracheaSegmentProcess(SegmentProcess):
             patch_size=patch_size,
         )
         self.torch_weights_file_name = "trachea_ct.pt"
-        self.torch_weights_url = (
-            "https://github.com/tfmoraes/deep_trachea_torch/releases/download/v1.0/weights.pt"
+        self.torch_weights_url = "https://github.com/tfmoraes/deep_trachea_torch/releases/download/v1.0/weights.pt"
+        self.torch_weights_hash = (
+            "6102d16e3c8c07a1c7b0632bc76db4d869c7467724ff7906f87d04f6dc72022e"
         )
-        self.torch_weights_hash = "6102d16e3c8c07a1c7b0632bc76db4d869c7467724ff7906f87d04f6dc72022e"
 
 
 class MandibleCTSegmentProcess(SegmentProcess):
@@ -519,7 +537,9 @@ class MandibleCTSegmentProcess(SegmentProcess):
 
         self.torch_weights_file_name = "mandible_jit_ct.pt"
         self.torch_weights_url = "https://raw.githubusercontent.com/invesalius/weights/main/mandible_ct/mandible_jit_ct.pt"
-        self.torch_weights_hash = "a9988c64b5f04dfbb6d058b95b737ed801f1a89d1cc828cd3e5d76d81979a724"
+        self.torch_weights_hash = (
+            "a9988c64b5f04dfbb6d058b95b737ed801f1a89d1cc828cd3e5d76d81979a724"
+        )
 
     def _run_segmentation(self):
         image = np.memmap(
@@ -530,7 +550,9 @@ class MandibleCTSegmentProcess(SegmentProcess):
         )
 
         if self.apply_wwwl:
-            image = imagedata_utils.get_LUT_value(image, self.window_width, self.window_level)
+            image = imagedata_utils.get_LUT_value(
+                image, self.window_width, self.window_level
+            )
 
         image = (image >= self.threshold).astype(np.float32)
 
@@ -540,14 +562,20 @@ class MandibleCTSegmentProcess(SegmentProcess):
             shape=self._image_shape,
             mode="r+",
         )
-        comm_array = np.memmap(self._comm_array_filename, dtype=np.float32, shape=(1,), mode="r+")
+        comm_array = np.memmap(
+            self._comm_array_filename, dtype=np.float32, shape=(1,), mode="r+"
+        )
 
         if self.backend.lower() == "pytorch":
             if not self.torch_weights_file_name:
                 raise FileNotFoundError("Weights file not specified.")
-            folder = inv_paths.MODELS_DIR.joinpath(self.torch_weights_file_name.split(".")[0])
+            folder = inv_paths.MODELS_DIR.joinpath(
+                self.torch_weights_file_name.split(".")[0]
+            )
             system_state_dict_file = folder.joinpath(self.torch_weights_file_name)
-            user_state_dict_file = inv_paths.USER_DL_WEIGHTS.joinpath(self.torch_weights_file_name)
+            user_state_dict_file = inv_paths.USER_DL_WEIGHTS.joinpath(
+                self.torch_weights_file_name
+            )
             if system_state_dict_file.exists():
                 weights_file = system_state_dict_file
             elif user_state_dict_file.exists():
@@ -665,14 +693,20 @@ class ImplantCTSegmentProcess(SegmentProcess):
             shape=self._image_shape,
             mode="r+",
         )
-        comm_array = np.memmap(self._comm_array_filename, dtype=np.float32, shape=(1,), mode="r+")
+        comm_array = np.memmap(
+            self._comm_array_filename, dtype=np.float32, shape=(1,), mode="r+"
+        )
 
         if self.backend.lower() == "pytorch":
             if not self.torch_weights_file_name:
                 raise FileNotFoundError("Weights file not specified.")
-            folder = inv_paths.MODELS_DIR.joinpath(self.torch_weights_file_name.split(".")[0])
+            folder = inv_paths.MODELS_DIR.joinpath(
+                self.torch_weights_file_name.split(".")[0]
+            )
             system_state_dict_file = folder.joinpath(self.torch_weights_file_name)
-            user_state_dict_file = inv_paths.USER_DL_WEIGHTS.joinpath(self.torch_weights_file_name)
+            user_state_dict_file = inv_paths.USER_DL_WEIGHTS.joinpath(
+                self.torch_weights_file_name
+            )
             if system_state_dict_file.exists():
                 weights_file = system_state_dict_file
             elif user_state_dict_file.exists():

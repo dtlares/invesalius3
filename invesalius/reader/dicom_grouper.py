@@ -125,7 +125,8 @@ class DicomGroup:
 
         if _has_win32api:
             filelist = [
-                win32api.GetShortPathName(dicom.image.file) for dicom in self.slices_dict.values()
+                win32api.GetShortPathName(dicom.image.file)
+                for dicom in self.slices_dict.values()
             ]
         else:
             filelist = [dicom.image.file for dicom in self.slices_dict.values()]

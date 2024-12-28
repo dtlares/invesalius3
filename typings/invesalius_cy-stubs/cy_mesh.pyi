@@ -1,11 +1,14 @@
 from vtk import vtkPolyData
 
 class Mesh:
-    def __init__(self, pd: vtkPolyData | None = None, other: Mesh | None = None) -> None: ...
+    def __init__(
+        self, pd: vtkPolyData | None = None, other: Mesh | None = None
+    ) -> None: ...
     def copy_to(self, other: Mesh) -> None:
         """
         Copies self content to other.
         """
+
     def to_vtk(self) -> vtkPolyData:
         """
         Converts Mesh to vtkPolyData.

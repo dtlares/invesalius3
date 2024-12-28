@@ -13,7 +13,8 @@ class mTMS:
         # TODO: create dialog to input mtms_path and vi
         mtms_path = "C:\\mTMS\\Labview\\Builds\\mTMS 3.1 hack"
         vipath = (
-            mtms_path + "\\mTMS ActiveX Server\\mTMS ActiveX Server.exe\\mTMS ActiveX Server.vi"
+            mtms_path
+            + "\\mTMS ActiveX Server\\mTMS ActiveX Server.exe\\mTMS ActiveX Server.vi"
         )
         # Connect to the ActiveX server
         mtms_app = win32com.client.Dispatch("MTMSActiveXServer.Application")
@@ -25,7 +26,8 @@ class mTMS:
         # self.intensity = 20
 
         self.df = pd.DataFrame(
-            [], columns=["mTMS_target", "brain_target(nav)", "coil_pose(nav)", "intensity"]
+            [],
+            columns=["mTMS_target", "brain_target(nav)", "coil_pose(nav)", "intensity"],
         )
 
     def CheckTargets(self, coil_pose, brain_target_list):
@@ -119,8 +121,12 @@ class mTMS:
 
     def SaveSequence(self):
         timestamp = time.localtime(time.time())
-        stamp_date = f"{timestamp.tm_year:0>4d}{timestamp.tm_mon:0>2d}{timestamp.tm_mday:0>2d}"
-        stamp_time = f"{timestamp.tm_hour:0>2d}{timestamp.tm_min:0>2d}{timestamp.tm_sec:0>2d}"
+        stamp_date = (
+            f"{timestamp.tm_year:0>4d}{timestamp.tm_mon:0>2d}{timestamp.tm_mday:0>2d}"
+        )
+        stamp_time = (
+            f"{timestamp.tm_hour:0>2d}{timestamp.tm_min:0>2d}{timestamp.tm_sec:0>2d}"
+        )
         sep = "_"
         parts = [stamp_date, stamp_time, self.log_name, "sequence"]
         default_filename = sep.join(parts) + ".csv"

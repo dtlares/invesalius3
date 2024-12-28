@@ -20,7 +20,8 @@
 from vtkmodules.vtkCommonCore import vtkLookupTable
 from vtkmodules.vtkImagingCore import vtkImageBlend, vtkImageMapToColors
 from vtkmodules.vtkInteractionStyle import vtkInteractorStyleImage
-from vtkmodules.vtkRenderingCore import vtkCellPicker, vtkImageActor, vtkImageMapper
+from vtkmodules.vtkRenderingCore import (vtkCellPicker, vtkImageActor,
+                                         vtkImageMapper)
 
 from invesalius.pubsub import pub as Publisher
 

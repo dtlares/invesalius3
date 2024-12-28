@@ -27,61 +27,36 @@ from imageio import imsave
 from scipy.spatial import distance
 from vtk import vtkCommand
 from vtkmodules.vtkCommonColor import vtkColorSeries, vtkNamedColors
-
 # TODO: Check that these imports are not used -- vtkLookupTable, vtkMinimalStandardRandomSequence, vtkPoints, vtkUnsignedCharArray
-from vtkmodules.vtkCommonCore import (
-    mutable,
-    vtkDoubleArray,
-    vtkIdList,
-    vtkLookupTable,
-    vtkPoints,
-    vtkUnsignedCharArray,
-)
-from vtkmodules.vtkCommonDataModel import (
-    vtkPolyData,
-)
+from vtkmodules.vtkCommonCore import (mutable, vtkDoubleArray, vtkIdList,
+                                      vtkLookupTable, vtkPoints,
+                                      vtkUnsignedCharArray)
+from vtkmodules.vtkCommonDataModel import vtkPolyData
 from vtkmodules.vtkCommonMath import vtkMatrix4x4
 from vtkmodules.vtkCommonTransforms import vtkTransform
-from vtkmodules.vtkFiltersCore import vtkCenterOfMass, vtkGlyph3D, vtkPolyDataNormals
+from vtkmodules.vtkFiltersCore import (vtkCenterOfMass, vtkGlyph3D,
+                                       vtkPolyDataNormals)
 from vtkmodules.vtkFiltersHybrid import vtkRenderLargeImage
 from vtkmodules.vtkFiltersModeling import vtkBandedPolyDataContourFilter
-from vtkmodules.vtkFiltersSources import (
-    vtkArrowSource,
-    vtkSphereSource,
-)
+from vtkmodules.vtkFiltersSources import vtkArrowSource, vtkSphereSource
 from vtkmodules.vtkInteractionStyle import vtkInteractorStyleTrackballCamera
-from vtkmodules.vtkInteractionWidgets import (
-    vtkImagePlaneWidget,
-    vtkOrientationMarkerWidget,
-)
-from vtkmodules.vtkIOExport import (
-    vtkIVExporter,
-    vtkOBJExporter,
-    vtkPOVExporter,
-    vtkRIBExporter,
-    vtkVRMLExporter,
-    vtkX3DExporter,
-)
+from vtkmodules.vtkInteractionWidgets import (vtkImagePlaneWidget,
+                                              vtkOrientationMarkerWidget)
+from vtkmodules.vtkIOExport import (vtkIVExporter, vtkOBJExporter,
+                                    vtkPOVExporter, vtkRIBExporter,
+                                    vtkVRMLExporter, vtkX3DExporter)
 from vtkmodules.vtkIOGeometry import vtkSTLReader
-from vtkmodules.vtkIOImage import (
-    vtkBMPWriter,
-    vtkJPEGWriter,
-    vtkPNGWriter,
-    vtkPostScriptWriter,
-    vtkTIFFWriter,
-)
-from vtkmodules.vtkRenderingAnnotation import vtkAnnotatedCubeActor, vtkAxesActor
-from vtkmodules.vtkRenderingCore import (
-    vtkActor,
-    vtkPointPicker,
-    vtkPolyDataMapper,
-    vtkProperty,
-    vtkPropPicker,
-    vtkRenderer,
-    vtkWindowToImageFilter,
-)
+from vtkmodules.vtkIOImage import (vtkBMPWriter, vtkJPEGWriter, vtkPNGWriter,
+                                   vtkPostScriptWriter, vtkTIFFWriter)
+from vtkmodules.vtkRenderingAnnotation import (vtkAnnotatedCubeActor,
+                                               vtkAxesActor)
+from vtkmodules.vtkRenderingCore import (vtkActor, vtkPointPicker,
+                                         vtkPolyDataMapper, vtkProperty,
+                                         vtkPropPicker, vtkRenderer,
+                                         vtkWindowToImageFilter)
 from vtkmodules.vtkRenderingOpenGL2 import vtkCompositePolyDataMapper2
-from vtkmodules.wx.wxVTKRenderWindowInteractor import wxVTKRenderWindowInteractor
+from vtkmodules.wx.wxVTKRenderWindowInteractor import \
+    wxVTKRenderWindowInteractor
 
 import invesalius.constants as const
 import invesalius.data.coordinates as dco
@@ -100,7 +75,8 @@ from invesalius.data.ruler_volume import GenericLeftRulerVolume
 from invesalius.data.visualization.coil_visualizer import CoilVisualizer
 from invesalius.data.visualization.marker_visualizer import MarkerVisualizer
 from invesalius.data.visualization.probe_visualizer import ProbeVisualizer
-from invesalius.data.visualization.vector_field_visualizer import VectorFieldVisualizer
+from invesalius.data.visualization.vector_field_visualizer import \
+    VectorFieldVisualizer
 from invesalius.gui.widgets.canvas_renderer import CanvasRendererCTX
 from invesalius.i18n import tr as _
 from invesalius.math_utils import inner1d
@@ -278,7 +254,9 @@ class Viewer(wx.Panel):
 
         # Set the angle and distance thresholds.
         session = ses.Session()
-        angle_threshold = session.GetConfig("angle_threshold", const.DEFAULT_ANGLE_THRESHOLD)
+        angle_threshold = session.GetConfig(
+            "angle_threshold", const.DEFAULT_ANGLE_THRESHOLD
+        )
         distance_threshold = session.GetConfig(
             "distance_threshold", const.DEFAULT_DISTANCE_THRESHOLD
         )
@@ -286,7 +264,9 @@ class Viewer(wx.Panel):
         self.angle_threshold = angle_threshold
         self.distance_threshold = distance_threshold
 
-        self.angle_arrow_projection_threshold = const.COIL_ANGLE_ARROW_PROJECTION_THRESHOLD
+        self.angle_arrow_projection_threshold = (
+            const.COIL_ANGLE_ARROW_PROJECTION_THRESHOLD
+        )
 
         self.actor_tracts = None
         self.actor_peel = None
@@ -364,7 +344,9 @@ class Viewer(wx.Panel):
     def ShowRuler(self):
         if self.ruler and (self.ruler not in self.canvas.draw_list):
             self.canvas.draw_list.append(self.ruler)
-            self.prev_view_port_height = round(self.ren.GetActiveCamera().GetParallelScale(), 4)
+            self.prev_view_port_height = round(
+                self.ren.GetActiveCamera().GetParallelScale(), 4
+            )
         self.UpdateCanvas()
 
     def HideRuler(self):
@@ -395,12 +377,16 @@ class Viewer(wx.Panel):
         Publisher.subscribe(self.RemoveSurface, "Remove surface actor from viewer")
         # Publisher.subscribe(self.OnShowSurface, 'Show surface')
         Publisher.subscribe(self.UpdateRender, "Render volume viewer")
-        Publisher.subscribe(self.ChangeBackgroundColour, "Change volume viewer background colour")
+        Publisher.subscribe(
+            self.ChangeBackgroundColour, "Change volume viewer background colour"
+        )
 
         # Related to raycasting
         Publisher.subscribe(self.LoadVolume, "Load volume into viewer")
         Publisher.subscribe(self.UnloadVolume, "Unload volume")
-        Publisher.subscribe(self.OnSetWindowLevelText, "Set volume window and level text")
+        Publisher.subscribe(
+            self.OnSetWindowLevelText, "Set volume window and level text"
+        )
         Publisher.subscribe(self.OnHideRaycasting, "Hide raycasting volume")
         Publisher.subscribe(self.OnShowRaycasting, "Update raycasting preset")
         ###
@@ -409,7 +395,8 @@ class Viewer(wx.Panel):
         Publisher.subscribe(self.OnSetViewAngle, "Set volume view angle")
 
         Publisher.subscribe(
-            self.OnDisableBrightContrast, "Set interaction mode " + str(const.MODE_SLICE_EDITOR)
+            self.OnDisableBrightContrast,
+            "Set interaction mode " + str(const.MODE_SLICE_EDITOR),
         )
 
         Publisher.subscribe(self.OnExportSurface, "Export surface to file")
@@ -429,7 +416,9 @@ class Viewer(wx.Panel):
         Publisher.subscribe(self.OnShowText, "Show text actors on viewers")
         Publisher.subscribe(self.OnShowRuler, "Show rulers on viewers")
         Publisher.subscribe(self.OnHideRuler, "Hide rulers on viewers")
-        Publisher.subscribe(self.OnRulerVisibilityStatus, "Receive ruler visibility status")
+        Publisher.subscribe(
+            self.OnRulerVisibilityStatus, "Receive ruler visibility status"
+        )
         Publisher.subscribe(self.OnCloseProject, "Close project data")
 
         Publisher.subscribe(self.RemoveAllActors, "Remove all volume actors")
@@ -459,7 +448,8 @@ class Viewer(wx.Panel):
         Publisher.subscribe(self.OnNavigationStatus, "Navigation status")
         Publisher.subscribe(self.UpdateArrowPose, "Update object arrow matrix")
         Publisher.subscribe(
-            self.UpdateEfieldPointLocation, "Update point location for e-field calculation"
+            self.UpdateEfieldPointLocation,
+            "Update point location for e-field calculation",
         )
         Publisher.subscribe(self.GetEnorm, "Get enorm")
         Publisher.subscribe(self.TrackObject, "Track object")
@@ -494,11 +484,14 @@ class Viewer(wx.Panel):
         Publisher.subscribe(self.GetTargetSavedEfieldData, "Get target index efield")
         Publisher.subscribe(self.CheckStatusSavedEfieldData, "Check efield data")
         Publisher.subscribe(self.GetNeuronavigationApi, "Get Neuronavigation Api")
-        Publisher.subscribe(self.UpdateEfieldPointLocationOffline, "Update interseccion offline")
+        Publisher.subscribe(
+            self.UpdateEfieldPointLocationOffline, "Update interseccion offline"
+        )
         Publisher.subscribe(self.MaxEfieldActor, "Show max Efield actor")
         Publisher.subscribe(self.CoGEfieldActor, "Show CoG Efield actor")
         Publisher.subscribe(
-            self.CalculateDistanceMaxEfieldCoGE, "Show distance between Max and CoG Efield"
+            self.CalculateDistanceMaxEfieldCoGE,
+            "Show distance between Max and CoG Efield",
         )
         Publisher.subscribe(self.EfieldVectors, "Show Efield vectors")
         Publisher.subscribe(self.RecolorEfieldActor, "Recolor efield actor")
@@ -513,13 +506,19 @@ class Viewer(wx.Panel):
         )
         Publisher.subscribe(self.UpdateEfieldThreshold, "Update Efield Threshold")
         Publisher.subscribe(self.UpdateEfieldROISize, "Update Efield ROI size")
-        Publisher.subscribe(self.SetEfieldTargetAtCortex, "Set as Efield target at cortex")
-        Publisher.subscribe(self.EnableShowEfieldAboveThreshold, "Show area above threshold")
+        Publisher.subscribe(
+            self.SetEfieldTargetAtCortex, "Set as Efield target at cortex"
+        )
+        Publisher.subscribe(
+            self.EnableShowEfieldAboveThreshold, "Show area above threshold"
+        )
         Publisher.subscribe(self.EnableEfieldTools, "Enable Efield tools")
         Publisher.subscribe(self.ClearTargetAtCortex, "Clear efield target at cortex")
         Publisher.subscribe(self.CoGEforCortexMarker, "Get Cortex position")
         Publisher.subscribe(self.AddCortexMarkerActor, "Add cortex marker actor")
-        Publisher.subscribe(self.CortexMarkersVisualization, "Display efield markers at cortex")
+        Publisher.subscribe(
+            self.CortexMarkersVisualization, "Display efield markers at cortex"
+        )
         Publisher.subscribe(self.GetTargetPositions, "Get targets Ids for mtms")
         Publisher.subscribe(self.GetTargetPathmTMS, "Send targeting file path")
         Publisher.subscribe(self.GetdIsfromCoord, "Send mtms coords")
@@ -773,7 +772,8 @@ class Viewer(wx.Panel):
 
         if not os.path.exists(filename):
             wx.MessageBox(
-                _("InVesalius was not able to export this picture"), _("Export picture error")
+                _("InVesalius was not able to export this picture"),
+                _("Export picture error"),
             )
 
     def OnCloseProject(self):
@@ -969,7 +969,9 @@ class Viewer(wx.Panel):
         self.stored_camera_settings = self.GetCameraSettings()
 
         # Set the transformation matrix for the target.
-        self.m_target = self.CreateVTKObjectMatrix(self.target_coord[:3], self.target_coord[3:])
+        self.m_target = self.CreateVTKObjectMatrix(
+            self.target_coord[:3], self.target_coord[3:]
+        )
 
         if self.actor_peel:
             self.object_orientation_torus_actor.SetVisibility(0)
@@ -1068,7 +1070,8 @@ class Viewer(wx.Panel):
         # vtk_colors = vtkNamedColors()
         if self.target_coord and self.target_mode:
             distance_to_target = distance.euclidean(
-                coord[0:3], (self.target_coord[0], -self.target_coord[1], self.target_coord[2])
+                coord[0:3],
+                (self.target_coord[0], -self.target_coord[1], self.target_coord[2]),
             )
 
             formatted_distance = f"Distance: {distance_to_target: >5.1f} mm"
@@ -1217,7 +1220,9 @@ class Viewer(wx.Panel):
 
             wx.CallAfter(Publisher.sendMessage, "Coil at target", state=coil_at_target)
             wx.CallAfter(
-                Publisher.sendMessage, "From Neuronavigation: Coil at target", state=coil_at_target
+                Publisher.sendMessage,
+                "From Neuronavigation: Coil at target",
+                state=coil_at_target,
             )
 
             self.guide_arrow_actors = (
@@ -1466,7 +1471,11 @@ class Viewer(wx.Panel):
             self.ren.RemoveActor(self.max_efield_vector)
             self.ren.RemoveActor(self.ball_max_vector)
         self.position_max = self.efield_mesh.GetPoint(self.Idmax)
-        orientation = [self.max_efield_array[0], self.max_efield_array[1], self.max_efield_array[2]]
+        orientation = [
+            self.max_efield_array[0],
+            self.max_efield_array[1],
+            self.max_efield_array[2],
+        ]
         self.max_efield_vector = self.DrawVectors(
             self.position_max, orientation, vtk_colors.GetColor3d("Red")
         )
@@ -1481,7 +1490,11 @@ class Viewer(wx.Panel):
         if self.GoGEfieldVector and self.ball_GoGEfieldVector is not None:
             self.ren.RemoveActor(self.GoGEfieldVector)
             self.ren.RemoveActor(self.ball_GoGEfieldVector)
-        orientation = [self.max_efield_array[0], self.max_efield_array[1], self.max_efield_array[2]]
+        orientation = [
+            self.max_efield_array[0],
+            self.max_efield_array[1],
+            self.max_efield_array[2],
+        ]
         [self.cell_id_indexes_above_threshold, self.positions_above_threshold] = (
             self.GetIndexesAboveThreshold(self.efield_threshold)
         )
@@ -1499,7 +1512,9 @@ class Viewer(wx.Panel):
 
     def CoGEforCortexMarker(self):
         if self.e_field_norms is not None:
-            [cell_id_indexes, positions_above_threshold] = self.GetIndexesAboveThreshold(0.98)
+            [cell_id_indexes, positions_above_threshold] = (
+                self.GetIndexesAboveThreshold(0.98)
+            )
             center_gravity_position_for_marker = self.FindCenterofGravity(
                 cell_id_indexes, positions_above_threshold
             )
@@ -1546,7 +1561,14 @@ class Viewer(wx.Panel):
             else:
                 current_folder_path = self.path_meshes
 
-            parts = [current_folder_path, "/", stamp_date, stamp_time, proj.name, "Efield"]
+            parts = [
+                current_folder_path,
+                "/",
+                stamp_date,
+                stamp_time,
+                proj.name,
+                "Efield",
+            ]
             default_filename = sep.join(parts) + ".csv"
 
             filename = dlg.ShowLoadSaveDialog(
@@ -1566,7 +1588,9 @@ class Viewer(wx.Panel):
                 marker_id=marker_id,
             )
 
-    def EnableSaveAutomaticallyEfieldData(self, enable, path_meshes, plot_efield_vectors):
+    def EnableSaveAutomaticallyEfieldData(
+        self, enable, path_meshes, plot_efield_vectors
+    ):
         self.save_automatically = enable
         self.path_meshes = path_meshes
         self.plot_efield_vectors = plot_efield_vectors
@@ -1592,7 +1616,9 @@ class Viewer(wx.Panel):
         self.ren.AddActor(self.SpreadEfieldFactorTextActor.actor)
 
     def CalculateDistanceMaxEfieldCoGE(self):
-        self.distance_efield = distance.euclidean(self.center_gravity_position, self.position_max)
+        self.distance_efield = distance.euclidean(
+            self.center_gravity_position, self.position_max
+        )
         self.SpreadEfieldFactorTextActor.SetValue(
             "Spread distance: " + str(f"{self.distance_efield:04.2f}")
         )
@@ -1634,18 +1660,26 @@ class Viewer(wx.Panel):
         self.ren.AddActor(self.vectorfield_actor)
         self.interactor.Update()
 
-    def SaveEfieldTargetData(self, target_list_index, position, orientation, plot_efield_vectors):
+    def SaveEfieldTargetData(
+        self, target_list_index, position, orientation, plot_efield_vectors
+    ):
         if len(self.Id_list) > 0:
             if self.efield_coords is not None:
                 import invesalius.data.imagedata_utils as imagedata_utils
 
-                position_world, orientation_world = imagedata_utils.convert_invesalius_to_world(
-                    position=[self.efield_coords[0], self.efield_coords[1], self.efield_coords[2]],
-                    orientation=[
-                        self.efield_coords[3],
-                        self.efield_coords[4],
-                        self.efield_coords[5],
-                    ],
+                position_world, orientation_world = (
+                    imagedata_utils.convert_invesalius_to_world(
+                        position=[
+                            self.efield_coords[0],
+                            self.efield_coords[1],
+                            self.efield_coords[2],
+                        ],
+                        orientation=[
+                            self.efield_coords[3],
+                            self.efield_coords[4],
+                            self.efield_coords[5],
+                        ],
+                    )
                 )
                 efield_coords_position = [list(position_world), list(orientation_world)]
             enorms_list = list(self.e_field_norms)
@@ -1812,7 +1846,9 @@ class Viewer(wx.Panel):
         bcf.SetInputData(self.efield_mesh)
         bcf.ClippingOn()
 
-        lower_edge = self.FindClosestValueEfieldEdges(np.array(self.e_field_norms), self.efield_min)
+        lower_edge = self.FindClosestValueEfieldEdges(
+            np.array(self.e_field_norms), self.efield_min
+        )
         middle_edge = self.FindClosestValueEfieldEdges(
             np.array(self.e_field_norms), self.efield_max * 0.2
         )
@@ -1933,7 +1969,9 @@ class Viewer(wx.Panel):
                 )
             ]
         )
-        distances_between_representatives = np.max(pairwise_distances(representative_centers))
+        distances_between_representatives = np.max(
+            pairwise_distances(representative_centers)
+        )
         focal_factor = (
             n_clusters / len(self.Id_list)
             + distances_between_representatives / 30
@@ -2015,10 +2053,13 @@ class Viewer(wx.Panel):
             if index in self.Id_list:
                 cell_number = self.Id_list.index(index)
                 self.EfieldAtTargetLegend.SetValue(
-                    "Efield at Target: " + str(f"{self.e_field_norms[cell_number]:04.2f}")
+                    "Efield at Target: "
+                    + str(f"{self.e_field_norms[cell_number]:04.2f}")
                 )
             else:
-                self.EfieldAtTargetLegend.SetValue("Efield at Target: " + str(f"{0:04.2f}"))
+                self.EfieldAtTargetLegend.SetValue(
+                    "Efield at Target: " + str(f"{0:04.2f}")
+                )
 
     def CreateEfieldAtTargetLegend(self):
         if self.EfieldAtTargetLegend is not None:
@@ -2054,7 +2095,9 @@ class Viewer(wx.Panel):
         self.efield_mesh_normals_viewer.SetFeatureAngle(80)
         self.efield_mesh_normals_viewer.AutoOrientNormalsOn()
         self.efield_mesh_normals_viewer.Update()
-        self.efield_mapper.SetInputConnection(self.efield_mesh_normals_viewer.GetOutputPort())
+        self.efield_mapper.SetInputConnection(
+            self.efield_mesh_normals_viewer.GetOutputPort()
+        )
         self.efield_mapper.ScalarVisibilityOn()
         self.efield_actor.SetMapper(self.efield_mapper)
         self.efield_actor.GetProperty().SetBackfaceCulling(1)
@@ -2117,7 +2160,9 @@ class Viewer(wx.Panel):
 
     def OnUpdateEfieldvis(self):
         if self.radius_list.GetNumberOfIds() != 0:
-            self.efield_lut = self.CreateLUTTableForEfield(self.efield_min, self.efield_max)
+            self.efield_lut = self.CreateLUTTableForEfield(
+                self.efield_min, self.efield_max
+            )
             self.CalculateEdgesEfield()
             self.colors_init.SetNumberOfComponents(3)
             self.colors_init.Fill(const.CORTEX_COLOR)
@@ -2140,7 +2185,10 @@ class Viewer(wx.Panel):
                 wx.CallAfter(Publisher.sendMessage, "Show max Efield actor")
                 wx.CallAfter(Publisher.sendMessage, "Show CoG Efield actor")
                 if self.efield_tools:
-                    wx.CallAfter(Publisher.sendMessage, "Show distance between Max and CoG Efield")
+                    wx.CallAfter(
+                        Publisher.sendMessage,
+                        "Show distance between Max and CoG Efield",
+                    )
                     if self.positions_above_threshold is not None:
                         self.DetectClustersEfieldSpread(self.positions_above_threshold)
                 if (
@@ -2162,7 +2210,9 @@ class Viewer(wx.Panel):
         # the instance from the desired mesh for visualization and if it works. Optimally, there should be no
         # processing or threading related commands inside viewer_volume.
         [coil_dir, norm, coil_norm, p1] = self.ObjectArrowLocation(m_img, coord)
-        intersectingCellIds = self.GetCellIntersection(p1, norm, self.locator_efield_cell)
+        intersectingCellIds = self.GetCellIntersection(
+            p1, norm, self.locator_efield_cell
+        )
         self.ShowEfieldintheintersection(intersectingCellIds, p1, coil_norm, coil_dir)
         try:
             self.e_field_IDs_queue = queue_IDs
@@ -2175,7 +2225,9 @@ class Viewer(wx.Panel):
 
     def UpdateEfieldPointLocationOffline(self, m_img, coord, list_index):
         [coil_dir, norm, coil_norm, p1] = self.ObjectArrowLocation(m_img, coord)
-        intersectingCellIds = self.GetCellIntersection(p1, norm, self.locator_efield_cell)
+        intersectingCellIds = self.GetCellIntersection(
+            p1, norm, self.locator_efield_cell
+        )
         self.ShowEfieldintheintersection(intersectingCellIds, p1, coil_norm, coil_dir)
         id_list = []
         for h in range(self.radius_list.GetNumberOfIds()):
@@ -2200,7 +2252,9 @@ class Viewer(wx.Panel):
         T_rot = np.append(ct1, ct2, axis=0)
         T_rot = np.append(T_rot, cn, axis=0)  # append
         T_rot = T_rot.tolist()  # to list
-        Publisher.sendMessage("Send coil position and rotation", T_rot=T_rot, cp=cp, m_img=m_img)
+        Publisher.sendMessage(
+            "Send coil position and rotation", T_rot=T_rot, cp=cp, m_img=m_img
+        )
 
     def GetEnorm(self, enorm_data, plot_vector):
         self.e_field_col1 = []
@@ -2216,9 +2270,13 @@ class Viewer(wx.Panel):
             if session.GetConfig("debug_efield"):
                 self.e_field_norms = enorm_data[3][self.Id_list, 0]
                 self.e_field_col1 = enorm_data[3][self.Id_list, 1]
-                self.e_field_col2 = enorm_data[3][self.Id_list, 1]  # LUKATODO: is this a typo?
+                self.e_field_col2 = enorm_data[3][
+                    self.Id_list, 1
+                ]  # LUKATODO: is this a typo?
                 self.e_field_col3 = enorm_data[3][self.Id_list, 3]
-                self.Idmax = np.array(self.Id_list[np.array(self.e_field_norms).argmax()])
+                self.Idmax = np.array(
+                    self.Id_list[np.array(self.e_field_norms).argmax()]
+                )
                 max = np.array(self.e_field_norms).argmax()
                 self.max_efield_array = [
                     self.e_field_col1[max],
@@ -2240,12 +2298,8 @@ class Viewer(wx.Panel):
 
                     proj = prj.Project()
                     timestamp = time.localtime(time.time())
-                    stamp_date = (
-                        f"{timestamp.tm_year:0>4d}{timestamp.tm_mon:0>2d}{timestamp.tm_mday:0>2d}"
-                    )
-                    stamp_time = (
-                        f"{timestamp.tm_hour:0>2d}{timestamp.tm_min:0>2d}{timestamp.tm_sec:0>2d}"
-                    )
+                    stamp_date = f"{timestamp.tm_year:0>4d}{timestamp.tm_mon:0>2d}{timestamp.tm_mday:0>2d}"
+                    stamp_time = f"{timestamp.tm_hour:0>2d}{timestamp.tm_min:0>2d}{timestamp.tm_sec:0>2d}"
                     sep = "-"
 
                     if self.path_meshes is None:
@@ -2255,7 +2309,14 @@ class Viewer(wx.Panel):
                     else:
                         current_folder_path = self.path_meshes
 
-                    parts = [current_folder_path, "/", stamp_date, stamp_time, proj.name, "Efield"]
+                    parts = [
+                        current_folder_path,
+                        "/",
+                        stamp_date,
+                        stamp_time,
+                        proj.name,
+                        "Efield",
+                    ]
                     default_filename = sep.join(parts) + ".csv"
 
                     filename = dlg.ShowLoadSaveDialog(
@@ -2303,9 +2364,19 @@ class Viewer(wx.Panel):
             "Mtms_coord",
         ]
         if self.efield_coords is not None:
-            position_world, orientation_world = imagedata_utils.convert_invesalius_to_world(
-                position=[self.efield_coords[0], self.efield_coords[1], self.efield_coords[2]],
-                orientation=[self.efield_coords[3], self.efield_coords[4], self.efield_coords[5]],
+            position_world, orientation_world = (
+                imagedata_utils.convert_invesalius_to_world(
+                    position=[
+                        self.efield_coords[0],
+                        self.efield_coords[1],
+                        self.efield_coords[2],
+                    ],
+                    orientation=[
+                        self.efield_coords[3],
+                        self.efield_coords[4],
+                        self.efield_coords[5],
+                    ],
+                )
             )
             efield_coords_position = [list(position_world), list(orientation_world)]
         if plot_efield_vectors:
@@ -2471,11 +2542,13 @@ class Viewer(wx.Panel):
     def TrackObject(self, enabled):
         if enabled:
             vtk_colors = vtkNamedColors()
-            self.obj_projection_arrow_actor = self.actor_factory.CreateArrowUsingDirection(
-                position=[0.0, 0.0, 0.0],
-                orientation=[0.0, 0.0, 0.0],
-                colour=vtk_colors.GetColor3d("Red"),
-                length_multiplier=0.8,
+            self.obj_projection_arrow_actor = (
+                self.actor_factory.CreateArrowUsingDirection(
+                    position=[0.0, 0.0, 0.0],
+                    orientation=[0.0, 0.0, 0.0],
+                    colour=vtk_colors.GetColor3d("Red"),
+                    length_multiplier=0.8,
+                )
             )
             self.object_orientation_torus_actor = self.actor_factory.CreateTorus(
                 position=[0.0, 0.0, 0.0],
@@ -2491,7 +2564,9 @@ class Viewer(wx.Panel):
             self.obj_projection_arrow_actor = None
             self.object_orientation_torus_actor = None
 
-    def OnUpdateTracts(self, root=None, affine_vtk=None, coord_offset=None, coord_offset_w=None):
+    def OnUpdateTracts(
+        self, root=None, affine_vtk=None, coord_offset=None, coord_offset_w=None
+    ):
         mapper = vtkCompositePolyDataMapper2()
         mapper.SetInputDataObject(root)
 
@@ -3024,21 +3099,33 @@ class SlicePlane:
 
     def ChangeSlice(self, orientation, index):
         if orientation == "CORONAL" and self.plane_y.GetEnabled():
-            Publisher.sendMessage("Update slice 3D", widget=self.plane_y, orientation=orientation)
+            Publisher.sendMessage(
+                "Update slice 3D", widget=self.plane_y, orientation=orientation
+            )
             Publisher.sendMessage("Render volume viewer")
 
         elif orientation == "SAGITAL" and self.plane_x.GetEnabled():
-            Publisher.sendMessage("Update slice 3D", widget=self.plane_x, orientation=orientation)
+            Publisher.sendMessage(
+                "Update slice 3D", widget=self.plane_x, orientation=orientation
+            )
             Publisher.sendMessage("Render volume viewer")
 
         elif orientation == "AXIAL" and self.plane_z.GetEnabled():
-            Publisher.sendMessage("Update slice 3D", widget=self.plane_z, orientation=orientation)
+            Publisher.sendMessage(
+                "Update slice 3D", widget=self.plane_z, orientation=orientation
+            )
             Publisher.sendMessage("Render volume viewer")
 
     def UpdateAllSlice(self):
-        Publisher.sendMessage("Update slice 3D", widget=self.plane_y, orientation="CORONAL")
-        Publisher.sendMessage("Update slice 3D", widget=self.plane_x, orientation="SAGITAL")
-        Publisher.sendMessage("Update slice 3D", widget=self.plane_z, orientation="AXIAL")
+        Publisher.sendMessage(
+            "Update slice 3D", widget=self.plane_y, orientation="CORONAL"
+        )
+        Publisher.sendMessage(
+            "Update slice 3D", widget=self.plane_x, orientation="SAGITAL"
+        )
+        Publisher.sendMessage(
+            "Update slice 3D", widget=self.plane_z, orientation="AXIAL"
+        )
 
     def DeletePlanes(self):
         del self.plane_x

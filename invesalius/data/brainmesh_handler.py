@@ -1,44 +1,28 @@
 import numpy as np
 import pyacvd
-
 # import os
 import pyvista
 from vtkmodules.vtkCommonColor import vtkColorSeries
-
 # import Trekker
-from vtkmodules.vtkCommonCore import (
-    vtkFloatArray,
-    vtkLookupTable,
-)
-from vtkmodules.vtkCommonDataModel import (
-    vtkCellLocator,
-    vtkDataObject,
-    vtkDataSetAttributes,
-    vtkPointLocator,
-    vtkPolyData,
-)
+from vtkmodules.vtkCommonCore import vtkFloatArray, vtkLookupTable
+from vtkmodules.vtkCommonDataModel import (vtkCellLocator, vtkDataObject,
+                                           vtkDataSetAttributes,
+                                           vtkPointLocator, vtkPolyData)
 from vtkmodules.vtkCommonMath import vtkMatrix4x4
 from vtkmodules.vtkCommonTransforms import vtkTransform
-from vtkmodules.vtkFiltersCore import (
-    vtkCellCenters,
-    vtkCleanPolyData,
-    vtkContourFilter,
-    vtkPolyDataNormals,
-    vtkProbeFilter,
-    vtkTriangleFilter,
-    vtkWindowedSincPolyDataFilter,
-)
-from vtkmodules.vtkFiltersGeneral import vtkTransformPolyDataFilter, vtkWarpVector
+from vtkmodules.vtkFiltersCore import (vtkCellCenters, vtkCleanPolyData,
+                                       vtkContourFilter, vtkPolyDataNormals,
+                                       vtkProbeFilter, vtkTriangleFilter,
+                                       vtkWindowedSincPolyDataFilter)
+from vtkmodules.vtkFiltersGeneral import (vtkTransformPolyDataFilter,
+                                          vtkWarpVector)
 from vtkmodules.vtkFiltersModeling import vtkLinearSubdivisionFilter
 from vtkmodules.vtkImagingCore import vtkImageFlip
 from vtkmodules.vtkIOImage import vtkNIFTIImageReader
 from vtkmodules.vtkRenderingAnnotation import vtkScalarBarActor
-from vtkmodules.vtkRenderingCore import (
-    vtkActor,
-    vtkPolyDataMapper,
-    vtkTextProperty,
-    vtkWindowLevelLookupTable,
-)
+from vtkmodules.vtkRenderingCore import (vtkActor, vtkPolyDataMapper,
+                                         vtkTextProperty,
+                                         vtkWindowLevelLookupTable)
 
 import invesalius.data.slice_ as sl
 import invesalius.data.vtk_utils as vtk_utils
@@ -157,7 +141,9 @@ class Brain:
         self.refImageSpace2_xyz.SetTransform(refImageSpace2_xyz_transform)
 
         xyz2_refImageSpace_transform = vtkTransform()
-        xyz2_refImageSpace_transform.SetMatrix(vtk_utils.numpy_to_vtkMatrix4x4(self.affine))
+        xyz2_refImageSpace_transform.SetMatrix(
+            vtk_utils.numpy_to_vtkMatrix4x4(self.affine)
+        )
 
         self.xyz2_refImageSpace = vtkTransformPolyDataFilter()
         self.xyz2_refImageSpace.SetTransform(xyz2_refImageSpace_transform)
@@ -204,7 +190,11 @@ class Brain:
             fixMesh(downsample(currentPeel))
         )  # fixMesh here updates normals needed for warping
         warp.SetInputArrayToProcess(
-            0, 0, 0, vtkDataObject().FIELD_ASSOCIATION_POINTS, vtkDataSetAttributes().NORMALS
+            0,
+            0,
+            0,
+            vtkDataObject().FIELD_ASSOCIATION_POINTS,
+            vtkDataSetAttributes().NORMALS,
         )
         warp.SetScaleFactor(-1)
         warp.Update()
@@ -384,7 +374,9 @@ class Scalp:
 
 def GetCenters(mesh):
     # Compute centers of triangles
-    centerComputer = vtkCellCenters()  # This computes centers of the triangles on the peel
+    centerComputer = (
+        vtkCellCenters()
+    )  # This computes centers of the triangles on the peel
     centerComputer.SetInputData(mesh)
     centerComputer.Update()
 
@@ -395,7 +387,9 @@ def GetCenters(mesh):
 
 def GetNormals(mesh):
     # Compute normals of triangles
-    normalComputer = vtkPolyDataNormals()  # This computes normals of the triangles on the peel
+    normalComputer = (
+        vtkPolyDataNormals()
+    )  # This computes normals of the triangles on the peel
     normalComputer.SetInputData(mesh)
     normalComputer.ComputePointNormalsOff()
     normalComputer.ComputeCellNormalsOn()

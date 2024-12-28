@@ -45,7 +45,9 @@ ICON_DIR = INV_TOP_DIR.joinpath("icons")
 SAMPLE_DIR = INV_TOP_DIR.joinpath("samples")
 DOC_DIR = INV_TOP_DIR.joinpath("docs")
 RAYCASTING_PRESETS_DIRECTORY = INV_TOP_DIR.joinpath("presets", "raycasting")
-RAYCASTING_PRESETS_COLOR_DIRECTORY = INV_TOP_DIR.joinpath("presets", "raycasting", "color_list")
+RAYCASTING_PRESETS_COLOR_DIRECTORY = INV_TOP_DIR.joinpath(
+    "presets", "raycasting", "color_list"
+)
 
 MODELS_DIR = INV_TOP_DIR.joinpath("ai")
 LOCALE_DIR = INV_TOP_DIR.joinpath("locale")
@@ -59,7 +61,9 @@ if hasattr(sys, "frozen") and (
     SAMPLE_DIR = INV_TOP_DIR.joinpath("samples")
     DOC_DIR = INV_TOP_DIR.joinpath("docs")
     RAYCASTING_PRESETS_DIRECTORY = abs_path.joinpath("presets", "raycasting")
-    RAYCASTING_PRESETS_COLOR_DIRECTORY = abs_path.joinpath("presets", "raycasting", "color_list")
+    RAYCASTING_PRESETS_COLOR_DIRECTORY = abs_path.joinpath(
+        "presets", "raycasting", "color_list"
+    )
 else:
     ICON_DIR = pathlib.Path(os.environ.get("INV_ICON_DIR", ICON_DIR))
     SAMPLE_DIR = pathlib.Path(os.environ.get("INV_SAMPLE_DIR", SAMPLE_DIR))
@@ -77,11 +81,19 @@ OBJ_DIR = str(INV_TOP_DIR.joinpath("navigation", "objects"))
 MTC_CAL_DIR = str(INV_TOP_DIR.joinpath("navigation", "mtc_files", "CalibrationFiles"))
 MTC_MAR_DIR = str(INV_TOP_DIR.joinpath("navigation", "mtc_files", "Markers"))
 
-NDI_MAR_DIR_PROBE = str(INV_TOP_DIR.joinpath("navigation", "ndi_files", "Markers", "8700340.rom"))
-NDI_MAR_DIR_REF = str(INV_TOP_DIR.joinpath("navigation", "ndi_files", "Markers", "8700339.rom"))
-NDI_MAR_DIR_OBJ = str(INV_TOP_DIR.joinpath("navigation", "ndi_files", "Markers", "8700338.rom"))
+NDI_MAR_DIR_PROBE = str(
+    INV_TOP_DIR.joinpath("navigation", "ndi_files", "Markers", "8700340.rom")
+)
+NDI_MAR_DIR_REF = str(
+    INV_TOP_DIR.joinpath("navigation", "ndi_files", "Markers", "8700339.rom")
+)
+NDI_MAR_DIR_OBJ = str(
+    INV_TOP_DIR.joinpath("navigation", "ndi_files", "Markers", "8700338.rom")
+)
 
-OPTITRACK_CAL_DIR = str(INV_TOP_DIR.joinpath("navigation", "optitrack_files", "Calibration.cal"))
+OPTITRACK_CAL_DIR = str(
+    INV_TOP_DIR.joinpath("navigation", "optitrack_files", "Calibration.cal")
+)
 OPTITRACK_USERPROFILE_DIR = str(
     INV_TOP_DIR.joinpath("navigation", "optitrack_files", "UserProfile.motive")
 )
@@ -106,6 +118,8 @@ def copy_old_files() -> None:
             print(
                 shutil.copy(
                     f,
-                    USER_INV_DIR.joinpath(str(f).replace(str(OLD_USER_INV_DIR) + "/", "")),
+                    USER_INV_DIR.joinpath(
+                        str(f).replace(str(OLD_USER_INV_DIR) + "/", "")
+                    ),
                 )
             )

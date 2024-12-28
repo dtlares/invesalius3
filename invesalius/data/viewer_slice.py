@@ -26,24 +26,15 @@ from vtkmodules.vtkFiltersGeneral import vtkCursor3D
 from vtkmodules.vtkFiltersHybrid import vtkRenderLargeImage
 from vtkmodules.vtkInteractionStyle import vtkInteractorStyleImage
 from vtkmodules.vtkIOExport import vtkPOVExporter
-from vtkmodules.vtkIOImage import (
-    vtkBMPWriter,
-    vtkJPEGWriter,
-    vtkPNGWriter,
-    vtkPostScriptWriter,
-    vtkTIFFWriter,
-)
-from vtkmodules.vtkRenderingCore import (
-    vtkActor,
-    vtkCoordinate,
-    vtkImageActor,
-    vtkPolyDataMapper,
-    vtkProperty,
-    vtkRenderer,
-    vtkWindowToImageFilter,
-    vtkWorldPointPicker,
-)
-from vtkmodules.wx.wxVTKRenderWindowInteractor import wxVTKRenderWindowInteractor
+from vtkmodules.vtkIOImage import (vtkBMPWriter, vtkJPEGWriter, vtkPNGWriter,
+                                   vtkPostScriptWriter, vtkTIFFWriter)
+from vtkmodules.vtkRenderingCore import (vtkActor, vtkCoordinate,
+                                         vtkImageActor, vtkPolyDataMapper,
+                                         vtkProperty, vtkRenderer,
+                                         vtkWindowToImageFilter,
+                                         vtkWorldPointPicker)
+from vtkmodules.wx.wxVTKRenderWindowInteractor import \
+    wxVTKRenderWindowInteractor
 
 import invesalius.constants as const
 import invesalius.data.cursor_actors as ca
@@ -182,7 +173,10 @@ class ContourMIPConfig(wx.Panel):
         else:
             self.inverted.Disable()
 
-        if projection_id in (const.PROJECTION_CONTOUR_MIP, const.PROJECTION_CONTOUR_MIDA):
+        if projection_id in (
+            const.PROJECTION_CONTOUR_MIP,
+            const.PROJECTION_CONTOUR_MIDA,
+        ):
             self.border_spin.Enable()
             self.txt_mip_border.Enable()
         else:
@@ -367,7 +361,8 @@ class Viewer(wx.Panel):
 
     def OnClutChange(self, evt):
         Publisher.sendMessage(
-            "Change colour table from background image from widget", nodes=evt.GetNodes()
+            "Change colour table from background image from widget",
+            nodes=evt.GetNodes(),
         )
         slc = sl.Slice()
         Publisher.sendMessage(
@@ -626,14 +621,34 @@ class Viewer(wx.Panel):
 
     def ScrollSlice(self, coord):
         if self.orientation == "AXIAL":
-            wx.CallAfter(Publisher.sendMessage, ("Set scroll position", "SAGITAL"), index=coord[0])
-            wx.CallAfter(Publisher.sendMessage, ("Set scroll position", "CORONAL"), index=coord[1])
+            wx.CallAfter(
+                Publisher.sendMessage,
+                ("Set scroll position", "SAGITAL"),
+                index=coord[0],
+            )
+            wx.CallAfter(
+                Publisher.sendMessage,
+                ("Set scroll position", "CORONAL"),
+                index=coord[1],
+            )
         elif self.orientation == "SAGITAL":
-            wx.CallAfter(Publisher.sendMessage, ("Set scroll position", "AXIAL"), index=coord[2])
-            wx.CallAfter(Publisher.sendMessage, ("Set scroll position", "CORONAL"), index=coord[1])
+            wx.CallAfter(
+                Publisher.sendMessage, ("Set scroll position", "AXIAL"), index=coord[2]
+            )
+            wx.CallAfter(
+                Publisher.sendMessage,
+                ("Set scroll position", "CORONAL"),
+                index=coord[1],
+            )
         elif self.orientation == "CORONAL":
-            wx.CallAfter(Publisher.sendMessage, ("Set scroll position", "AXIAL"), index=coord[2])
-            wx.CallAfter(Publisher.sendMessage, ("Set scroll position", "SAGITAL"), index=coord[0])
+            wx.CallAfter(
+                Publisher.sendMessage, ("Set scroll position", "AXIAL"), index=coord[2]
+            )
+            wx.CallAfter(
+                Publisher.sendMessage,
+                ("Set scroll position", "SAGITAL"),
+                index=coord[0],
+            )
 
     def get_slice_data(self, render):
         # for slice_data in self.slice_data_list:
@@ -880,10 +895,14 @@ class Viewer(wx.Panel):
         Publisher.subscribe(self.LoadImagedata, "Load slice to viewer")
         Publisher.subscribe(self.SetBrushColour, "Change mask colour")
         Publisher.subscribe(self.UpdateRender, "Update slice viewer")
-        Publisher.subscribe(self.UpdateRender, f"Update slice viewer {self.orientation}")
+        Publisher.subscribe(
+            self.UpdateRender, f"Update slice viewer {self.orientation}"
+        )
         Publisher.subscribe(self.UpdateCanvas, "Redraw canvas")
         Publisher.subscribe(self.UpdateCanvas, f"Redraw canvas {self.orientation}")
-        Publisher.subscribe(self.ChangeSliceNumber, ("Set scroll position", self.orientation))
+        Publisher.subscribe(
+            self.ChangeSliceNumber, ("Set scroll position", self.orientation)
+        )
         # Publisher.subscribe(self.__update_cross_position,
         #                     'Update cross position')
         # Publisher.subscribe(self.__update_cross_position,
@@ -915,14 +934,18 @@ class Viewer(wx.Panel):
         Publisher.subscribe(self.SetSizeWECursor, "Set interactor resize WE cursor")
         Publisher.subscribe(self.SetSizeNWSECursor, "Set interactor resize NSWE cursor")
 
-        Publisher.subscribe(self.AddActors, "Add actors " + str(ORIENTATIONS[self.orientation]))
+        Publisher.subscribe(
+            self.AddActors, "Add actors " + str(ORIENTATIONS[self.orientation])
+        )
         Publisher.subscribe(
             self.RemoveActors, "Remove actors " + str(ORIENTATIONS[self.orientation])
         )
         Publisher.subscribe(self.OnSwapVolumeAxes, "Swap volume axes")
 
         Publisher.subscribe(self.ReloadActualSlice, "Reload actual slice")
-        Publisher.subscribe(self.ReloadActualSlice, f"Reload actual slice {self.orientation}")
+        Publisher.subscribe(
+            self.ReloadActualSlice, f"Reload actual slice {self.orientation}"
+        )
         Publisher.subscribe(self.OnUpdateScroll, "Update scroll")
 
         # MIP
@@ -960,11 +983,17 @@ class Viewer(wx.Panel):
             self.interactor.SetCursor(wx.Cursor(wx.CURSOR_SIZING))
 
     def SetFocus(self):
-        Publisher.sendMessage("Set viewer orientation focus", orientation=self.orientation)
+        Publisher.sendMessage(
+            "Set viewer orientation focus", orientation=self.orientation
+        )
         super().SetFocus()
 
     def OnExportPicture(self, orientation, filename, filetype):
-        dict = {"AXIAL": const.AXIAL, "CORONAL": const.CORONAL, "SAGITAL": const.SAGITAL}
+        dict = {
+            "AXIAL": const.AXIAL,
+            "CORONAL": const.CORONAL,
+            "SAGITAL": const.SAGITAL,
+        }
 
         if orientation == dict[self.orientation]:
             Publisher.sendMessage("Begin busy cursor")
@@ -979,7 +1008,11 @@ class Viewer(wx.Panel):
     def _export_picture(self, id, filename, filetype):
         view_prop_list = []
 
-        dict = {"AXIAL": const.AXIAL, "CORONAL": const.CORONAL, "SAGITAL": const.SAGITAL}
+        dict = {
+            "AXIAL": const.AXIAL,
+            "CORONAL": const.CORONAL,
+            "SAGITAL": const.SAGITAL,
+        }
 
         if id == dict[self.orientation]:
             if filetype == const.FILETYPE_POV:
@@ -1019,7 +1052,8 @@ class Viewer(wx.Panel):
 
             if not os.path.exists(filename):
                 wx.MessageBox(
-                    _("InVesalius was not able to export this picture"), _("Export picture error")
+                    _("InVesalius was not able to export this picture"),
+                    _("Export picture error"),
                 )
 
             for actor in view_prop_list:
@@ -1158,7 +1192,10 @@ class Viewer(wx.Panel):
         self.__build_cross_lines()
 
         self.canvas = CanvasRendererCTX(
-            self, self.slice_data.renderer, self.slice_data.canvas_renderer, self.orientation
+            self,
+            self.slice_data.renderer,
+            self.slice_data.canvas_renderer,
+            self.orientation,
         )
         self.canvas.draw_list.append(self.slice_data)
 
@@ -1592,7 +1629,9 @@ class Viewer(wx.Panel):
     def UpdateCross(self, coord):
         self.cross.SetFocalPoint(coord)
         Publisher.sendMessage(
-            "Co-registered points", arg=None, position=(coord[0], coord[1], coord[2], 0.0, 0.0, 0.0)
+            "Co-registered points",
+            arg=None,
+            position=(coord[0], coord[1], coord[2], 0.0, 0.0, 0.0),
         )
         self.OnScrollBar()
         if not self.nav_status:

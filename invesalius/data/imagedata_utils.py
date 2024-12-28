@@ -29,7 +29,8 @@ from skimage.color import rgb2gray
 from skimage.measure import label
 from vtkmodules.util import numpy_support
 from vtkmodules.vtkFiltersCore import vtkImageAppend
-from vtkmodules.vtkImagingCore import vtkExtractVOI, vtkImageClip, vtkImageResample
+from vtkmodules.vtkImagingCore import (vtkExtractVOI, vtkImageClip,
+                                       vtkImageResample)
 from vtkmodules.vtkImagingGeneral import vtkImageGaussianSmooth
 from vtkmodules.vtkInteractionImage import vtkImageViewer
 from vtkmodules.vtkIOXML import vtkXMLImageDataReader, vtkXMLImageDataWriter
@@ -67,7 +68,9 @@ def ResampleImage3D(imagedata, value):
     return resample.GetOutput()
 
 
-def ResampleImage2D(imagedata, px=None, py=None, resolution_percentage=None, update_progress=None):
+def ResampleImage2D(
+    imagedata, px=None, py=None, resolution_percentage=None, update_progress=None
+):
     """
     Resample vtkImageData matrix.
     """
@@ -99,7 +102,9 @@ def ResampleImage2D(imagedata, px=None, py=None, resolution_percentage=None, upd
     #  resample.SetOutputSpacing(spacing[0] * factor_x, spacing[1] * factor_y, spacing[2])
     if update_progress:
         message = _("Generating multiplanar visualization...")
-        resample.AddObserver("ProgressEvent", lambda obj, evt: update_progress(resample, message))
+        resample.AddObserver(
+            "ProgressEvent", lambda obj, evt: update_progress(resample, message)
+        )
     resample.Update()
 
     return resample.GetOutput()
@@ -268,7 +273,9 @@ def create_dicom_thumbnails(image, window=None, level=None):
         thumbnail_paths = []
         for i in range(np_image.shape[0]):
             thumb_image = zoom(np_image[i], 0.25)
-            thumb_image = np.array(get_LUT_value_255(thumb_image, window, level), dtype=np.uint8)
+            thumb_image = np.array(
+                get_LUT_value_255(thumb_image, window, level), dtype=np.uint8
+            )
             fd, thumbnail_path = tempfile.mkstemp(prefix="thumb_", suffix=".png")
             imageio.imsave(thumbnail_path, thumb_image)
             thumbnail_paths.append(thumbnail_path)
@@ -278,7 +285,9 @@ def create_dicom_thumbnails(image, window=None, level=None):
         fd, thumbnail_path = tempfile.mkstemp(prefix="thumb_", suffix=".png")
         if pf.GetSamplesPerPixel() == 1:
             thumb_image = zoom(np_image, 0.25)
-            thumb_image = np.array(get_LUT_value_255(thumb_image, window, level), dtype=np.uint8)
+            thumb_image = np.array(
+                get_LUT_value_255(thumb_image, window, level), dtype=np.uint8
+            )
         else:
             thumb_image = zoom(np_image, (0.25, 0.25, 1))
         imageio.imsave(thumbnail_path, thumb_image)
@@ -305,7 +314,9 @@ def bitmap2memmap(files, slice_size, orientation, spacing, resolution_percentage
     """
     message = _("Generating multiplanar visualization...")
     if len(files) > 1:
-        update_progress = vtk_utils.ShowProgress(len(files) - 1, dialog_type="ProgressDialog")
+        update_progress = vtk_utils.ShowProgress(
+            len(files) - 1, dialog_type="ProgressDialog"
+        )
 
     temp_fd, temp_file = tempfile.mkstemp()
 
@@ -422,7 +433,9 @@ def dcm2memmap(files, slice_size, orientation, resolution_percentage):
     """
     if len(files) > 1:
         message = _("Generating multiplanar visualization...")
-        update_progress = vtk_utils.ShowProgress(len(files) - 1, dialog_type="ProgressDialog")
+        update_progress = vtk_utils.ShowProgress(
+            len(files) - 1, dialog_type="ProgressDialog"
+        )
 
     first_slice = read_dcm_slice_as_np2(files[0], resolution_percentage)
     slice_size = first_slice.shape[::-1]
@@ -556,8 +569,15 @@ def get_LUT_value(data: np.ndarray, window: int, level: int) -> np.ndarray:
     data_ = data.ravel()
     data = np.piecewise(
         data_,
-        [data_ <= (level - 0.5 - (window - 1) / 2), data_ > (level - 0.5 + (window - 1) / 2)],
-        [0, window, lambda data_: ((data_ - (level - 0.5)) / (window - 1) + 0.5) * (window)],
+        [
+            data_ <= (level - 0.5 - (window - 1) / 2),
+            data_ > (level - 0.5 + (window - 1) / 2),
+        ],
+        [
+            0,
+            window,
+            lambda data_: ((data_ - (level - 0.5)) / (window - 1) + 0.5) * (window),
+        ],
     )
     data.shape = shape
     return data
@@ -623,7 +643,11 @@ def convert_invesalius_to_voxel(position):
     """
     slice = sl.Slice()
     return np.array(
-        (position[0], slice.spacing[1] * (slice.matrix.shape[1] - 1) - position[1], position[2])
+        (
+            position[0],
+            slice.spacing[1] * (slice.matrix.shape[1] - 1) - position[1],
+            position[2],
+        )
     )
 
 

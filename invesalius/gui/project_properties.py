@@ -48,7 +48,9 @@ class ProjectProperties(wx.Dialog):
         self.name_txt = wx.TextCtrl(self, -1, value=project.name)
         self.name_txt.SetMinSize((utils.calc_width_needed(self.name_txt, 30), -1))
 
-        modality_txt = wx.TextCtrl(self, -1, value=project.modality, style=wx.TE_READONLY)
+        modality_txt = wx.TextCtrl(
+            self, -1, value=project.modality, style=wx.TE_READONLY
+        )
 
         try:
             orientation = ORIENTATION_LABEL[project.original_orientation]
@@ -63,24 +65,35 @@ class ProjectProperties(wx.Dialog):
         spacing_txt_z = wx.TextCtrl(self, -1, value=f"{sz:.5}", style=wx.TE_READONLY)
 
         name_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        name_sizer.Add(wx.StaticText(self, -1, _("Name")), 0, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5)
+        name_sizer.Add(
+            wx.StaticText(self, -1, _("Name")), 0, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5
+        )
         name_sizer.Add(self.name_txt, 1, wx.EXPAND | wx.ALL, 5)
 
         modality_sizer = wx.BoxSizer(wx.HORIZONTAL)
         modality_sizer.Add(
-            wx.StaticText(self, -1, _("Modality")), 0, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5
+            wx.StaticText(self, -1, _("Modality")),
+            0,
+            wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            5,
         )
         modality_sizer.Add(modality_txt, 1, wx.EXPAND | wx.ALL, 5)
 
         orientation_sizer = wx.BoxSizer(wx.HORIZONTAL)
         orientation_sizer.Add(
-            wx.StaticText(self, -1, _("Orientation")), 0, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5
+            wx.StaticText(self, -1, _("Orientation")),
+            0,
+            wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            5,
         )
         orientation_sizer.Add(orientation_txt, 1, wx.EXPAND | wx.ALL, 5)
 
         spacing_sizer = wx.BoxSizer(wx.HORIZONTAL)
         spacing_sizer.Add(
-            wx.StaticText(self, -1, _("Spacing")), 0, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5
+            wx.StaticText(self, -1, _("Spacing")),
+            0,
+            wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            5,
         )
         spacing_sizer.Add(spacing_txt_x, 1, wx.EXPAND | wx.ALL, 5)
         spacing_sizer.Add(spacing_txt_y, 1, wx.EXPAND | wx.ALL, 5)

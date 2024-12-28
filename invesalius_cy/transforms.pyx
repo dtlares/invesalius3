@@ -7,14 +7,15 @@
 # cython: language_level=3
 
 import numpy as np
-cimport numpy as np
+
 cimport cython
+cimport numpy as np
+from cython.parallel cimport prange
+from libc.math cimport ceil, fabs, floor, round, sqrt
 
 from .cy_my_types cimport image_t
-from .interpolation cimport interpolate, tricub_interpolate, tricubicInterpolate, lanczos3, nearest_neighbour_interp
-
-from libc.math cimport floor, ceil, sqrt, fabs, round
-from cython.parallel cimport prange
+from .interpolation cimport (interpolate, lanczos3, nearest_neighbour_interp,
+                             tricub_interpolate, tricubicInterpolate)
 
 ctypedef double (*interp_function)(image_t[:, :, :], double, double, double) noexcept nogil
 

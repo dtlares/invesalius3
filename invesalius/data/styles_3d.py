@@ -19,11 +19,10 @@
 
 
 import wx
-from vtkmodules.vtkInteractionStyle import (
-    vtkInteractorStyleRubberBandZoom,
-    vtkInteractorStyleTrackballCamera,
-)
-from vtkmodules.vtkRenderingCore import vtkCellPicker, vtkPointPicker, vtkPropPicker
+from vtkmodules.vtkInteractionStyle import (vtkInteractorStyleRubberBandZoom,
+                                            vtkInteractorStyleTrackballCamera)
+from vtkmodules.vtkRenderingCore import (vtkCellPicker, vtkPointPicker,
+                                         vtkPropPicker)
 
 import invesalius.constants as const
 import invesalius.project as prj
@@ -396,7 +395,9 @@ class WWWLInteractorStyle(DefaultInteractorStyle):
             diff_y = mouse_y - self.last_y
             self.last_x, self.last_y = mouse_x, mouse_y
             Publisher.sendMessage(
-                "Set raycasting relative window and level", diff_wl=diff_x, diff_ww=diff_y
+                "Set raycasting relative window and level",
+                diff_wl=diff_x,
+                diff_ww=diff_y,
             )
             Publisher.sendMessage("Refresh raycasting widget points")
             Publisher.sendMessage("Render volume viewer")
@@ -545,7 +546,9 @@ class CrossInteractorStyle(DefaultInteractorStyle):
 
         if self.picker.GetActor():
             Publisher.sendMessage("Update slices position", position=[x, -y, z])
-            Publisher.sendMessage("Set cross focal point", position=[x, -y, z, None, None, None])
+            Publisher.sendMessage(
+                "Set cross focal point", position=[x, -y, z, None, None, None]
+            )
             Publisher.sendMessage("Update volume viewer pointer", position=[x, y, z])
 
             Publisher.sendMessage("Update slice viewer")
@@ -581,7 +584,9 @@ class RegistrationInteractorStyle(DefaultInteractorStyle):
 
         if self.picker.GetActor():
             Publisher.sendMessage("Update slices position", position=[x, -y, z])
-            Publisher.sendMessage("Set cross focal point", position=[x, -y, z, None, None, None])
+            Publisher.sendMessage(
+                "Set cross focal point", position=[x, -y, z, None, None, None]
+            )
             Publisher.sendMessage("Update volume viewer pointer", position=[x, y, z])
 
             Publisher.sendMessage("Update slice viewer")

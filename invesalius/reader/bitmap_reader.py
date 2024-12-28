@@ -30,13 +30,8 @@ from vtkmodules.vtkCommonCore import vtkFileOutputWindow, vtkOutputWindow
 from vtkmodules.vtkCommonDataModel import vtkImageData
 from vtkmodules.vtkImagingColor import vtkImageLuminance
 from vtkmodules.vtkImagingCore import vtkImageCast, vtkImageResample
-from vtkmodules.vtkIOImage import (
-    vtkBMPReader,
-    vtkJPEGReader,
-    vtkPNGReader,
-    vtkPNGWriter,
-    vtkTIFFReader,
-)
+from vtkmodules.vtkIOImage import (vtkBMPReader, vtkJPEGReader, vtkPNGReader,
+                                   vtkPNGWriter, vtkTIFFReader)
 
 import invesalius.constants as const
 import invesalius.data.converters as converters
@@ -162,7 +157,9 @@ class LoadBitmap:
         if not (isinstance(n_array, numpy.ndarray)):
             return False
 
-        image = converters.to_vtk(n_array, spacing=(1, 1, 1), slice_number=1, orientation="AXIAL")
+        image = converters.to_vtk(
+            n_array, spacing=(1, 1, 1), slice_number=1, orientation="AXIAL"
+        )
 
         dim = image.GetDimensions()
         x = dim[0]

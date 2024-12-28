@@ -49,7 +49,9 @@ def add_sendMessage_hook(hook: Hook) -> None:
     sendMessage_hook = hook
 
 
-def subscribe(listener: UserListener, topicName: str, **curriedArgs) -> Tuple[Listener, bool]:
+def subscribe(
+    listener: UserListener, topicName: str, **curriedArgs
+) -> Tuple[Listener, bool]:
     """Subscribe to a topic.
 
     :param listener:

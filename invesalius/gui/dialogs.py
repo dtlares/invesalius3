@@ -26,19 +26,8 @@ import sys
 import time
 from concurrent import futures
 from functools import partial
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Dict,
-    Iterable,
-    List,
-    Literal,
-    MutableSequence,
-    Optional,
-    Sequence,
-    Tuple,
-    Union,
-)
+from typing import (TYPE_CHECKING, Any, Dict, Iterable, List, Literal,
+                    MutableSequence, Optional, Sequence, Tuple, Union)
 
 if sys.platform == "win32":
     try:
@@ -58,37 +47,27 @@ import wx.lib.filebrowsebutton as filebrowse
 from vtkmodules.vtkCommonColor import vtkNamedColors
 from vtkmodules.vtkCommonComputationalGeometry import vtkParametricTorus
 from vtkmodules.vtkCommonCore import mutable, vtkPoints
-from vtkmodules.vtkCommonDataModel import (
-    vtkCellLocator,
-    vtkIterativeClosestPointTransform,
-    vtkPolyData,
-)
+from vtkmodules.vtkCommonDataModel import (vtkCellLocator,
+                                           vtkIterativeClosestPointTransform,
+                                           vtkPolyData)
 from vtkmodules.vtkCommonMath import vtkMatrix4x4
 from vtkmodules.vtkCommonTransforms import vtkTransform
-from vtkmodules.vtkFiltersCore import vtkAppendPolyData, vtkCleanPolyData, vtkPolyDataNormals
+from vtkmodules.vtkFiltersCore import (vtkAppendPolyData, vtkCleanPolyData,
+                                       vtkPolyDataNormals)
 from vtkmodules.vtkFiltersGeneral import vtkTransformPolyDataFilter
-from vtkmodules.vtkFiltersSources import (
-    vtkArrowSource,
-    vtkCylinderSource,
-    vtkParametricFunctionSource,
-    vtkRegularPolygonSource,
-    vtkSphereSource,
-)
-from vtkmodules.vtkInteractionStyle import (
-    vtkInteractorStyleTrackballActor,
-    vtkInteractorStyleTrackballCamera,
-)
+from vtkmodules.vtkFiltersSources import (vtkArrowSource, vtkCylinderSource,
+                                          vtkParametricFunctionSource,
+                                          vtkRegularPolygonSource,
+                                          vtkSphereSource)
+from vtkmodules.vtkInteractionStyle import (vtkInteractorStyleTrackballActor,
+                                            vtkInteractorStyleTrackballCamera)
 from vtkmodules.vtkIOGeometry import vtkSTLReader
-from vtkmodules.vtkRenderingCore import (
-    vtkActor,
-    vtkCellPicker,
-    vtkFollower,
-    vtkPolyDataMapper,
-    vtkProperty,
-    vtkRenderer,
-)
+from vtkmodules.vtkRenderingCore import (vtkActor, vtkCellPicker, vtkFollower,
+                                         vtkPolyDataMapper, vtkProperty,
+                                         vtkRenderer)
 from vtkmodules.vtkRenderingFreeType import vtkVectorText
-from vtkmodules.wx.wxVTKRenderWindowInteractor import wxVTKRenderWindowInteractor
+from vtkmodules.wx.wxVTKRenderWindowInteractor import \
+    wxVTKRenderWindowInteractor
 from wx.adv import AboutBox, AboutDialogInfo, BitmapComboBox
 from wx.lib import masked
 from wx.lib.wordwrap import wordwrap
@@ -103,7 +82,8 @@ import invesalius.gui.widgets.gradient as grad
 import invesalius.session as ses
 import invesalius.utils as utils
 from invesalius import inv_paths
-from invesalius.gui.widgets.clut_imagedata import EVT_CLUT_NODE_CHANGED, CLUTImageDataWidget
+from invesalius.gui.widgets.clut_imagedata import (EVT_CLUT_NODE_CHANGED,
+                                                   CLUTImageDataWidget)
 from invesalius.gui.widgets.fiducial_buttons import OrderedFiducialButtons
 from invesalius.gui.widgets.inv_spinctrl import InvFloatSpinCtrl, InvSpinCtrl
 from invesalius.i18n import tr as _
@@ -111,21 +91,18 @@ from invesalius.math_utils import inner1d
 from invesalius.pubsub import pub as Publisher
 
 if TYPE_CHECKING:
+    from typings.wx.type_defs import ColourType  # type: ignore
+
     from invesalius.data.mask import Mask
-    from invesalius.data.styles import (
-        CropMaskConfig,
-        FFillConfig,
-        FFillSegmentationConfig,
-        SelectPartConfig,
-        WatershedConfig,
-    )
+    from invesalius.data.styles import (CropMaskConfig, FFillConfig,
+                                        FFillSegmentationConfig,
+                                        SelectPartConfig, WatershedConfig)
     from invesalius.gui.widgets.clut_imagedata import CLUTEvent, Node
     from invesalius.navigation.mtms import mTMS
     from invesalius.navigation.navigation import Navigation
     from invesalius.navigation.robot import Robot
     from invesalius.navigation.tracker import Tracker
     from invesalius.net.pedal_connection import PedalConnector
-    from typings.wx.type_defs import ColourType  # type: ignore
 
 
 class MaskEvent(wx.PyCommandEvent):
@@ -230,7 +207,9 @@ class ResizeImageDialog(wx.Dialog):
         btn_sizer.AddButton(btn_cancel)
         btn_sizer.Realize()
 
-        lbl_message_percent = wx.StaticText(self, -1, _("Percentage of original resolution"))
+        lbl_message_percent = wx.StaticText(
+            self, -1, _("Percentage of original resolution")
+        )
 
         num_ctrl_percent = InvSpinCtrl(self, -1, value=100, min_value=20, max_value=100)
         self.num_ctrl_porcent = num_ctrl_percent
@@ -290,7 +269,9 @@ WILDCARD_OPEN = "InVesalius 3 project (*.inv3)|*.inv3|" "All files (*.*)|*.*"
 
 WILDCARD_ANALYZE = "Analyze 7.5 (*.hdr)|*.hdr|" "All files (*.*)|*.*"
 
-WILDCARD_NIFTI = "NIfTI 1 (*.nii;*.nii.gz;*.hdr)|*.nii;*.nii.gz;*.hdr|" "All files (*.*)|*.*"
+WILDCARD_NIFTI = (
+    "NIfTI 1 (*.nii;*.nii.gz;*.hdr)|*.nii;*.nii.gz;*.hdr|" "All files (*.*)|*.*"
+)
 # ".[jJ][pP][gG]"
 WILDCARD_PARREC = "PAR/REC (*.par)|*.par|" "All files (*.*)|*.*"
 
@@ -526,8 +507,12 @@ def ShowImportMeshFilesDialog() -> Optional[str]:
         if dlg.ShowModal() == wx.ID_OK:
             filename = dlg.GetPath()
             if conversion_radio_box is not None:
-                convert_to_inv = conversion_radio_box.GetSelection() == const.SURFACE_SPACE_WORLD
-                Publisher.sendMessage("Update convert_to_inv flag", convert_to_inv=convert_to_inv)
+                convert_to_inv = (
+                    conversion_radio_box.GetSelection() == const.SURFACE_SPACE_WORLD
+                )
+                Publisher.sendMessage(
+                    "Update convert_to_inv flag", convert_to_inv=convert_to_inv
+                )
 
     except wx.PyAssertionError:  # TODO: error win64
         if dlg.GetPath():
@@ -763,7 +748,12 @@ class MessageDialog(wx.Dialog):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(label, 0, wx.ALIGN_CENTRE | wx.ALL, 5)
-        sizer.Add(btnsizer, 0, wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 5)
+        sizer.Add(
+            btnsizer,
+            0,
+            wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
+            5,
+        )
         self.SetSizer(sizer)
         sizer.Fit(self)
 
@@ -806,7 +796,12 @@ class UpdateMessageDialog(wx.Dialog):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(label, 0, wx.ALIGN_CENTRE | wx.ALL, 5)
-        sizer.Add(btnsizer, 0, wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 5)
+        sizer.Add(
+            btnsizer,
+            0,
+            wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
+            5,
+        )
         self.SetSizer(sizer)
         sizer.Fit(self)
         self.Centre()
@@ -837,15 +832,24 @@ class UpdateMessageDialog(wx.Dialog):
 
 class MessageBox(wx.Dialog):
     def __init__(
-        self, parent: wx.Window, title: str, message: str, caption: str = "InVesalius3 Error"
+        self,
+        parent: wx.Window,
+        title: str,
+        message: str,
+        caption: str = "InVesalius3 Error",
     ):
         wx.Dialog.__init__(
-            self, parent, title=caption, style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER
+            self,
+            parent,
+            title=caption,
+            style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
         )
 
         title_label = wx.StaticText(self, -1, title)
 
-        text = wx.TextCtrl(self, style=wx.TE_MULTILINE | wx.TE_READONLY | wx.BORDER_NONE)
+        text = wx.TextCtrl(
+            self, style=wx.TE_MULTILINE | wx.TE_READONLY | wx.BORDER_NONE
+        )
         text.SetValue(message)
         text.SetBackgroundColour(wx.SystemSettings.GetColour(4))
 
@@ -876,7 +880,10 @@ class ErrorMessageBox(wx.Dialog):
         caption: str = "InVesalius3 Error",
     ):
         wx.Dialog.__init__(
-            self, parent, title=caption, style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER
+            self,
+            parent,
+            title=caption,
+            style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
         )
 
         title_label = wx.StaticText(self, -1, title)
@@ -887,7 +894,9 @@ class ErrorMessageBox(wx.Dialog):
         )
         bmp = wx.StaticBitmap(self, -1, icon)
 
-        text = wx.TextCtrl(self, style=wx.TE_MULTILINE | wx.TE_READONLY | wx.BORDER_NONE)
+        text = wx.TextCtrl(
+            self, style=wx.TE_MULTILINE | wx.TE_READONLY | wx.BORDER_NONE
+        )
         text.SetValue(message)
         text.SetBackgroundColour(wx.SystemSettings.GetColour(4))
 
@@ -967,7 +976,9 @@ def WarningRescalePixelValues() -> None:
     if sys.platform == "darwin":
         dlg = wx.MessageDialog(None, "", msg1 + msg2, wx.ICON_INFORMATION | wx.OK)
     else:
-        dlg = wx.MessageDialog(None, msg1 + msg2, "InVesalius 3", wx.ICON_INFORMATION | wx.OK)
+        dlg = wx.MessageDialog(
+            None, msg1 + msg2, "InVesalius 3", wx.ICON_INFORMATION | wx.OK
+        )
     dlg.ShowModal()
     dlg.Destroy()
 
@@ -978,7 +989,9 @@ def ImagePixelRescaling() -> None:
     if sys.platform == "darwin":
         dlg = wx.MessageDialog(None, "", msg1 + msg2, wx.ICON_INFORMATION | wx.OK)
     else:
-        dlg = wx.MessageDialog(None, msg1 + msg2, "InVesalius 3", wx.ICON_INFORMATION | wx.OK)
+        dlg = wx.MessageDialog(
+            None, msg1 + msg2, "InVesalius 3", wx.ICON_INFORMATION | wx.OK
+        )
     dlg.ShowModal()
     dlg.Destroy()
 
@@ -1237,7 +1250,9 @@ def ShowConfirmationDialog(msg: str = _("Proceed?")) -> int:
     if sys.platform == "darwin":
         dlg = wx.MessageDialog(None, "", msg, wx.OK | wx.CANCEL | wx.ICON_QUESTION)
     else:
-        dlg = wx.MessageDialog(None, msg, "InVesalius 3", wx.OK | wx.CANCEL | wx.ICON_QUESTION)
+        dlg = wx.MessageDialog(
+            None, msg, "InVesalius 3", wx.OK | wx.CANCEL | wx.ICON_QUESTION
+        )
     result = dlg.ShowModal()
     dlg.Destroy()
     return result
@@ -1312,7 +1327,11 @@ class NewMask(wx.Dialog):
 
         # Mask selection combo
         combo_thresh = wx.ComboBox(
-            self, -1, "", choices=self.thresh_list, style=wx.CB_DROPDOWN | wx.CB_READONLY
+            self,
+            -1,
+            "",
+            choices=self.thresh_list,
+            style=wx.CB_DROPDOWN | wx.CB_READONLY,
         )
         combo_thresh.SetSelection(default_index)
         if sys.platform != "win32":
@@ -1327,7 +1346,13 @@ class NewMask(wx.Dialog):
         colour = [255 * i for i in original_colour]
         colour.append(100)
         gradient = grad.GradientCtrl(
-            self, -1, int(bound_min), int(bound_max), int(thresh_min), int(thresh_max), colour
+            self,
+            -1,
+            int(bound_min),
+            int(bound_max),
+            int(thresh_min),
+            int(thresh_max),
+            colour,
         )
         self.gradient = gradient
 
@@ -1428,13 +1453,17 @@ def MissingFilesForReconstruction() -> None:
     dlg.Destroy()
 
 
-def SaveChangesDialog(filename: "str | bytes | os.PathLike[str]", parent) -> Literal[-1, 0, 1]:
+def SaveChangesDialog(
+    filename: "str | bytes | os.PathLike[str]", parent
+) -> Literal[-1, 0, 1]:
     current_dir = os.path.abspath(".")
     msg = _("The project %s has been modified.\nSave changes?") % filename
     if sys.platform == "darwin":
         dlg = wx.MessageDialog(None, "", msg, wx.ICON_QUESTION | wx.YES_NO | wx.CANCEL)
     else:
-        dlg = wx.MessageDialog(None, msg, "InVesalius 3", wx.ICON_QUESTION | wx.YES_NO | wx.CANCEL)
+        dlg = wx.MessageDialog(
+            None, msg, "InVesalius 3", wx.ICON_QUESTION | wx.YES_NO | wx.CANCEL
+        )
 
     try:
         answer = dlg.ShowModal()
@@ -1477,7 +1506,9 @@ def ShowAboutDialog(parent: wx.Window) -> None:
     year = datetime.date.today().year
 
     info.Copyright = _(
-        "(c) 2007-" + str(year) + " Center for Information Technology Renato Archer - CTI"
+        "(c) 2007-"
+        + str(year)
+        + " Center for Information Technology Renato Archer - CTI"
     )
     info.Description = wordwrap(
         _(
@@ -1493,7 +1524,9 @@ def ShowAboutDialog(parent: wx.Window) -> None:
     #       _("so the user can print 3D physical models of the patient's anatomy ")+\
     #       _("using Rapid Prototyping."), 350, wx.ClientDC(parent))
 
-    icon = wx.Icon(os.path.join(inv_paths.ICON_DIR, "invesalius_64x64.ico"), wx.BITMAP_TYPE_ICO)
+    icon = wx.Icon(
+        os.path.join(inv_paths.ICON_DIR, "invesalius_64x64.ico"), wx.BITMAP_TYPE_ICO
+    )
 
     info.SetWebSite("https://www.cti.gov.br/invesalius")
     info.SetIcon(icon)
@@ -2027,7 +2060,9 @@ class SurfaceTransparencyDialog(wx.Dialog):
         self.value_text.SetLabel(f"Surface transparency: {value}%")
 
         Publisher.sendMessage(
-            "Set surface transparency", surface_index=self.surface_index, transparency=value / 100.0
+            "Set surface transparency",
+            surface_index=self.surface_index,
+            transparency=value / 100.0,
         )
 
     def on_ok(self, event: wx.CommandEvent) -> None:
@@ -2114,20 +2149,28 @@ class SurfaceMethodPanel(wx.Panel):
             -1,
             _("Default"),
             choices=[
-                i for i in sorted(self.alg_types) if not (self.mask_edited and i in self.edited_imp)
+                i
+                for i in sorted(self.alg_types)
+                if not (self.mask_edited and i in self.edited_imp)
             ],
             style=wx.CB_READONLY,
         )
         w, h = self.cb_types.GetSize()
 
-        icon = wx.ArtProvider.GetBitmap(wx.ART_INFORMATION, wx.ART_MESSAGE_BOX, (h * 0.8, h * 0.8))
+        icon = wx.ArtProvider.GetBitmap(
+            wx.ART_INFORMATION, wx.ART_MESSAGE_BOX, (h * 0.8, h * 0.8)
+        )
         self.bmp = wx.StaticBitmap(self, -1, icon)
         self.bmp.SetToolTip(
-            _("It is not possible to use the Default method because the mask was edited.")
+            _(
+                "It is not possible to use the Default method because the mask was edited."
+            )
         )
 
         self.method_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.method_sizer.Add(wx.StaticText(self, -1, _("Method:")), 0, wx.EXPAND | wx.ALL, 5)
+        self.method_sizer.Add(
+            wx.StaticText(self, -1, _("Method:")), 0, wx.EXPAND | wx.ALL, 5
+        )
         self.method_sizer.Add(self.cb_types, 1, wx.EXPAND)
         self.method_sizer.Add(self.bmp, 0, wx.EXPAND | wx.ALL, 5)
 
@@ -2181,7 +2224,11 @@ class SurfaceMethodPanel(wx.Panel):
     def ReloadMethodsOptions(self) -> None:
         self.cb_types.Clear()
         self.cb_types.AppendItems(
-            [i for i in sorted(self.alg_types) if not (self.mask_edited and i in self.edited_imp)]
+            [
+                i
+                for i in sorted(self.alg_types)
+                if not (self.mask_edited and i in self.edited_imp)
+            ]
         )
         if self.mask_edited:
             self.cb_types.SetValue(_("Context aware smoothing"))
@@ -2197,7 +2244,11 @@ class SurfaceMethodPanel(wx.Panel):
 
 class ClutImagedataDialog(wx.Dialog):
     def __init__(
-        self, histogram: np.ndarray, init: float, end: float, nodes: Optional[List["Node"]] = None
+        self,
+        histogram: np.ndarray,
+        init: float,
+        end: float,
+        nodes: Optional[List["Node"]] = None,
     ):
         wx.Dialog.__init__(
             self,
@@ -2233,7 +2284,8 @@ class ClutImagedataDialog(wx.Dialog):
 
     def OnClutChange(self, evt: "CLUTEvent") -> None:
         Publisher.sendMessage(
-            "Change colour table from background image from widget", nodes=evt.GetNodes()
+            "Change colour table from background image from widget",
+            nodes=evt.GetNodes(),
         )
         Publisher.sendMessage(
             "Update window level text",
@@ -2264,7 +2316,11 @@ class WatershedOptionsPanel(wx.Panel):
 
     def _init_gui(self) -> None:
         self.choice_algorithm = wx.RadioBox(
-            self, -1, _("Method"), choices=self.algorithms, style=wx.NO_BORDER | wx.HORIZONTAL
+            self,
+            -1,
+            _("Method"),
+            choices=self.algorithms,
+            style=wx.NO_BORDER | wx.HORIZONTAL,
         )
         self.choice_algorithm.SetSelection(self.algorithms.index(self.config.algorithm))
 
@@ -2290,12 +2346,16 @@ class WatershedOptionsPanel(wx.Panel):
             self, -1, value=self.config.mg_size, min_value=1, max_value=10
         )
 
-        box_sizer = wx.StaticBoxSizer(wx.StaticBox(self, -1, "Conectivity"), wx.VERTICAL)
+        box_sizer = wx.StaticBoxSizer(
+            wx.StaticBox(self, -1, "Conectivity"), wx.VERTICAL
+        )
         box_sizer.Add(self.choice_2dcon, 0, wx.ALL, 5)
         box_sizer.Add(self.choice_3dcon, 0, wx.ALL, 5)
 
         g_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        g_sizer.Add(wx.StaticText(self, -1, _("Gaussian sigma")), 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        g_sizer.Add(
+            wx.StaticText(self, -1, _("Gaussian sigma")), 0, wx.ALIGN_CENTER | wx.ALL, 5
+        )
         g_sizer.Add(self.gaussian_size, 0, wx.ALL, 5)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -2322,7 +2382,9 @@ class WatershedOptionsDialog(wx.Dialog):
         title: str = _("Watershed"),
         style: int = wx.DEFAULT_DIALOG_STYLE | wx.FRAME_FLOAT_ON_PARENT,
     ):
-        wx.Dialog.__init__(self, wx.GetApp().GetTopWindow(), ID, title=title, style=style)
+        wx.Dialog.__init__(
+            self, wx.GetApp().GetTopWindow(), ID, title=title, style=style
+        )
 
         self.config = config
 
@@ -2367,7 +2429,9 @@ class MaskBooleanDialog(wx.Dialog):
         title: str = _("Boolean operations"),
         style: int = wx.DEFAULT_DIALOG_STYLE | wx.FRAME_FLOAT_ON_PARENT,
     ):
-        wx.Dialog.__init__(self, wx.GetApp().GetTopWindow(), ID, title=title, style=style)
+        wx.Dialog.__init__(
+            self, wx.GetApp().GetTopWindow(), ID, title=title, style=style
+        )
 
         self._init_gui(masks)
         self.CenterOnScreen()
@@ -2451,7 +2515,9 @@ class ReorientImageDialog(wx.Dialog):
         title: str = _("Image reorientation"),
         style: int = wx.DEFAULT_DIALOG_STYLE | wx.FRAME_FLOAT_ON_PARENT,
     ):
-        wx.Dialog.__init__(self, wx.GetApp().GetTopWindow(), ID, title=title, style=style)
+        wx.Dialog.__init__(
+            self, wx.GetApp().GetTopWindow(), ID, title=title, style=style
+        )
 
         self._closed = False
 
@@ -2486,11 +2552,26 @@ class ReorientImageDialog(wx.Dialog):
         angles_sizer = wx.FlexGridSizer(3, 2, 5, 5)
         angles_sizer.AddMany(
             [
-                (wx.StaticText(self, -1, _("Angle X")), 1, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5),
+                (
+                    wx.StaticText(self, -1, _("Angle X")),
+                    1,
+                    wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+                    5,
+                ),
                 (self.anglex, 0, wx.EXPAND | wx.ALL, 5),
-                (wx.StaticText(self, -1, _("Angle Y")), 1, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5),
+                (
+                    wx.StaticText(self, -1, _("Angle Y")),
+                    1,
+                    wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+                    5,
+                ),
                 (self.angley, 0, wx.EXPAND | wx.ALL, 5),
-                (wx.StaticText(self, -1, _("Angle Z")), 1, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5),
+                (
+                    wx.StaticText(self, -1, _("Angle Z")),
+                    1,
+                    wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+                    5,
+                ),
                 (self.anglez, 0, wx.EXPAND | wx.ALL, 5),
             ]
         )
@@ -2595,7 +2676,9 @@ class ImportBitmapParameters(wx.Dialog):
         import invesalius.project as prj
 
         p = wx.Panel(
-            self, -1, style=wx.TAB_TRAVERSAL | wx.CLIP_CHILDREN | wx.FULL_REPAINT_ON_RESIZE
+            self,
+            -1,
+            style=wx.TAB_TRAVERSAL | wx.CLIP_CHILDREN | wx.FULL_REPAINT_ON_RESIZE,
         )
 
         gbs_principal = self.gbs = wx.GridBagSizer(4, 1)
@@ -2605,7 +2688,9 @@ class ImportBitmapParameters(wx.Dialog):
         flag_labels = wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL
 
         stx_name = wx.StaticText(p, -1, _("Project name:"))
-        tx_name = self.tx_name = wx.TextCtrl(p, -1, "InVesalius Bitmap", size=wx.Size(220, -1))
+        tx_name = self.tx_name = wx.TextCtrl(
+            p, -1, "InVesalius Bitmap", size=wx.Size(220, -1)
+        )
 
         stx_orientation = wx.StaticText(
             p,
@@ -2638,17 +2723,35 @@ class ImportBitmapParameters(wx.Dialog):
 
         stx_spacing_x = stx_spacing_x = wx.StaticText(p, -1, _("X:"))
         fsp_spacing_x = self.fsp_spacing_x = InvFloatSpinCtrl(
-            p, -1, min_value=0, max_value=1000000000, increment=0.25, value=1.0, digits=8
+            p,
+            -1,
+            min_value=0,
+            max_value=1000000000,
+            increment=0.25,
+            value=1.0,
+            digits=8,
         )
 
         stx_spacing_y = stx_spacing_y = wx.StaticText(p, -1, _("Y:"))
         fsp_spacing_y = self.fsp_spacing_y = InvFloatSpinCtrl(
-            p, -1, min_value=0, max_value=1000000000, increment=0.25, value=1.0, digits=8
+            p,
+            -1,
+            min_value=0,
+            max_value=1000000000,
+            increment=0.25,
+            value=1.0,
+            digits=8,
         )
 
         stx_spacing_z = stx_spacing_z = wx.StaticText(p, -1, _("Z:"))
         fsp_spacing_z = self.fsp_spacing_z = InvFloatSpinCtrl(
-            p, -1, min_value=0, max_value=1000000000, increment=0.25, value=1.0, digits=8
+            p,
+            -1,
+            min_value=0,
+            max_value=1000000000,
+            increment=0.25,
+            value=1.0,
+            digits=8,
         )
 
         try:
@@ -2743,13 +2846,18 @@ def BitmapNotSameSize() -> None:
 
 class PanelTargeFFill(wx.Panel):
     def __init__(
-        self, parent: wx.Window, ID: int = -1, style: int = wx.TAB_TRAVERSAL | wx.NO_BORDER
+        self,
+        parent: wx.Window,
+        ID: int = -1,
+        style: int = wx.TAB_TRAVERSAL | wx.NO_BORDER,
     ):
         wx.Panel.__init__(self, parent, ID, style=style)
         self._init_gui()
 
     def _init_gui(self) -> None:
-        self.target_2d = wx.RadioButton(self, -1, _("2D - Actual slice"), style=wx.RB_GROUP)
+        self.target_2d = wx.RadioButton(
+            self, -1, _("2D - Actual slice"), style=wx.RB_GROUP
+        )
         self.target_3d = wx.RadioButton(self, -1, _("3D - All slices"))
 
         sizer = wx.GridBagSizer(5, 5)
@@ -2783,7 +2891,11 @@ class Panel2DConnectivity(wx.Panel):
 
         sizer.Add(0, 0, (0, 0))
         sizer.Add(
-            wx.StaticText(self, -1, _("2D Connectivity")), (1, 0), (1, 6), flag=wx.LEFT, border=5
+            wx.StaticText(self, -1, _("2D Connectivity")),
+            (1, 0),
+            (1, 6),
+            flag=wx.LEFT,
+            border=5,
         )
         sizer.Add(self.conect2D_4, (2, 0), flag=wx.LEFT, border=7)
         sizer.Add(self.conect2D_8, (2, 1), flag=wx.LEFT, border=7)
@@ -2791,7 +2903,10 @@ class Panel2DConnectivity(wx.Panel):
 
         if show_orientation:
             self.cmb_orientation = wx.ComboBox(
-                self, -1, choices=(_("Axial"), _("Coronal"), _("Sagital")), style=wx.CB_READONLY
+                self,
+                -1,
+                choices=(_("Axial"), _("Coronal"), _("Sagital")),
+                style=wx.CB_READONLY,
             )
             self.cmb_orientation.SetSelection(0)
 
@@ -2803,7 +2918,11 @@ class Panel2DConnectivity(wx.Panel):
                 border=5,
             )
             sizer.Add(
-                self.cmb_orientation, (5, 0), (1, 10), flag=wx.LEFT | wx.RIGHT | wx.EXPAND, border=7
+                self.cmb_orientation,
+                (5, 0),
+                (1, 10),
+                flag=wx.LEFT | wx.RIGHT | wx.EXPAND,
+                border=7,
             )
             sizer.Add(0, 0, (6, 0))
 
@@ -2818,14 +2937,21 @@ class Panel2DConnectivity(wx.Panel):
             return 8
 
     def GetOrientation(self) -> str:
-        dic_ori = {_("Axial"): "AXIAL", _("Coronal"): "CORONAL", _("Sagital"): "SAGITAL"}
+        dic_ori = {
+            _("Axial"): "AXIAL",
+            _("Coronal"): "CORONAL",
+            _("Sagital"): "SAGITAL",
+        }
 
         return dic_ori[self.cmb_orientation.GetStringSelection()]
 
 
 class Panel3DConnectivity(wx.Panel):
     def __init__(
-        self, parent: wx.Window, ID: int = -1, style: int = wx.TAB_TRAVERSAL | wx.NO_BORDER
+        self,
+        parent: wx.Window,
+        ID: int = -1,
+        style: int = wx.TAB_TRAVERSAL | wx.NO_BORDER,
     ):
         wx.Panel.__init__(self, parent, ID, style=style)
         self._init_gui()
@@ -2839,7 +2965,11 @@ class Panel3DConnectivity(wx.Panel):
 
         sizer.Add(0, 0, (0, 0))
         sizer.Add(
-            wx.StaticText(self, -1, _("3D Connectivity")), (1, 0), (1, 6), flag=wx.LEFT, border=5
+            wx.StaticText(self, -1, _("3D Connectivity")),
+            (1, 0),
+            (1, 6),
+            flag=wx.LEFT,
+            border=5,
         )
         sizer.Add(self.conect3D_6, (2, 0), flag=wx.LEFT, border=9)
         sizer.Add(self.conect3D_18, (2, 1), flag=wx.LEFT, border=9)
@@ -2882,7 +3012,13 @@ class PanelFFillThreshold(wx.Panel):
         colour.append(100)
 
         self.threshold = grad.GradientCtrl(
-            self, -1, int(bound_min), int(bound_max), self.config.t0, self.config.t1, colour
+            self,
+            -1,
+            int(bound_min),
+            int(bound_max),
+            self.config.t0,
+            self.config.t1,
+            colour,
         )
 
         # sizer
@@ -2940,7 +3076,13 @@ class PanelFFillDynamic(wx.Panel):
 
         sizer.Add(0, 0, (2, 0))
 
-        sizer.Add(wx.StaticText(self, -1, _("Deviation")), (3, 0), (1, 6), flag=wx.LEFT, border=5)
+        sizer.Add(
+            wx.StaticText(self, -1, _("Deviation")),
+            (3, 0),
+            (1, 6),
+            flag=wx.LEFT,
+            border=5,
+        )
 
         sizer.Add(
             wx.StaticText(self, -1, _("Min:")),
@@ -3060,7 +3202,10 @@ class PanelFFillConfidence(wx.Panel):
 
 class PanelFFillProgress(wx.Panel):
     def __init__(
-        self, parent: wx.Window, ID: int = -1, style: int = wx.TAB_TRAVERSAL | wx.NO_BORDER
+        self,
+        parent: wx.Window,
+        ID: int = -1,
+        style: int = wx.TAB_TRAVERSAL | wx.NO_BORDER,
     ) -> None:
         wx.Panel.__init__(self, parent, ID, style=style)
         self._init_gui()
@@ -3121,8 +3266,12 @@ class FFillOptionsDialog(wx.Dialog):
             border_style = wx.SUNKEN_BORDER
 
         self.panel_target = PanelTargeFFill(self, style=border_style | wx.TAB_TRAVERSAL)
-        self.panel2dcon = Panel2DConnectivity(self, style=border_style | wx.TAB_TRAVERSAL)
-        self.panel3dcon = Panel3DConnectivity(self, style=border_style | wx.TAB_TRAVERSAL)
+        self.panel2dcon = Panel2DConnectivity(
+            self, style=border_style | wx.TAB_TRAVERSAL
+        )
+        self.panel3dcon = Panel3DConnectivity(
+            self, style=border_style | wx.TAB_TRAVERSAL
+        )
 
         if self.config.target == "2D":
             self.panel_target.target_2d.SetValue(True)
@@ -3244,7 +3393,9 @@ class SelectPartsOptionsDialog(wx.Dialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         sizer.AddSpacer(5)
-        sizer.Add(wx.StaticText(self, -1, _("Target mask name")), flag=wx.LEFT, border=5)
+        sizer.Add(
+            wx.StaticText(self, -1, _("Target mask name")), flag=wx.LEFT, border=5
+        )
         sizer.AddSpacer(5)
         sizer.Add(self.target_name, flag=wx.LEFT | wx.EXPAND | wx.RIGHT, border=9)
         sizer.AddSpacer(5)
@@ -3291,7 +3442,9 @@ class SelectPartsOptionsDialog(wx.Dialog):
 
     def OnClose(self, evt: wx.CloseEvent) -> None:
         if self.config.dlg_visible:
-            Publisher.sendMessage("Disable style", style=const.SLICE_STATE_SELECT_MASK_PARTS)
+            Publisher.sendMessage(
+                "Disable style", style=const.SLICE_STATE_SELECT_MASK_PARTS
+            )
         evt.Skip()
         self.Destroy()
 
@@ -3304,7 +3457,9 @@ class FFillSegmentationOptionsDialog(wx.Dialog):
         title: str = _("Region growing"),
         style: int = wx.DEFAULT_DIALOG_STYLE | wx.FRAME_FLOAT_ON_PARENT,
     ):
-        wx.Dialog.__init__(self, wx.GetApp().GetTopWindow(), ID, title=title, style=style)
+        wx.Dialog.__init__(
+            self, wx.GetApp().GetTopWindow(), ID, title=title, style=style
+        )
 
         self.config = config
 
@@ -3322,8 +3477,12 @@ class FFillSegmentationOptionsDialog(wx.Dialog):
             border_style = wx.SUNKEN_BORDER
 
         self.panel_target = PanelTargeFFill(self, style=border_style | wx.TAB_TRAVERSAL)
-        self.panel2dcon = Panel2DConnectivity(self, style=border_style | wx.TAB_TRAVERSAL)
-        self.panel3dcon = Panel3DConnectivity(self, style=border_style | wx.TAB_TRAVERSAL)
+        self.panel2dcon = Panel2DConnectivity(
+            self, style=border_style | wx.TAB_TRAVERSAL
+        )
+        self.panel3dcon = Panel3DConnectivity(
+            self, style=border_style | wx.TAB_TRAVERSAL
+        )
 
         if self.config.target == "2D":
             self.panel_target.target_2d.SetValue(True)
@@ -3350,7 +3509,10 @@ class FFillSegmentationOptionsDialog(wx.Dialog):
             self.panel3dcon.conect3D_6.SetValue(True)
 
         self.cmb_method = wx.ComboBox(
-            self, -1, choices=(_("Dynamic"), _("Threshold"), _("Confidence")), style=wx.CB_READONLY
+            self,
+            -1,
+            choices=(_("Dynamic"), _("Threshold"), _("Confidence")),
+            style=wx.CB_READONLY,
         )
 
         if self.config.method == "dynamic":
@@ -3388,13 +3550,37 @@ class FFillSegmentationOptionsDialog(wx.Dialog):
         sizer = wx.GridBagSizer(2, 2)
 
         sizer.Add(0, 0, (0, 0))
-        sizer.Add(wx.StaticText(self, -1, _("Parameters")), (1, 0), (1, 6), flag=wx.LEFT, border=5)
+        sizer.Add(
+            wx.StaticText(self, -1, _("Parameters")),
+            (1, 0),
+            (1, 6),
+            flag=wx.LEFT,
+            border=5,
+        )
         sizer.Add(0, 0, (2, 0))
-        sizer.Add(self.panel_target, (3, 0), (1, 6), flag=wx.LEFT | wx.RIGHT | wx.EXPAND, border=7)
+        sizer.Add(
+            self.panel_target,
+            (3, 0),
+            (1, 6),
+            flag=wx.LEFT | wx.RIGHT | wx.EXPAND,
+            border=7,
+        )
         sizer.Add(0, 0, (4, 0))
-        sizer.Add(self.panel2dcon, (5, 0), (1, 6), flag=wx.LEFT | wx.RIGHT | wx.EXPAND, border=7)
+        sizer.Add(
+            self.panel2dcon,
+            (5, 0),
+            (1, 6),
+            flag=wx.LEFT | wx.RIGHT | wx.EXPAND,
+            border=7,
+        )
         sizer.Add(0, 0, (6, 0))
-        sizer.Add(self.panel3dcon, (7, 0), (1, 6), flag=wx.LEFT | wx.RIGHT | wx.EXPAND, border=7)
+        sizer.Add(
+            self.panel3dcon,
+            (7, 0),
+            (1, 6),
+            flag=wx.LEFT | wx.RIGHT | wx.EXPAND,
+            border=7,
+        )
         sizer.Add(0, 0, (8, 0))
 
         sizer.Add(
@@ -3404,7 +3590,13 @@ class FFillSegmentationOptionsDialog(wx.Dialog):
             flag=wx.LEFT | wx.ALIGN_CENTER_VERTICAL,
             border=7,
         )
-        sizer.Add(self.cmb_method, (9, 1), (1, 5), flag=wx.LEFT | wx.RIGHT | wx.EXPAND, border=7)
+        sizer.Add(
+            self.cmb_method,
+            (9, 1),
+            (1, 5),
+            flag=wx.LEFT | wx.RIGHT | wx.EXPAND,
+            border=7,
+        )
 
         sizer.Add(0, 0, (10, 0))
 
@@ -3442,10 +3634,16 @@ class FFillSegmentationOptionsDialog(wx.Dialog):
 
         sizer.Add(0, 0, (12, 0))
         sizer.Add(
-            self.panel_ffill_progress, (13, 0), (1, 6), flag=wx.ALIGN_RIGHT | wx.RIGHT, border=5
+            self.panel_ffill_progress,
+            (13, 0),
+            (1, 6),
+            flag=wx.ALIGN_RIGHT | wx.RIGHT,
+            border=5,
         )
         sizer.Add(0, 0, (14, 0))
-        sizer.Add(self.close_btn, (15, 0), (1, 6), flag=wx.ALIGN_RIGHT | wx.RIGHT, border=5)
+        sizer.Add(
+            self.close_btn, (15, 0), (1, 6), flag=wx.ALIGN_RIGHT | wx.RIGHT, border=5
+        )
         sizer.Add(0, 0, (16, 0))
 
         self.SetSizer(sizer)
@@ -3484,7 +3682,9 @@ class FFillSegmentationOptionsDialog(wx.Dialog):
 
     def OnSetMethod(self, evt: wx.CommandEvent) -> None:
         sizer = self.GetSizer()
-        assert isinstance(sizer, wx.GridBagSizer), "assigned sizer must be a wx.GridBagSizer"
+        assert isinstance(
+            sizer, wx.GridBagSizer
+        ), "assigned sizer must be a wx.GridBagSizer"
         item_panel = sizer.FindItemAtPosition((11, 0)).GetWindow()
 
         if self.cmb_method.GetSelection() == 0:
@@ -3527,7 +3727,9 @@ class CropOptionsDialog(wx.Dialog):
         style: int = wx.DEFAULT_DIALOG_STYLE | wx.FRAME_FLOAT_ON_PARENT,
     ):
         self.config = config
-        wx.Dialog.__init__(self, wx.GetApp().GetTopWindow(), ID, title=title, style=style)
+        wx.Dialog.__init__(
+            self, wx.GetApp().GetTopWindow(), ID, title=title, style=style
+        )
         self._init_gui()
 
     def UpdateValues(self, limits: Iterable[float]) -> None:
@@ -3544,7 +3746,9 @@ class CropOptionsDialog(wx.Dialog):
 
     def _init_gui(self) -> None:
         p = wx.Panel(
-            self, -1, style=wx.TAB_TRAVERSAL | wx.CLIP_CHILDREN | wx.FULL_REPAINT_ON_RESIZE
+            self,
+            -1,
+            style=wx.TAB_TRAVERSAL | wx.CLIP_CHILDREN | wx.FULL_REPAINT_ON_RESIZE,
         )
 
         gbs_principal = self.gbs = wx.GridBagSizer(4, 1)
@@ -3556,9 +3760,13 @@ class CropOptionsDialog(wx.Dialog):
         txt_style = wx.TE_READONLY
 
         stx_axial = wx.StaticText(p, -1, _("Axial:"))
-        self.tx_axial_i = tx_axial_i = wx.TextCtrl(p, -1, "", size=wx.Size(50, -1), style=txt_style)
+        self.tx_axial_i = tx_axial_i = wx.TextCtrl(
+            p, -1, "", size=wx.Size(50, -1), style=txt_style
+        )
         stx_axial_t = wx.StaticText(p, -1, _(" - "))
-        self.tx_axial_f = tx_axial_f = wx.TextCtrl(p, -1, "", size=wx.Size(50, -1), style=txt_style)
+        self.tx_axial_f = tx_axial_f = wx.TextCtrl(
+            p, -1, "", size=wx.Size(50, -1), style=txt_style
+        )
 
         gbs.Add(stx_axial, (0, 0), flag=flag_labels)
         gbs.Add(tx_axial_i, (0, 1))
@@ -3657,12 +3865,16 @@ class FillHolesAutoDialog(wx.Dialog):
         else:
             border_style = wx.SUNKEN_BORDER
 
-        self.spin_size = InvSpinCtrl(self, -1, value=1000, min_value=1, max_value=1000000000)
+        self.spin_size = InvSpinCtrl(
+            self, -1, value=1000, min_value=1, max_value=1000000000
+        )
         self.panel_target = PanelTargeFFill(self, style=border_style | wx.TAB_TRAVERSAL)
         self.panel2dcon = Panel2DConnectivity(
             self, show_orientation=True, style=border_style | wx.TAB_TRAVERSAL
         )
-        self.panel3dcon = Panel3DConnectivity(self, style=border_style | wx.TAB_TRAVERSAL)
+        self.panel3dcon = Panel3DConnectivity(
+            self, style=border_style | wx.TAB_TRAVERSAL
+        )
 
         self.panel2dcon.Enable(True)
         self.panel3dcon.Enable(False)
@@ -3696,7 +3908,9 @@ class FillHolesAutoDialog(wx.Dialog):
         )
         spin_sizer.Add(self.spin_size, 0, flag=wx.LEFT | wx.RIGHT, border=5)
         spin_sizer.Add(
-            wx.StaticText(self, -1, _("voxels")), flag=wx.RIGHT | wx.ALIGN_CENTER_VERTICAL, border=5
+            wx.StaticText(self, -1, _("voxels")),
+            flag=wx.RIGHT | wx.ALIGN_CENTER_VERTICAL,
+            border=5,
         )
 
         sizer.Add(spin_sizer, 0, flag=wx.LEFT | wx.RIGHT | wx.EXPAND, border=7)
@@ -3797,7 +4011,11 @@ class MaskDensityDialog(wx.Dialog):
         values_sizer = wx.FlexGridSizer(rows=4, cols=2, vgap=5, hgap=5)
         values_sizer.AddMany(
             [
-                (wx.StaticText(self, -1, _("Mean:")), 0, wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT),
+                (
+                    wx.StaticText(self, -1, _("Mean:")),
+                    0,
+                    wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT,
+                ),
                 (self.mean_density, 1, wx.EXPAND),
                 (
                     wx.StaticText(self, -1, _("Minimun:")),
@@ -3889,7 +4107,9 @@ class ObjectCalibrationDialog(wx.Dialog):
 
         self.tracker_id = tracker.GetTrackerId()
         self.obj_id = 2  # the index of the object in coord_raw
-        self.show_sensor_options: bool = self.tracker_id in const.TRACKERS_WITH_SENSOR_OPTIONS
+        self.show_sensor_options: bool = (
+            self.tracker_id in const.TRACKERS_WITH_SENSOR_OPTIONS
+        )
         self.coil_path = None
         self.polydata = None
 
@@ -3998,7 +4218,9 @@ class ObjectCalibrationDialog(wx.Dialog):
         for m in range(0, 4):
             for n in range(0, 3):
                 self.txt_coord[m].append(
-                    wx.StaticText(self, -1, label="-", style=wx.ALIGN_RIGHT, size=wx.Size(40, 23))
+                    wx.StaticText(
+                        self, -1, label="-", style=wx.ALIGN_RIGHT, size=wx.Size(40, 23)
+                    )
                 )
 
         coord_sizer = wx.GridBagSizer(hgap=20, vgap=5)
@@ -4007,7 +4229,10 @@ class ObjectCalibrationDialog(wx.Dialog):
             coord_sizer.Add(button, pos=wx.GBPosition(m, 0))
             for n in range(0, 3):
                 coord_sizer.Add(
-                    self.txt_coord[m][n], pos=wx.GBPosition(m, n + 1), flag=wx.TOP, border=5
+                    self.txt_coord[m][n],
+                    pos=wx.GBPosition(m, n + 1),
+                    flag=wx.TOP,
+                    border=5,
                 )
 
         # Hide "Fixed fiducial" for trackers other than Polhemus
@@ -4017,19 +4242,27 @@ class ObjectCalibrationDialog(wx.Dialog):
                 coord.Hide()
 
         group_sizer = wx.FlexGridSizer(rows=1, cols=2, hgap=50, vgap=5)
-        group_sizer.AddMany([(coord_sizer, 0, wx.LEFT, 20), (extra_sizer, 0, wx.LEFT, 10)])
+        group_sizer.AddMany(
+            [(coord_sizer, 0, wx.LEFT, 20), (extra_sizer, 0, wx.LEFT, 10)]
+        )
 
         name_sizer = wx.FlexGridSizer(rows=1, cols=2, hgap=5, vgap=5)
         lbl_name = wx.StaticText(self, -1, _("Name the coil:"))
         self.name_box = name_box = wx.TextCtrl(self, -1, _("coil1"))
         name_sizer.AddMany(
-            [(lbl_name, 1, wx.ALIGN_CENTER_VERTICAL), (name_box, 1, wx.ALIGN_CENTER_VERTICAL)]
+            [
+                (lbl_name, 1, wx.ALIGN_CENTER_VERTICAL),
+                (name_box, 1, wx.ALIGN_CENTER_VERTICAL),
+            ]
         )
 
         main_sizer = wx.BoxSizer(wx.VERTICAL)
         main_sizer.Add(self.interactor, 0, wx.EXPAND)
         main_sizer.Add(
-            group_sizer, 0, wx.EXPAND | wx.GROW | wx.LEFT | wx.TOP | wx.RIGHT | wx.BOTTOM, 10
+            group_sizer,
+            0,
+            wx.EXPAND | wx.GROW | wx.LEFT | wx.TOP | wx.RIGHT | wx.BOTTOM,
+            10,
         )
         if self.n_coils > 1:  # Multicoil
             main_sizer.Add(name_sizer, 0, wx.EXPAND)
@@ -4059,7 +4292,9 @@ class ObjectCalibrationDialog(wx.Dialog):
         if sys.platform == "darwin":
             dlg = wx.MessageDialog(None, "", msg, wx.ICON_QUESTION | wx.YES_NO)
         else:
-            dlg = wx.MessageDialog(None, msg, "InVesalius 3", wx.ICON_QUESTION | wx.YES_NO)
+            dlg = wx.MessageDialog(
+                None, msg, "InVesalius 3", wx.ICON_QUESTION | wx.YES_NO
+            )
         answer = dlg.ShowModal()
         dlg.Destroy()
 
@@ -4071,7 +4306,8 @@ class ObjectCalibrationDialog(wx.Dialog):
     def ShowObject(self, polydata: vtkPolyData) -> None:
         if polydata.GetNumberOfPoints() == 0:
             wx.MessageBox(
-                _("InVesalius was not able to import this surface"), _("Import surface error")
+                _("InVesalius was not able to import this surface"),
+                _("Import surface error"),
             )
 
         transform = vtkTransform()
@@ -4096,9 +4332,15 @@ class ObjectCalibrationDialog(wx.Dialog):
         obj_actor = vtkActor()
         obj_actor.SetMapper(mapper)
 
-        self.ball_actors[0], self.text_actors[0] = self.OnCreateObjectText("Left", (0, 55, 0))
-        self.ball_actors[1], self.text_actors[1] = self.OnCreateObjectText("Right", (0, -55, 0))
-        self.ball_actors[2], self.text_actors[2] = self.OnCreateObjectText("Anterior", (23, 0, 0))
+        self.ball_actors[0], self.text_actors[0] = self.OnCreateObjectText(
+            "Left", (0, 55, 0)
+        )
+        self.ball_actors[1], self.text_actors[1] = self.OnCreateObjectText(
+            "Right", (0, -55, 0)
+        )
+        self.ball_actors[2], self.text_actors[2] = self.OnCreateObjectText(
+            "Anterior", (23, 0, 0)
+        )
 
         # Match actor colors with fiducial buttons
         def set_actor_colors(n: int, color_float: Sequence[float]) -> None:
@@ -4132,7 +4374,8 @@ class ObjectCalibrationDialog(wx.Dialog):
             valid_extensions = (".stl", "ply", ".obj", ".vtp")
             if not path.lower().endswith(valid_extensions):
                 wx.MessageBox(
-                    _("File format not recognized by InVesalius"), _("Import surface error")
+                    _("File format not recognized by InVesalius"),
+                    _("Import surface error"),
                 )
                 return False
 
@@ -4153,7 +4396,9 @@ class ObjectCalibrationDialog(wx.Dialog):
             self.polydata = pu.LoadPolydata(path=object_path)
             self.ShowObject(polydata=self.polydata)
 
-    def OnCreateObjectText(self, name: str, coord: Sequence[float]) -> Tuple[vtkActor, vtkFollower]:
+    def OnCreateObjectText(
+        self, name: str, coord: Sequence[float]
+    ) -> Tuple[vtkActor, vtkFollower]:
         ball_source = vtkSphereSource()
         ball_source.SetRadius(3)
         mapper = vtkPolyDataMapper()
@@ -4173,7 +4418,9 @@ class ObjectCalibrationDialog(wx.Dialog):
         tactor.GetProperty().SetColor(const.RED_COLOR_FLOAT)
         tactor.SetScale(5)
         ball_position = ball_actor.GetPosition()
-        tactor.SetPosition(ball_position[0] + 5, ball_position[1] + 5, ball_position[2] + 10)
+        tactor.SetPosition(
+            ball_position[0] + 5, ball_position[1] + 5, ball_position[2] + 10
+        )
         self.ren.AddActor(tactor)
         tactor.SetCamera(self.ren.GetActiveCamera())
         self.ren.AddActor(ball_actor)
@@ -4246,7 +4493,10 @@ class ObjectCalibrationDialog(wx.Dialog):
             ShowNavigationTrackerWarning(0, "choose")
 
         # Collect the "fixed fiducial" at the same time as anterior for trackers other than Polhemus
-        if fiducial_index == const.OBJECT_FIDUCIAL_ANTERIOR and not self.show_sensor_options:
+        if (
+            fiducial_index == const.OBJECT_FIDUCIAL_ANTERIOR
+            and not self.show_sensor_options
+        ):
             self.SetObjectFiducial(const.OBJECT_FIDUCIAL_FIXED)
 
     def ResetObjectFiducials(self) -> None:
@@ -4391,7 +4641,8 @@ class ICPCorregistrationDialog(wx.Dialog):
 
         cont_point = wx.ToggleButton(self, -1, label=_("Continuous acquisition"))
         cont_point.Bind(
-            wx.EVT_TOGGLEBUTTON, partial(self.OnContinuousAcquisitionButton, btn=cont_point)
+            wx.EVT_TOGGLEBUTTON,
+            partial(self.OnContinuousAcquisitionButton, btn=cont_point),
         )
         self.cont_point = cont_point
 
@@ -4413,7 +4664,9 @@ class ICPCorregistrationDialog(wx.Dialog):
         btn_cancel.SetHelpText("")
 
         top_sizer = wx.FlexGridSizer(rows=2, cols=2, hgap=50, vgap=5)
-        top_sizer.AddMany([txt_surface, txt_mode, combo_surface_name, choice_icp_method])
+        top_sizer.AddMany(
+            [txt_surface, txt_mode, combo_surface_name, choice_icp_method]
+        )
 
         btn_acqui_sizer = wx.FlexGridSizer(rows=1, cols=3, hgap=15, vgap=15)
         btn_acqui_sizer.AddMany([create_point, cont_point, btn_reset])
@@ -4423,7 +4676,10 @@ class ICPCorregistrationDialog(wx.Dialog):
 
         btn_sizer = wx.FlexGridSizer(rows=2, cols=1, hgap=50, vgap=20)
         btn_sizer.AddMany(
-            [(btn_acqui_sizer, 1, wx.ALIGN_CENTER_HORIZONTAL), (btn_ok_sizer, 1, wx.ALIGN_RIGHT)]
+            [
+                (btn_acqui_sizer, 1, wx.ALIGN_CENTER_HORIZONTAL),
+                (btn_ok_sizer, 1, wx.ALIGN_RIGHT),
+            ]
         )
 
         self.progress = wx.Gauge(self, -1)
@@ -4431,7 +4687,9 @@ class ICPCorregistrationDialog(wx.Dialog):
         main_sizer = wx.BoxSizer(wx.VERTICAL)
         main_sizer.Add(top_sizer, 0, wx.LEFT | wx.TOP | wx.BOTTOM, 10)
         main_sizer.Add(self.interactor, 0, wx.EXPAND)
-        main_sizer.Add(btn_sizer, 0, wx.EXPAND | wx.GROW | wx.LEFT | wx.TOP | wx.BOTTOM, 10)
+        main_sizer.Add(
+            btn_sizer, 0, wx.EXPAND | wx.GROW | wx.LEFT | wx.TOP | wx.BOTTOM, 10
+        )
         main_sizer.Add(self.progress, 0, wx.EXPAND | wx.ALL, 5)
 
         self.SetSizer(main_sizer)
@@ -4500,11 +4758,17 @@ class ICPCorregistrationDialog(wx.Dialog):
         self.interactor.Render()
 
     def GetCurrentCoord(self) -> Tuple[Tuple, List[bool]]:
-        coord_raw, marker_visibilities = self.tracker.TrackerCoordinates.GetCoordinates()
-        coord, _ = dcr.corregistrate_probe(self.m_change, None, coord_raw, const.DEFAULT_REF_MODE)
+        coord_raw, marker_visibilities = (
+            self.tracker.TrackerCoordinates.GetCoordinates()
+        )
+        coord, _ = dcr.corregistrate_probe(
+            self.m_change, None, coord_raw, const.DEFAULT_REF_MODE
+        )
         return coord[:3], marker_visibilities
 
-    def AddMarker(self, size: int, colour: Tuple[int, int, int], coord: np.ndarray) -> None:
+    def AddMarker(
+        self, size: int, colour: Tuple[int, int, int], coord: np.ndarray
+    ) -> None:
         """
         Points are rendered into the scene. These points give visual information about the registration.
         :param size: value of the marker size
@@ -4625,7 +4889,9 @@ class ICPCorregistrationDialog(wx.Dialog):
 
         return np.mean(error)
 
-    def DistanceBetweenPointAndSurface(self, surface, points: np.ndarray) -> np.floating:
+    def DistanceBetweenPointAndSurface(
+        self, surface, points: np.ndarray
+    ) -> np.floating:
         """
         Estimation of the squared distance between the point to the closest mesh
         :param surface: Surface polydata of the scene
@@ -4658,7 +4924,9 @@ class ICPCorregistrationDialog(wx.Dialog):
         self.icp_mode = evt.GetSelection()
 
     def OnContinuousAcquisitionButton(
-        self, evt: Optional[wx.CommandEvent] = None, btn: Optional[wx.ToggleButton] = None
+        self,
+        evt: Optional[wx.CommandEvent] = None,
+        btn: Optional[wx.ToggleButton] = None,
     ) -> None:
         assert btn is not None, "btn must be provided"
         value = btn.GetValue()
@@ -4678,7 +4946,10 @@ class ICPCorregistrationDialog(wx.Dialog):
         if probe_visible and head_visible:
             self.AddMarker(3, (1, 0, 0), current_coord)
             self.txt_markers_not_detected.VisibilityOff()
-            if self.DistanceBetweenPointAndSurface(self.surface, self.point_coord[-1]) >= 20:
+            if (
+                self.DistanceBetweenPointAndSurface(self.surface, self.point_coord[-1])
+                >= 20
+            ):
                 self.OnDeleteLastPoint()
                 ReportICPPointError()
             else:
@@ -4903,7 +5174,9 @@ class EfieldConfiguration(wx.Dialog):
         filename = ShowImportMeshFilesDialog()
         if filename:
             convert_to_inv = ImportMeshCoordSystem()
-            Publisher.sendMessage("Update convert_to_inv flag", convert_to_inv=convert_to_inv)
+            Publisher.sendMessage(
+                "Update convert_to_inv flag", convert_to_inv=convert_to_inv
+            )
         Publisher.sendMessage("Import bin file", filename=filename)
 
 
@@ -4976,7 +5249,9 @@ class CreateBrainTargetDialog(wx.Dialog):
         self.actor_style.AddObserver("MouseWheelBackwardEvent", self.OnZoomMove)
 
         self.camera_style.AddObserver("LeftButtonPressEvent", self.OnPressLeftButton)
-        self.camera_style.AddObserver("LeftButtonReleaseEvent", self.OnReleaseLeftButton)
+        self.camera_style.AddObserver(
+            "LeftButtonReleaseEvent", self.OnReleaseLeftButton
+        )
         self.camera_style.AddObserver("MouseMoveEvent", self.OnSpinMove)
         self.camera_style.AddObserver("MouseWheelForwardEvent", self.OnZoomMove)
         self.camera_style.AddObserver("MouseWheelBackwardEvent", self.OnZoomMove)
@@ -5024,7 +5299,9 @@ class CreateBrainTargetDialog(wx.Dialog):
         self.chk_show_surface = wx.CheckBox(self, wx.ID_ANY, _("Show scalp surface"))
         self.chk_show_surface.Bind(wx.EVT_CHECKBOX, self.OnCheckBoxScalp)
         self.chk_show_surface.SetValue(True)
-        self.chk_show_brain_surface = wx.CheckBox(self, wx.ID_ANY, _("Show brain surface"))
+        self.chk_show_brain_surface = wx.CheckBox(
+            self, wx.ID_ANY, _("Show brain surface")
+        )
         self.chk_show_brain_surface.Bind(wx.EVT_CHECKBOX, self.OnCheckBoxBrain)
         self.chk_show_brain_surface.SetValue(True)
 
@@ -5034,7 +5311,9 @@ class CreateBrainTargetDialog(wx.Dialog):
         change_view = wx.Button(self, -1, label=_("Change view"))
         change_view.Bind(wx.EVT_BUTTON, self.OnChangeView)
 
-        create_random_target_grid = wx.Button(self, -1, label=_("Create random coil target grid"))
+        create_random_target_grid = wx.Button(
+            self, -1, label=_("Create random coil target grid")
+        )
         create_random_target_grid.Bind(wx.EVT_BUTTON, self.OnCreateRandomTargetGrid)
 
         create_target_grid = wx.Button(self, -1, label=_("Create coil target grid"))
@@ -5195,7 +5474,9 @@ class CreateBrainTargetDialog(wx.Dialog):
         self.dummy_coil_actor = vtkActor()
         self.dummy_coil_actor.SetMapper(obj_mapper)
         vtk_colors = vtkNamedColors()
-        self.dummy_coil_actor.GetProperty().SetDiffuseColor(vtk_colors.GetColor3d("cornsilk4"))
+        self.dummy_coil_actor.GetProperty().SetDiffuseColor(
+            vtk_colors.GetColor3d("cornsilk4")
+        )
         self.dummy_coil_actor.GetProperty().SetSpecular(0.5)
         self.dummy_coil_actor.GetProperty().SetSpecularPower(10)
         self.dummy_coil_actor.GetProperty().SetOpacity(0.3)
@@ -5238,7 +5519,9 @@ class CreateBrainTargetDialog(wx.Dialog):
                 if self.marker_actor != self.coil_pose_actor:
                     self.marker_actor.GetProperty().SetColor([1, 0, 0])
                 coord = [x, y, z, coord_flip[3], coord_flip[4], coord_flip[5]]
-                brain_target_actor, _ = self.AddTarget(coord, colour=[1.0, 0.0, 0.0], scale=2)
+                brain_target_actor, _ = self.AddTarget(
+                    coord, colour=[1.0, 0.0, 0.0], scale=2
+                )
                 self.marker_actor.GetProperty().SetColor([0, 1, 0])
                 self.brain_target_actor_list.append(brain_target_actor)
                 self.OnResetOrientation()
@@ -5651,7 +5934,9 @@ class CreateBrainTargetDialog(wx.Dialog):
 
         return point.GetOutput()
 
-    def CreateGrid(self, resolution: int, space_x: float, space_y: float) -> List[np.ndarray]:
+    def CreateGrid(
+        self, resolution: int, space_x: float, space_y: float
+    ) -> List[np.ndarray]:
         minX, maxX, minY, maxY = -space_x, space_x, -space_y, space_y
         # create one-dimensional arrays for x and y
         x = np.linspace(minX, maxX, resolution)
@@ -5666,7 +5951,9 @@ class CreateBrainTargetDialog(wx.Dialog):
         position = [narray[0][-1], narray[1][-1], narray[2][-1]]
         m_rotation = [narray[0][:3], narray[1][:3], narray[2][:3]]
         coil_target_position = position
-        coil_target_orientation = np.rad2deg(tr.euler_from_matrix(m_rotation, axes="sxyz"))
+        coil_target_orientation = np.rad2deg(
+            tr.euler_from_matrix(m_rotation, axes="sxyz")
+        )
         if self.center_brain_target_actor is None:
             self.center_brain_target_actor = self.LoadCenterBrainTarget(
                 coil_target_position, coil_target_orientation
@@ -5700,7 +5987,9 @@ class CreateBrainTargetDialog(wx.Dialog):
                 axes="sxyz",
             )
             m_target = m_origin_coil @ m_offset_target
-            position, orientation = dco.transformation_matrix_to_coordinates(m_target, axes="sxyz")
+            position, orientation = dco.transformation_matrix_to_coordinates(
+                m_target, axes="sxyz"
+            )
             coord = [
                 position[0],
                 position[1],
@@ -5721,7 +6010,9 @@ class CreateBrainTargetDialog(wx.Dialog):
         position = [narray[0][-1], narray[1][-1], narray[2][-1]]
         m_rotation = [narray[0][:3], narray[1][:3], narray[2][:3]]
         coil_target_position = position
-        coil_target_orientation = np.rad2deg(tr.euler_from_matrix(m_rotation, axes="sxyz"))
+        coil_target_orientation = np.rad2deg(
+            tr.euler_from_matrix(m_rotation, axes="sxyz")
+        )
 
         # coord_flip = list(self.marker)
         # coord_flip[1] = -coord_flip[1]
@@ -5811,7 +6102,9 @@ class CreateBrainTargetDialog(wx.Dialog):
         m_rotation = [narray[0][:3], narray[1][:3], narray[2][:3]]
         orientation = list(np.rad2deg(tr.euler_from_matrix(m_rotation, axes="sxyz")))
         if self.mTMS:
-            self.mTMS.UpdateTarget(coil_pose=self.marker, brain_target=position + orientation)
+            self.mTMS.UpdateTarget(
+                coil_pose=self.marker, brain_target=position + orientation
+            )
 
     def CreateVTKObjectMatrix(
         self,
@@ -5860,8 +6153,12 @@ class CreateBrainTargetDialog(wx.Dialog):
         u2_target = self.Normalize(v2_target)
         u3_target = self.Normalize(np.cross(u1_target, u2_target))
 
-        U = np.hstack([u1_start.reshape(3, 1), u2_start.reshape(3, 1), u3_start.reshape(3, 1)])
-        V = np.hstack([u1_target.reshape(3, 1), u2_target.reshape(3, 1), u3_target.reshape(3, 1)])
+        U = np.hstack(
+            [u1_start.reshape(3, 1), u2_start.reshape(3, 1), u3_start.reshape(3, 1)]
+        )
+        V = np.hstack(
+            [u1_target.reshape(3, 1), u2_target.reshape(3, 1), u3_target.reshape(3, 1)]
+        )
 
         if not np.isclose(np.dot(v1_target, v2_target), 0, atol=1e-03):
             raise ValueError("v1_target and v2_target must be vertical")
@@ -5918,7 +6215,12 @@ class CreateBrainTargetDialog(wx.Dialog):
 
     def GetValue(
         self,
-    ) -> Tuple[List[List[np.float64]], List[np.ndarray], List[List[np.float64]], List[np.ndarray]]:
+    ) -> Tuple[
+        List[List[np.float64]],
+        List[np.ndarray],
+        List[List[np.float64]],
+        List[np.ndarray],
+    ]:
         self.ren.RemoveActor(self.peel_brain_actor)
         vtkmat = self.coil_pose_actor.GetMatrix()
         narray = np.eye(4)
@@ -5926,7 +6228,9 @@ class CreateBrainTargetDialog(wx.Dialog):
         position: List[np.float64] = [narray[0][-1], -narray[1][-1], narray[2][-1]]
         m_rotation = [narray[0][:3], narray[1][:3], narray[2][:3]]
         coil_target_position = [position]
-        coil_target_orientation = [np.rad2deg(tr.euler_from_matrix(m_rotation, axes="sxyz"))]
+        coil_target_orientation = [
+            np.rad2deg(tr.euler_from_matrix(m_rotation, axes="sxyz"))
+        ]
 
         brain_target_position: List[List[np.float64]] = []
         brain_target_orientation = []
@@ -5979,7 +6283,9 @@ class TractographyProgressWindow:
         self.title = "InVesalius 3"
         self.msg = msg
         self.style = wx.PD_APP_MODAL | wx.PD_APP_MODAL | wx.PD_CAN_ABORT
-        self.dlg = wx.ProgressDialog(self.title, self.msg, parent=None, style=self.style)
+        self.dlg = wx.ProgressDialog(
+            self.title, self.msg, parent=None, style=self.style
+        )
         self.running = True
         self.error = None
         self.dlg.Show()
@@ -6037,8 +6343,12 @@ class SurfaceProgressWindow:
     def __init__(self):
         self.title = "InVesalius 3"
         self.msg = _("Creating 3D surface ...")
-        self.style = wx.PD_APP_MODAL | wx.PD_APP_MODAL | wx.PD_CAN_ABORT | wx.PD_ELAPSED_TIME
-        self.dlg = wx.ProgressDialog(self.title, self.msg, parent=None, style=self.style)
+        self.style = (
+            wx.PD_APP_MODAL | wx.PD_APP_MODAL | wx.PD_CAN_ABORT | wx.PD_ELAPSED_TIME
+        )
+        self.dlg = wx.ProgressDialog(
+            self.title, self.msg, parent=None, style=self.style
+        )
         self.running = True
         self.error = None
         self.dlg.Show()
@@ -6058,7 +6368,9 @@ class SurfaceProgressWindow:
 
 
 class GoToDialog(wx.Dialog):
-    def __init__(self, title: str = _("Go to slice ..."), init_orientation: str = const.AXIAL_STR):
+    def __init__(
+        self, title: str = _("Go to slice ..."), init_orientation: str = const.AXIAL_STR
+    ):
         wx.Dialog.__init__(
             self,
             wx.GetApp().GetTopWindow(),
@@ -6075,7 +6387,9 @@ class GoToDialog(wx.Dialog):
             (_("Sagital"), const.SAGITAL_STR),
         )
         self.goto_slice = wx.TextCtrl(self, -1, "")
-        self.goto_orientation = wx.ComboBox(self, -1, style=wx.CB_DROPDOWN | wx.CB_READONLY)
+        self.goto_orientation = wx.ComboBox(
+            self, -1, style=wx.CB_DROPDOWN | wx.CB_READONLY
+        )
         cb_init = 0
         for n, orientation in enumerate(orientations):
             self.goto_orientation.Append(*orientation)
@@ -6133,7 +6447,9 @@ class GoToDialog(wx.Dialog):
                 self.goto_orientation.GetSelection()
             )
 
-            Publisher.sendMessage(("Set scroll position", orientation), index=slice_number)
+            Publisher.sendMessage(
+                ("Set scroll position", orientation), index=slice_number
+            )
             Publisher.sendMessage("Set Update cross pos")
 
         except ValueError:
@@ -6232,12 +6548,16 @@ class GoToDialogScannerCoord(wx.Dialog):
             # transformation from scanner coordinates to inv coord system
             affine_inverse = np.linalg.inv(slc.Slice().affine)
             self.result = (
-                np.dot(affine_inverse[:3, :3], np.transpose(point[0:3])) + affine_inverse[:3, 3]
+                np.dot(affine_inverse[:3, :3], np.transpose(point[0:3]))
+                + affine_inverse[:3, 3]
             )
-            self.result[1] = slc.Slice().GetMaxSliceNumber(const.CORONAL_STR) - self.result[1]
+            self.result[1] = (
+                slc.Slice().GetMaxSliceNumber(const.CORONAL_STR) - self.result[1]
+            )
 
             Publisher.sendMessage(
-                "Update status text in GUI", label=_("Calculating the transformation ...")
+                "Update status text in GUI",
+                label=_("Calculating the transformation ..."),
             )
 
             Publisher.sendMessage("Set Update cross pos")
@@ -6299,7 +6619,9 @@ class SelectNiftiVolumeDialog(wx.Dialog):
         self.CenterOnParent()
 
     def GetVolumeChoice(self) -> int:
-        volume_choice = int(self.cmb_volume.GetString(self.cmb_volume.GetSelection())) - 1
+        volume_choice = (
+            int(self.cmb_volume.GetString(self.cmb_volume.GetSelection())) - 1
+        )
 
         return volume_choice
 
@@ -6347,7 +6669,9 @@ class ConfigureOptitrackDialog(wx.Dialog):
     def _init_gui(self) -> None:
         session = ses.Session()
         last_optitrack_cal_dir = session.GetConfig("last_optitrack_cal_dir", "")
-        last_optitrack_User_Profile_dir = session.GetConfig("last_optitrack_User_Profile_dir", "")
+        last_optitrack_User_Profile_dir = session.GetConfig(
+            "last_optitrack_User_Profile_dir", ""
+        )
 
         if not last_optitrack_cal_dir:
             last_optitrack_cal_dir = inv_paths.OPTITRACK_CAL_DIR
@@ -6363,7 +6687,9 @@ class ConfigureOptitrackDialog(wx.Dialog):
             size=(700, -1),
         )
         row_cal = wx.BoxSizer(wx.VERTICAL)
-        row_cal.Add(wx.StaticText(self, wx.ID_ANY, "Calibration:"), 0, wx.TOP | wx.RIGHT, 5)
+        row_cal.Add(
+            wx.StaticText(self, wx.ID_ANY, "Calibration:"), 0, wx.TOP | wx.RIGHT, 5
+        )
         row_cal.Add(self.dir_cal, 0, wx.ALL | wx.CENTER | wx.EXPAND)
 
         self.dir_UserProfile = wx.FilePickerCtrl(
@@ -6415,7 +6741,9 @@ class ConfigureOptitrackDialog(wx.Dialog):
         if fn_cal and fn_userprofile:
             session = ses.Session()
             session.SetConfig("last_optitrack_cal_dir", self.dir_cal.GetPath())
-            session.SetConfig("last_optitrack_User_Profile_dir", self.dir_UserProfile.GetPath())
+            session.SetConfig(
+                "last_optitrack_User_Profile_dir", self.dir_UserProfile.GetPath()
+            )
 
         return fn_cal, fn_userprofile
 
@@ -6456,7 +6784,9 @@ class SetTrackerDeviceToRobot(wx.Dialog):
         )
         choice_trck.SetToolTip(tooltip)
         choice_trck.SetSelection(const.DEFAULT_TRACKER)
-        choice_trck.Bind(wx.EVT_COMBOBOX, partial(self.OnChoiceTracker, ctrl=choice_trck))
+        choice_trck.Bind(
+            wx.EVT_COMBOBOX, partial(self.OnChoiceTracker, ctrl=choice_trck)
+        )
 
         btn_ok = wx.Button(self, wx.ID_OK)
         btn_ok.SetHelpText("")
@@ -6512,7 +6842,11 @@ class SetRobotIP(wx.Dialog):
         tooltip = _("Choose or type the robot IP")
         robot_ip_options = [_("Select robot IP:")] + const.ROBOT_IPS
         choice_IP = wx.ComboBox(
-            self, -1, "", choices=robot_ip_options, style=wx.CB_DROPDOWN | wx.TE_PROCESS_ENTER
+            self,
+            -1,
+            "",
+            choices=robot_ip_options,
+            style=wx.CB_DROPDOWN | wx.TE_PROCESS_ENTER,
         )
         choice_IP.SetToolTip(tooltip)
         choice_IP.SetSelection(const.DEFAULT_TRACKER)
@@ -6586,14 +6920,17 @@ class RobotCoregistrationDialog(wx.Dialog):
 
     def _init_gui(self) -> None:
         # Buttons to acquire and remove points
-        txt_acquisition = wx.StaticText(self, -1, _("Poses acquisition for robot registration:"))
+        txt_acquisition = wx.StaticText(
+            self, -1, _("Poses acquisition for robot registration:")
+        )
 
         btn_create_point = wx.Button(self, -1, label=_("Single"))
         btn_create_point.Bind(wx.EVT_BUTTON, self.CreatePoint)
 
         btn_cont_point = wx.ToggleButton(self, -1, label=_("Continuous"))
         btn_cont_point.Bind(
-            wx.EVT_TOGGLEBUTTON, partial(self.OnContinuousAcquisitionButton, btn=btn_cont_point)
+            wx.EVT_TOGGLEBUTTON,
+            partial(self.OnContinuousAcquisitionButton, btn=btn_cont_point),
         )
         self.btn_cont_point = btn_cont_point
 
@@ -6631,18 +6968,30 @@ class RobotCoregistrationDialog(wx.Dialog):
         acquisition = wx.BoxSizer(wx.HORIZONTAL)
         acquisition.AddMany(
             [
-                (btn_create_point, 1, wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT | wx.LEFT, border),
+                (
+                    btn_create_point,
+                    1,
+                    wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT | wx.LEFT,
+                    border,
+                ),
                 (btn_cont_point, 1, wx.ALL | wx.EXPAND | wx.GROW, border),
             ]
         )
 
         txt_pose = wx.BoxSizer(wx.HORIZONTAL)
-        txt_pose.AddMany([(txt_number, 1, wx.LEFT, 50), (txt_recorded, 1, wx.LEFT, border)])
+        txt_pose.AddMany(
+            [(txt_number, 1, wx.LEFT, 50), (txt_recorded, 1, wx.LEFT, border)]
+        )
 
         apply_reset = wx.BoxSizer(wx.HORIZONTAL)
         apply_reset.AddMany(
             [
-                (btn_reset, 1, wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT | wx.LEFT, border),
+                (
+                    btn_reset,
+                    1,
+                    wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT | wx.LEFT,
+                    border,
+                ),
                 (btn_apply_reg, 1, wx.ALL | wx.EXPAND | wx.GROW, border),
             ]
         )
@@ -6650,7 +6999,12 @@ class RobotCoregistrationDialog(wx.Dialog):
         save_load = wx.BoxSizer(wx.HORIZONTAL)
         save_load.AddMany(
             [
-                (btn_save, 1, wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT | wx.LEFT, border),
+                (
+                    btn_save,
+                    1,
+                    wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT | wx.LEFT,
+                    border,
+                ),
                 (btn_load, 1, wx.ALL | wx.EXPAND | wx.GROW, border),
             ]
         )
@@ -6673,20 +7027,42 @@ class RobotCoregistrationDialog(wx.Dialog):
         border = 10
         border_last = 10
         main_sizer = wx.BoxSizer(wx.VERTICAL)
-        main_sizer.Add(wx.StaticLine(self, -1), 0, wx.EXPAND | wx.TOP | wx.BOTTOM, border)
         main_sizer.Add(
-            txt_acquisition, 0, wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.ALIGN_CENTER_HORIZONTAL, border
+            wx.StaticLine(self, -1), 0, wx.EXPAND | wx.TOP | wx.BOTTOM, border
         )
-        main_sizer.Add(acquisition, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border)
-        main_sizer.Add(txt_pose, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.TOP | wx.BOTTOM, border)
-        main_sizer.Add(apply_reset, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT, border_last)
-        main_sizer.Add(wx.StaticLine(self, -1), 0, wx.EXPAND | wx.TOP | wx.BOTTOM, border)
         main_sizer.Add(
-            txt_file, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, int(border / 2)
+            txt_acquisition,
+            0,
+            wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.ALIGN_CENTER_HORIZONTAL,
+            border,
         )
-        main_sizer.Add(save_load, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border)
-        main_sizer.Add(wx.StaticLine(self, -1), 0, wx.EXPAND | wx.TOP | wx.BOTTOM, border)
-        main_sizer.Add(btnsizer, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border)
+        main_sizer.Add(
+            acquisition, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border
+        )
+        main_sizer.Add(
+            txt_pose, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.TOP | wx.BOTTOM, border
+        )
+        main_sizer.Add(
+            apply_reset, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT, border_last
+        )
+        main_sizer.Add(
+            wx.StaticLine(self, -1), 0, wx.EXPAND | wx.TOP | wx.BOTTOM, border
+        )
+        main_sizer.Add(
+            txt_file,
+            0,
+            wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+            int(border / 2),
+        )
+        main_sizer.Add(
+            save_load, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border
+        )
+        main_sizer.Add(
+            wx.StaticLine(self, -1), 0, wx.EXPAND | wx.TOP | wx.BOTTOM, border
+        )
+        main_sizer.Add(
+            btnsizer, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border
+        )
         main_sizer.Fit(self)
 
         self.SetSizer(main_sizer)
@@ -6707,7 +7083,9 @@ class RobotCoregistrationDialog(wx.Dialog):
         )
 
     def OnContinuousAcquisitionButton(
-        self, evt: Optional[wx.CommandEvent] = None, btn: Optional[wx.ToggleButton] = None
+        self,
+        evt: Optional[wx.CommandEvent] = None,
+        btn: Optional[wx.ToggleButton] = None,
     ) -> None:
         assert btn is not None, "btn must be provided"
         value = btn.GetValue()
@@ -6870,7 +7248,9 @@ class ConfigurePolarisDialog(wx.Dialog):
         com_ports = wx.ComboBox(self, -1, style=wx.CB_DROPDOWN)
         com_ports.Bind(wx.EVT_COMBOBOX, partial(self.OnChoicePort, ctrl=com_ports))
         row_com = wx.BoxSizer(wx.VERTICAL)
-        row_com.Add(wx.StaticText(self, wx.ID_ANY, "COM port or IP:"), 0, wx.TOP | wx.RIGHT, 5)
+        row_com.Add(
+            wx.StaticText(self, wx.ID_ANY, "COM port or IP:"), 0, wx.TOP | wx.RIGHT, 5
+        )
         row_com.Add(com_ports, 0, wx.EXPAND)
 
         port_list, port_selec = self.serial_ports()
@@ -6903,7 +7283,9 @@ class ConfigurePolarisDialog(wx.Dialog):
             size=(700, -1),
         )
         row_probe = wx.BoxSizer(wx.VERTICAL)
-        row_probe.Add(wx.StaticText(self, wx.ID_ANY, "Probe ROM file:"), 0, wx.TOP | wx.RIGHT, 5)
+        row_probe.Add(
+            wx.StaticText(self, wx.ID_ANY, "Probe ROM file:"), 0, wx.TOP | wx.RIGHT, 5
+        )
         row_probe.Add(self.dir_probe, 0, wx.ALL | wx.CENTER | wx.EXPAND)
 
         self.dir_ref = wx.FilePickerCtrl(
@@ -6915,7 +7297,12 @@ class ConfigurePolarisDialog(wx.Dialog):
             size=(700, -1),
         )
         row_ref = wx.BoxSizer(wx.VERTICAL)
-        row_ref.Add(wx.StaticText(self, wx.ID_ANY, "Reference ROM file:"), 0, wx.TOP | wx.RIGHT, 5)
+        row_ref.Add(
+            wx.StaticText(self, wx.ID_ANY, "Reference ROM file:"),
+            0,
+            wx.TOP | wx.RIGHT,
+            5,
+        )
         row_ref.Add(self.dir_ref, 0, wx.ALL | wx.CENTER | wx.EXPAND)
 
         self.dir_objs = []
@@ -6933,7 +7320,10 @@ class ConfigurePolarisDialog(wx.Dialog):
 
             row_obj = wx.BoxSizer(wx.VERTICAL)
             row_obj.Add(
-                wx.StaticText(self, wx.ID_ANY, f"Coil {i+1} ROM file:"), 0, wx.TOP | wx.RIGHT, 5
+                wx.StaticText(self, wx.ID_ANY, f"Coil {i+1} ROM file:"),
+                0,
+                wx.TOP | wx.RIGHT,
+                5,
             )
             row_obj.Add(dir_obj, 0, wx.ALL | wx.CENTER | wx.EXPAND)
             row_objs.append(row_obj)
@@ -7033,7 +7423,10 @@ class SetCOMPort(wx.Dialog):
         if self.select_baud_rate:
             baud_rates_as_strings = [str(baud_rate) for baud_rate in const.BAUD_RATES]
             self.baud_rate_dropdown = wx.ComboBox(
-                self, -1, choices=baud_rates_as_strings, style=wx.CB_DROPDOWN | wx.CB_READONLY
+                self,
+                -1,
+                choices=baud_rates_as_strings,
+                style=wx.CB_DROPDOWN | wx.CB_READONLY,
             )
             self.baud_rate_dropdown.SetSelection(const.BAUD_RATE_DEFAULT_SELECTION)
 
@@ -7064,7 +7457,9 @@ class SetCOMPort(wx.Dialog):
 
         if self.select_baud_rate:
             main_sizer.Add((5, 5))
-            main_sizer.Add(baud_rate_text_and_dropdown, 1, wx.EXPAND | wx.LEFT | wx.RIGHT, 5)
+            main_sizer.Add(
+                baud_rate_text_and_dropdown, 1, wx.EXPAND | wx.LEFT | wx.RIGHT, 5
+            )
 
         main_sizer.Add((5, 5))
         main_sizer.Add(btnsizer, 0, wx.EXPAND)
@@ -7076,14 +7471,18 @@ class SetCOMPort(wx.Dialog):
         self.CenterOnParent()
 
     def GetCOMPort(self) -> str:
-        com_port = self.com_port_dropdown.GetString(self.com_port_dropdown.GetSelection())
+        com_port = self.com_port_dropdown.GetString(
+            self.com_port_dropdown.GetSelection()
+        )
         return com_port
 
     def GetBaudRate(self) -> Optional[str]:
         if not self.select_baud_rate:
             return None
 
-        baud_rate = self.baud_rate_dropdown.GetString(self.baud_rate_dropdown.GetSelection())
+        baud_rate = self.baud_rate_dropdown.GetString(
+            self.baud_rate_dropdown.GetSelection()
+        )
         return baud_rate
 
 
@@ -7100,13 +7499,17 @@ class ManualWWWLDialog(wx.Dialog):
 
         self.txt_wl = wx.TextCtrl(self, -1, str(int(wl)))
         wl_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        wl_sizer.Add(wx.StaticText(self, -1, _("Window Level")), 0, wx.ALIGN_CENTER_VERTICAL)
+        wl_sizer.Add(
+            wx.StaticText(self, -1, _("Window Level")), 0, wx.ALIGN_CENTER_VERTICAL
+        )
         wl_sizer.Add(self.txt_wl, 1, wx.ALL | wx.EXPAND, 5)
         wl_sizer.Add(wx.StaticText(self, -1, _("WL")), 0, wx.ALIGN_CENTER_VERTICAL)
 
         self.txt_ww = wx.TextCtrl(self, -1, str(int(ww)))
         ww_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        ww_sizer.Add(wx.StaticText(self, -1, _("Window Width")), 0, wx.ALIGN_CENTER_VERTICAL)
+        ww_sizer.Add(
+            wx.StaticText(self, -1, _("Window Width")), 0, wx.ALIGN_CENTER_VERTICAL
+        )
         ww_sizer.Add(self.txt_ww, 1, wx.ALL | wx.EXPAND, 5)
         ww_sizer.Add(wx.StaticText(self, -1, _("WW")), 0, wx.ALIGN_CENTER_VERTICAL)
 
@@ -7141,7 +7544,9 @@ class ManualWWWLDialog(wx.Dialog):
             self.Close()
             return
 
-        Publisher.sendMessage("Bright and contrast adjustment image", window=ww, level=wl)
+        Publisher.sendMessage(
+            "Bright and contrast adjustment image", window=ww, level=wl
+        )
         const.WINDOW_LEVEL["Manual"] = (ww, wl)
         Publisher.sendMessage("Check window and level other")
         Publisher.sendMessage("Update window level value", window=ww, level=wl)
@@ -7177,9 +7582,15 @@ class SetSpacingDialog(wx.Dialog):
         self._bind_events()
 
     def _init_gui(self) -> None:
-        self.txt_spacing_new_x = wx.TextCtrl(self, -1, value=str(self.spacing_original_x))
-        self.txt_spacing_new_y = wx.TextCtrl(self, -1, value=str(self.spacing_original_y))
-        self.txt_spacing_new_z = wx.TextCtrl(self, -1, value=str(self.spacing_original_z))
+        self.txt_spacing_new_x = wx.TextCtrl(
+            self, -1, value=str(self.spacing_original_x)
+        )
+        self.txt_spacing_new_y = wx.TextCtrl(
+            self, -1, value=str(self.spacing_original_y)
+        )
+        self.txt_spacing_new_z = wx.TextCtrl(
+            self, -1, value=str(self.spacing_original_z)
+        )
 
         sizer_new = wx.FlexGridSizer(3, 2, 5, 5)
         sizer_new.AddMany(
@@ -7206,7 +7617,9 @@ class SetSpacingDialog(wx.Dialog):
             wx.StaticText(
                 self,
                 -1,
-                _("It was not possible to obtain the image spacings.\nPlease set it correctly:"),
+                _(
+                    "It was not possible to obtain the image spacings.\nPlease set it correctly:"
+                ),
             ),
             0,
             wx.EXPAND,
@@ -7328,7 +7741,9 @@ class PeelsCreationDlg(wx.Dialog):
 
     def _from_files_gui(self) -> wx.StaticBoxSizer:
         session = ses.Session()
-        last_directory = session.GetConfig("last_directory_%d" % const.ID_NIFTI_IMPORT, "")
+        last_directory = session.GetConfig(
+            "last_directory_%d" % const.ID_NIFTI_IMPORT, ""
+        )
 
         files_box = wx.StaticBox(self, -1, _("From files"))
         from_files_stbox = wx.StaticBoxSizer(files_box, wx.VERTICAL)
@@ -7340,7 +7755,9 @@ class PeelsCreationDlg(wx.Dialog):
             fileMask=WILDCARD_NIFTI,
             dialogTitle=_("Choose mask file"),
             startDirectory=last_directory,
-            changeCallback=lambda evt: self._set_files_callback(mask_path=evt.GetString()),
+            changeCallback=lambda evt: self._set_files_callback(
+                mask_path=evt.GetString()
+            ),
         )
         self.from_files_rb = wx.RadioButton(self, -1, "")
 
@@ -7486,7 +7903,9 @@ class ProgressBarHandler(wx.ProgressDialog):
         msg: str = "Initializing...",
         max_value: Optional[float] = None,
     ):
-        super().__init__(title, msg, parent=parent, style=wx.PD_APP_MODAL | wx.PD_AUTO_HIDE)
+        super().__init__(
+            title, msg, parent=parent, style=wx.PD_APP_MODAL | wx.PD_AUTO_HIDE
+        )
 
         self.max_value = max_value
 

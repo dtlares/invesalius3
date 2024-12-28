@@ -119,7 +119,8 @@ class EditionHistory:
                 Publisher.sendMessage("Enable redo", value=True)
             elif (
                 actual_slices
-                and actual_slices[h[self.index - 1].orientation] != h[self.index - 1].index
+                and actual_slices[h[self.index - 1].orientation]
+                != h[self.index - 1].index
             ):
                 self._reload_slice(self.index - 1)
             else:
@@ -128,7 +129,8 @@ class EditionHistory:
                 if (
                     actual_slices
                     and self.index
-                    and actual_slices[h[self.index - 1].orientation] == h[self.index - 1].index
+                    and actual_slices[h[self.index - 1].orientation]
+                    == h[self.index - 1].index
                 ):
                     self.index -= 1
                     h[self.index].commit_history(mvolume)
@@ -154,7 +156,8 @@ class EditionHistory:
                 Publisher.sendMessage("Enable undo", value=True)
             elif (
                 actual_slices
-                and actual_slices[h[self.index + 1].orientation] != h[self.index + 1].index
+                and actual_slices[h[self.index + 1].orientation]
+                != h[self.index + 1].index
             ):
                 self._reload_slice(self.index + 1)
             else:
@@ -163,7 +166,8 @@ class EditionHistory:
                 if (
                     actual_slices
                     and self.index < len(h) - 1
-                    and actual_slices[h[self.index + 1].orientation] == h[self.index + 1].index
+                    and actual_slices[h[self.index + 1].orientation]
+                    == h[self.index + 1].index
                 ):
                     self.index += 1
                     h[self.index].commit_history(mvolume)
@@ -215,7 +219,10 @@ class Mask:
         self.opacity = const.MASK_OPACITY
         self.threshold_range = const.THRESHOLD_RANGE
         self.name = const.MASK_NAME_PATTERN % (Mask.general_index + 1)
-        self.edition_threshold_range = [const.THRESHOLD_OUTVALUE, const.THRESHOLD_INVALUE]
+        self.edition_threshold_range = [
+            const.THRESHOLD_OUTVALUE,
+            const.THRESHOLD_INVALUE,
+        ]
         self.is_shown = 1
         self.edited_points = {}
         self.was_edited = False
@@ -267,7 +274,9 @@ class Mask:
 
         session = ses.Session()
         if session.mask_3d_preview:
-            Publisher.sendMessage("Show mask preview", index=self.index, flag=bool(self.is_shown))
+            Publisher.sendMessage(
+                "Show mask preview", index=self.index, flag=bool(self.is_shown)
+            )
             Publisher.sendMessage("Render volume viewer")
 
     def create_3d_preview(self):

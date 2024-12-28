@@ -20,7 +20,6 @@ import sys
 
 import wx
 import wx.gizmos as gizmos
-
 # from dicionario import musicdata
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.splitter as spl
@@ -29,7 +28,6 @@ from wx.lib.mixins.listctrl import CheckListCtrlMixin
 import invesalius.constants as const
 import invesalius.gui.dialogs as dlg
 import invesalius.net.dicom as dcm_net
-
 # import invesalius.gui.dicom_preview_panel as dpp
 import invesalius.reader.dicom_grouper as dcm
 from invesalius.i18n import tr as _
@@ -109,7 +107,11 @@ class InnerPanel(wx.Panel):
         btnsizer.Realize()
 
         self.combo_interval = wx.ComboBox(
-            panel, -1, "", choices=const.IMPORT_INTERVAL, style=wx.CB_DROPDOWN | wx.CB_READONLY
+            panel,
+            -1,
+            "",
+            choices=const.IMPORT_INTERVAL,
+            style=wx.CB_DROPDOWN | wx.CB_READONLY,
         )
         self.combo_interval.SetSelection(0)
 
@@ -235,12 +237,9 @@ class TextPanel(wx.Panel):
         tree = gizmos.TreeListCtrl(
             self,
             -1,
-            style=wx.TR_DEFAULT_STYLE
-            | wx.TR_HIDE_ROOT
-            | wx.TR_ROW_LINES
+            style=wx.TR_DEFAULT_STYLE | wx.TR_HIDE_ROOT | wx.TR_ROW_LINES
             #  | wx.TR_COLUMN_LINES
-            | wx.TR_FULL_ROW_HIGHLIGHT
-            | wx.TR_SINGLE,
+            | wx.TR_FULL_ROW_HIGHLIGHT | wx.TR_SINGLE,
         )
 
         tree.AddColumn(_("Patient name"))
@@ -589,7 +588,10 @@ class HostFindPanel(wx.Panel):
 
 
 class NodesTree(
-    wx.ListCtrl, CheckListCtrlMixin, listmix.ListCtrlAutoWidthMixin, listmix.TextEditMixin
+    wx.ListCtrl,
+    CheckListCtrlMixin,
+    listmix.ListCtrlAutoWidthMixin,
+    listmix.TextEditMixin,
 ):
     def __init__(self, parent):
         self.item = 0

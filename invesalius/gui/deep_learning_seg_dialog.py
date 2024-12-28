@@ -48,7 +48,13 @@ if HAS_PLAIDML:
 
 class DeepLearningSegmenterDialog(wx.Dialog):
     def __init__(
-        self, parent, title, has_torch=True, has_plaidml=True, has_theano=True, segmenter=None
+        self,
+        parent,
+        title,
+        has_torch=True,
+        has_plaidml=True,
+        has_theano=True,
+        segmenter=None,
     ):
         wx.Dialog.__init__(
             self,
@@ -95,7 +101,9 @@ class DeepLearningSegmenterDialog(wx.Dialog):
             value=self.backends[0],
             style=wx.CB_DROPDOWN | wx.CB_READONLY,
         )
-        w, h = self.CalcSizeFromTextSize("MM" * (1 + max(len(i) for i in self.backends)))
+        w, h = self.CalcSizeFromTextSize(
+            "MM" * (1 + max(len(i) for i in self.backends))
+        )
         self.cb_backends.SetMinClientSize((w, -1))
         self.chk_use_gpu = wx.CheckBox(self, wx.ID_ANY, _("Use GPU"))
         if HAS_TORCH or HAS_PLAIDML:
@@ -305,7 +313,9 @@ class DeepLearningSegmenterDialog(wx.Dialog):
             self.HideProgress()
             dlg = dialogs.ErrorMessageBox(
                 None,
-                "It was not possible to start brain segmentation because:" + "\n" + str(err),
+                "It was not possible to start brain segmentation because:"
+                + "\n"
+                + str(err),
                 "Brain segmentation error",
                 #  wx.ICON_ERROR | wx.OK,
             )
@@ -430,7 +440,9 @@ class MandibleSegmenterDialog(DeepLearningSegmenterDialog):
     def _init_gui(self):
         super()._init_gui()
 
-        self.chk_apply_resize_by_spacing = wx.CheckBox(self, wx.ID_ANY, _("Resize by spacing"))
+        self.chk_apply_resize_by_spacing = wx.CheckBox(
+            self, wx.ID_ANY, _("Resize by spacing")
+        )
         self.chk_apply_resize_by_spacing.SetValue(True)
 
         self.patch_txt = wx.StaticText(self, label="Patch size:")
@@ -461,7 +473,9 @@ class MandibleSegmenterDialog(DeepLearningSegmenterDialog):
 
     def _do_layout(self):
         super()._do_layout()
-        self.main_sizer.Insert(8, self.chk_apply_resize_by_spacing, 0, wx.EXPAND | wx.ALL, 5)
+        self.main_sizer.Insert(
+            8, self.chk_apply_resize_by_spacing, 0, wx.EXPAND | wx.ALL, 5
+        )
         self.main_sizer.Insert(9, self.path_sizer, 0, wx.EXPAND | wx.ALL, 5)
 
     def OnSegment(self, evt):
@@ -519,7 +533,9 @@ class MandibleSegmenterDialog(DeepLearningSegmenterDialog):
             self.HideProgress()
             dlg = dialogs.ErrorMessageBox(
                 None,
-                "It was not possible to start brain segmentation because:" + "\n" + str(err),
+                "It was not possible to start brain segmentation because:"
+                + "\n"
+                + str(err),
                 "Brain segmentation error",
                 #  wx.ICON_ERROR | wx.OK,
             )
@@ -645,7 +661,9 @@ class ImplantSegmenterDialog(DeepLearningSegmenterDialog):
             self.HideProgress()
             dlg = dialogs.ErrorMessageBox(
                 None,
-                "It was not possible to start brain segmentation because:" + "\n" + str(err),
+                "It was not possible to start brain segmentation because:"
+                + "\n"
+                + str(err),
                 "Brain segmentation error",
                 #  wx.ICON_ERROR | wx.OK,
             )

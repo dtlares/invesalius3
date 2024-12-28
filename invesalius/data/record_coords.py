@@ -78,6 +78,8 @@ class Record(threading.Thread):
             if self.coord_list.size == 0:
                 self.coord_list = hstack((relative_time, self.coord))
             else:
-                self.coord_list = vstack((self.coord_list, hstack((relative_time, self.coord))))
+                self.coord_list = vstack(
+                    (self.coord_list, hstack((relative_time, self.coord)))
+                )
             if self._pause_:
                 return

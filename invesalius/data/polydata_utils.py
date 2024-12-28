@@ -21,15 +21,12 @@ import sys
 from typing import Iterable, List
 
 from vtkmodules.vtkCommonDataModel import vtkPolyData
-from vtkmodules.vtkFiltersCore import (
-    vtkAppendPolyData,
-    vtkCleanPolyData,
-    vtkMassProperties,
-    vtkPolyDataConnectivityFilter,
-    vtkQuadricDecimation,
-    vtkSmoothPolyDataFilter,
-    vtkTriangleFilter,
-)
+from vtkmodules.vtkFiltersCore import (vtkAppendPolyData, vtkCleanPolyData,
+                                       vtkMassProperties,
+                                       vtkPolyDataConnectivityFilter,
+                                       vtkQuadricDecimation,
+                                       vtkSmoothPolyDataFilter,
+                                       vtkTriangleFilter)
 from vtkmodules.vtkFiltersModeling import vtkFillHolesFilter
 from vtkmodules.vtkIOGeometry import vtkOBJReader, vtkSTLReader
 from vtkmodules.vtkIOPLY import vtkPLYReader
@@ -54,7 +51,9 @@ else:
 UpdateProgress = vu.ShowProgress()
 
 
-def ApplyDecimationFilter(polydata: vtkPolyData, reduction_factor: float) -> vtkPolyData:
+def ApplyDecimationFilter(
+    polydata: vtkPolyData, reduction_factor: float
+) -> vtkPolyData:
     """
     Reduce number of triangles of the given vtkPolyData, based on
     reduction_factor.
@@ -87,7 +86,8 @@ def ApplySmoothFilter(
     smoother.BoundarySmoothingOn()
     smoother.GetOutput().ReleaseDataFlagOn()
     smoother.AddObserver(
-        "ProgressEvent", lambda obj, evt: UpdateProgress(smoother, "Smoothing surface...")
+        "ProgressEvent",
+        lambda obj, evt: UpdateProgress(smoother, "Smoothing surface..."),
     )
 
     return smoother.GetOutput()
@@ -221,7 +221,8 @@ def SelectLargestPart(polydata: vtkPolyData) -> vtkPolyData:
     conn.SetInputData(polydata)
     conn.SetExtractionModeToLargestRegion()
     conn.AddObserver(
-        "ProgressEvent", lambda obj, evt: UpdateProgress(conn, "Getting largest part...")
+        "ProgressEvent",
+        lambda obj, evt: UpdateProgress(conn, "Getting largest part..."),
     )
     conn.Update()
 

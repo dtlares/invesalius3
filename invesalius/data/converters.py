@@ -22,10 +22,9 @@ from typing import TYPE_CHECKING, Optional, Sequence, Tuple
 import gdcm
 import numpy as np
 from vtkmodules.util import numpy_support
-from vtkmodules.vtkCommonCore import (
-    vtkPoints,
-)
-from vtkmodules.vtkCommonDataModel import vtkCellArray, vtkImageData, vtkPolyData, vtkTriangle
+from vtkmodules.vtkCommonCore import vtkPoints
+from vtkmodules.vtkCommonDataModel import (vtkCellArray, vtkImageData,
+                                           vtkPolyData, vtkTriangle)
 
 if TYPE_CHECKING:
     import os
@@ -136,7 +135,9 @@ def to_vtk_mask(
     return image
 
 
-def np_rgba_to_vtk(n_array: np.ndarray, spacing: Sequence[float] = (1.0, 1.0, 1.0)) -> vtkImageData:
+def np_rgba_to_vtk(
+    n_array: np.ndarray, spacing: Sequence[float] = (1.0, 1.0, 1.0)
+) -> vtkImageData:
     dy, dx, dc = n_array.shape
     v_image = numpy_support.numpy_to_vtk(n_array.reshape(dy * dx, dc))
 
@@ -187,7 +188,9 @@ def gdcm_to_numpy(image: gdcm.Image, apply_intercep_scale: bool = True):
         shape = image.GetDimension(1), image.GetDimension(0), pf.GetSamplesPerPixel()
     dtype = map_gdcm_np[pf.GetScalarType()]
     gdcm_array = image.GetBuffer()
-    np_array = np.frombuffer(gdcm_array.encode("utf-8", errors="surrogateescape"), dtype=dtype)
+    np_array = np.frombuffer(
+        gdcm_array.encode("utf-8", errors="surrogateescape"), dtype=dtype
+    )
     if pf.GetScalarType() == gdcm.PixelFormat.SINGLEBIT:
         np_array = np.unpackbits(np_array)
     np_array.shape = shape
@@ -203,7 +206,9 @@ def gdcm_to_numpy(image: gdcm.Image, apply_intercep_scale: bool = True):
         return np_array
 
 
-def convert_custom_bin_to_vtk(filename: "str | bytes | os.PathLike[str]") -> Optional[vtkPolyData]:
+def convert_custom_bin_to_vtk(
+    filename: "str | bytes | os.PathLike[str]",
+) -> Optional[vtkPolyData]:
     import os
 
     if os.path.exists(filename):

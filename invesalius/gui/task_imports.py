@@ -103,7 +103,9 @@ class TaskPanel(wx.Panel):
         inner_panel = InnerTaskPanel(self)
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add(inner_panel, 1, wx.EXPAND | wx.GROW | wx.BOTTOM | wx.RIGHT | wx.LEFT, 0)
+        sizer.Add(
+            inner_panel, 1, wx.EXPAND | wx.GROW | wx.BOTTOM | wx.RIGHT | wx.LEFT, 0
+        )
         sizer.Fit(self)
 
         self.SetSizer(sizer)
@@ -272,7 +274,8 @@ class InnerFoldPanel(wx.Panel):
         offset_constant = 1.8
         offset = 0
         panels = [
-            self.fold_panel.GetFoldPanel(panel) for panel in range(self.fold_panel.GetCount())
+            self.fold_panel.GetFoldPanel(panel)
+            for panel in range(self.fold_panel.GetCount())
         ]
         for panel in panels:
             if not panel.IsExpanded():

@@ -203,7 +203,9 @@ class Session(metaclass=Singleton):
 
         # Add new item
         recent_projects.insert(0, item)
-        self.SetConfig("recent_projects", recent_projects[: const.RECENT_PROJECTS_MAXIMUM])
+        self.SetConfig(
+            "recent_projects", recent_projects[: const.RECENT_PROJECTS_MAXIMUM]
+        )
 
     def _read_config_from_json(self, json_filename: "str | Path") -> None:
         with open(json_filename) as config_file:

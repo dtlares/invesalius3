@@ -10,25 +10,25 @@
 import os
 import sys
 import time
-cimport numpy as np
 
-from libc.math cimport sin, cos, acos, exp, sqrt, fabs, M_PI
+cimport numpy as np
+cimport openmp
+from cython.operator cimport dereference as deref
+from cython.operator cimport preincrement as inc
+from cython.parallel cimport prange
+from libc.math cimport M_PI, acos, cos, exp, fabs, sin, sqrt
 from libc.stdlib cimport abs as cabs
-from cython.operator cimport dereference as deref, preincrement as inc
-from libcpp.map cimport map
-from libcpp.unordered_map cimport unordered_map
-from libcpp.set cimport set
-from libcpp.vector cimport vector
-from libcpp.pair cimport pair
 from libcpp cimport bool
 from libcpp.deque cimport deque as cdeque
-from cython.parallel cimport prange
-cimport openmp
+from libcpp.map cimport map
+from libcpp.pair cimport pair
+from libcpp.set cimport set
+from libcpp.unordered_map cimport unordered_map
+from libcpp.vector cimport vector
 
-from .cy_my_types cimport vertex_t, normal_t, vertex_id_t
+from .cy_my_types cimport normal_t, vertex_id_t, vertex_t
 
 import numpy as np
-
 from vtkmodules.util import numpy_support
 from vtkmodules.vtkCommonCore import vtkPoints
 from vtkmodules.vtkCommonDataModel import vtkCellArray, vtkPolyData

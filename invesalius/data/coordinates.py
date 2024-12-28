@@ -113,14 +113,18 @@ def GetCoordinatesForThread(
             const.DEBUGTRACKRANDOM: DebugCoordRandom,
             const.DEBUGTRACKAPPROACH: DebugCoordRandom,
         }
-        coord, marker_visibilities = getcoord[tracker_id](tracker_connection, tracker_id, ref_mode)
+        coord, marker_visibilities = getcoord[tracker_id](
+            tracker_connection, tracker_id, ref_mode
+        )
     else:
         print("Select Tracker")
 
     return coord, marker_visibilities
 
 
-def PolarisP4Coord(tracker_connection: "TrackerConnection", tracker_id: int, ref_mode: int):
+def PolarisP4Coord(
+    tracker_connection: "TrackerConnection", tracker_id: int, ref_mode: int
+):
     trck = tracker_connection.GetConnection()
     trck.Run()
 
@@ -164,7 +168,9 @@ def PolarisP4Coord(tracker_connection: "TrackerConnection", tracker_id: int, ref
     return coord, [trck.probeID, trck.refID, trck.objID]
 
 
-def OptitrackCoord(tracker_connection: "TrackerConnection", tracker_id: int, ref_mode: int):
+def OptitrackCoord(
+    tracker_connection: "TrackerConnection", tracker_id: int, ref_mode: int
+):
     """
 
     Obtains coordinates and angles of tracking rigid bodies (Measurement Probe, Coil, Head). Converts orientations from quaternion
@@ -183,7 +189,9 @@ def OptitrackCoord(tracker_connection: "TrackerConnection", tracker_id: int, ref
     trck = tracker_connection.GetConnection()
     trck.Run()
 
-    scale = 1000 * np.array([1.0, 1.0, 1.0])  # coordinates are in millimeters in Motive API
+    scale = 1000 * np.array(
+        [1.0, 1.0, 1.0]
+    )  # coordinates are in millimeters in Motive API
 
     angles_probe = np.degrees(
         tr.euler_from_quaternion(
@@ -207,7 +215,12 @@ def OptitrackCoord(tracker_connection: "TrackerConnection", tracker_id: int, ref
 
     angles_head = np.degrees(
         tr.euler_from_quaternion(
-            [float(trck.qwHead), float(trck.qzHead), float(trck.qxHead), float(trck.qyHead)],
+            [
+                float(trck.qwHead),
+                float(trck.qzHead),
+                float(trck.qxHead),
+                float(trck.qyHead),
+            ],
             axes="rzyx",
         )
     )
@@ -222,7 +235,12 @@ def OptitrackCoord(tracker_connection: "TrackerConnection", tracker_id: int, ref
 
     angles_coil = np.degrees(
         tr.euler_from_quaternion(
-            [float(trck.qwCoil), float(trck.qzCoil), float(trck.qxCoil), float(trck.qyCoil)],
+            [
+                float(trck.qwCoil),
+                float(trck.qzCoil),
+                float(trck.qxCoil),
+                float(trck.qyCoil),
+            ],
             axes="rzyx",
         )
     )
@@ -240,7 +258,9 @@ def OptitrackCoord(tracker_connection: "TrackerConnection", tracker_id: int, ref
     return coord, [trck.probeID, trck.HeadID, trck.coilID]
 
 
-def PolarisCoord(tracker_connection: "TrackerConnection", tracker_id: int, ref_mode: int):
+def PolarisCoord(
+    tracker_connection: "TrackerConnection", tracker_id: int, ref_mode: int
+):
     trck = tracker_connection.GetConnection()
     trck.Run()
 
@@ -274,7 +294,9 @@ def CameraCoord(tracker_connection: "TrackerConnection", tracker_id: int, ref_mo
     return coord, [probeID, refID, coilID]
 
 
-def ClaronCoord(tracker_connection: "TrackerConnection", tracker_id: int, ref_mode: int):
+def ClaronCoord(
+    tracker_connection: "TrackerConnection", tracker_id: int, ref_mode: int
+):
     trck = tracker_connection.GetConnection()
     trck.Run()
 
@@ -318,7 +340,9 @@ def ClaronCoord(tracker_connection: "TrackerConnection", tracker_id: int, ref_mo
     return coord, [trck.probeID, trck.refID, trck.coilID]
 
 
-def PolhemusCoord(tracker_connection: "TrackerConnection", tracker_id: int, ref_mode: int):
+def PolhemusCoord(
+    tracker_connection: "TrackerConnection", tracker_id: int, ref_mode: int
+):
     lib_mode = tracker_connection.GetLibMode()
 
     coord = None
@@ -335,7 +359,9 @@ def PolhemusCoord(tracker_connection: "TrackerConnection", tracker_id: int, ref_
     return coord, [True, True, True]
 
 
-def PolhemusWrapperCoord(tracker_connection: "TrackerConnection", tracker_id: int, ref_mode: int):
+def PolhemusWrapperCoord(
+    tracker_connection: "TrackerConnection", tracker_id: int, ref_mode: int
+):
     trck = tracker_connection.GetConnection()
     trck.Run()
 
@@ -393,7 +419,9 @@ def PolhemusWrapperCoord(tracker_connection: "TrackerConnection", tracker_id: in
     return coord
 
 
-def PolhemusUSBCoord(tracker_connection: "TrackerConnection", tracker_id: int, ref_mode: int):
+def PolhemusUSBCoord(
+    tracker_connection: "TrackerConnection", tracker_id: int, ref_mode: int
+):
     trck = tracker_connection.GetConnection()
 
     endpoint = trck[0][(0, 0)][0]
@@ -446,7 +474,9 @@ def PolhemusUSBCoord(tracker_connection: "TrackerConnection", tracker_id: int, r
         return coord
 
 
-def PolhemusSerialCoord(tracker_connection: "TrackerConnection", tracker_id: int, ref_mode: int):
+def PolhemusSerialCoord(
+    tracker_connection: "TrackerConnection", tracker_id: int, ref_mode: int
+):
     trck = tracker_connection.GetConnection()
 
     # mudanca para fastrak - ref 1 tem somente x, y, z
@@ -465,7 +495,14 @@ def PolhemusSerialCoord(tracker_connection: "TrackerConnection", tracker_id: int
         data = [s for s in data.split()]
         data = [float(s) for s in data[1 : len(data)]]
         probe = np.array(
-            [data[0] * scale[0], data[1] * scale[1], data[2] * scale[2], data[3], data[4], data[5]]
+            [
+                data[0] * scale[0],
+                data[1] * scale[1],
+                data[2] * scale[2],
+                data[3],
+                data[4],
+                data[5],
+            ]
         )
 
         if ref_mode:
@@ -498,10 +535,15 @@ def RobotCoord(tracker_connection: "TrackerConnection", tracker_id: int, ref_mod
         tracker_connection, tracker_id, ref_mode
     )
 
-    return np.vstack([coord_tracker[0], coord_tracker[1], coord_tracker[2]]), marker_visibilities
+    return (
+        np.vstack([coord_tracker[0], coord_tracker[1], coord_tracker[2]]),
+        marker_visibilities,
+    )
 
 
-def DebugCoordRandom(tracker_connection: "TrackerConnection", tracker_id: int, ref_mode: int):
+def DebugCoordRandom(
+    tracker_connection: "TrackerConnection", tracker_id: int, ref_mode: int
+):
     """
     Method to simulate a tracking device for debug and error check. Generate a random
     x, y, z, alfa, beta and gama coordinates in interval [1, 200[
@@ -530,19 +572,54 @@ def DebugCoordRandom(tracker_connection: "TrackerConnection", tracker_id: int, r
     dt = [-180, 180]
 
     coord1 = np.array(
-        [uniform(*dx), uniform(*dx), uniform(*dx), uniform(*dt), uniform(*dt), uniform(*dt)]
+        [
+            uniform(*dx),
+            uniform(*dx),
+            uniform(*dx),
+            uniform(*dt),
+            uniform(*dt),
+            uniform(*dt),
+        ]
     )
     coord2 = np.array(
-        [uniform(*dx), uniform(*dx), uniform(*dx), uniform(*dt), uniform(*dt), uniform(*dt)]
+        [
+            uniform(*dx),
+            uniform(*dx),
+            uniform(*dx),
+            uniform(*dt),
+            uniform(*dt),
+            uniform(*dt),
+        ]
     )
     coord3 = np.array(
-        [uniform(*dx), uniform(*dx), uniform(*dx), uniform(*dt), uniform(*dt), uniform(*dt)]
+        [
+            uniform(*dx),
+            uniform(*dx),
+            uniform(*dx),
+            uniform(*dt),
+            uniform(*dt),
+            uniform(*dt),
+        ]
     )
     coord4 = np.array(
-        [uniform(*dx), uniform(*dx), uniform(*dx), uniform(*dt), uniform(*dt), uniform(*dt)]
+        [
+            uniform(*dx),
+            uniform(*dx),
+            uniform(*dx),
+            uniform(*dt),
+            uniform(*dt),
+            uniform(*dt),
+        ]
     )
     coord5 = np.array(
-        [uniform(*dx), uniform(*dx), uniform(*dx), uniform(*dt), uniform(*dt), uniform(*dt)]
+        [
+            uniform(*dx),
+            uniform(*dx),
+            uniform(*dx),
+            uniform(*dt),
+            uniform(*dt),
+            uniform(*dt),
+        ]
     )
 
     sleep(0.15)
@@ -708,7 +785,14 @@ def dynamic_reference_m2(probe, reference):
 
     coord_rot = np.squeeze(coord_rot)
 
-    return coord_rot[0], coord_rot[1], coord_rot[2], np.degrees(al), np.degrees(be), np.degrees(ga)
+    return (
+        coord_rot[0],
+        coord_rot[1],
+        coord_rot[2],
+        np.degrees(al),
+        np.degrees(be),
+        np.degrees(ga),
+    )
 
 
 def str2float(data: str) -> List[float]:
@@ -731,7 +815,9 @@ def str2float(data: str) -> List[float]:
     return ret
 
 
-def offset_coordinate(p_old: np.ndarray, norm_vec: np.ndarray, offset: float) -> np.ndarray:
+def offset_coordinate(
+    p_old: np.ndarray, norm_vec: np.ndarray, offset: float
+) -> np.ndarray:
     """
     Translate the coordinates of a point along a vector
     :param p_old: (x, y, z) array with current point coordinates

@@ -121,7 +121,9 @@ class SliceMenu(wx.Menu):
         submenu_projection = wx.Menu()
         for name in PROJECTIONS_ID:
             new_id = wx.NewIdRef()
-            projection_item = submenu_projection.Append(new_id, name, kind=wx.ITEM_RADIO)
+            projection_item = submenu_projection.Append(
+                new_id, name, kind=wx.ITEM_RADIO
+            )
             self.ID_TO_TOOL_ITEM[new_id] = projection_item
             self.projection_items[PROJECTIONS_ID[name]] = projection_item
 
@@ -130,7 +132,9 @@ class SliceMenu(wx.Menu):
         submenu_image_tiling = wx.Menu()
         for name in sorted(const.IMAGE_TILING):
             new_id = wx.NewIdRef()
-            image_tiling_item = submenu_image_tiling.Append(new_id, name, kind=wx.ITEM_RADIO)
+            image_tiling_item = submenu_image_tiling.Append(
+                new_id, name, kind=wx.ITEM_RADIO
+            )
             self.ID_TO_TOOL_ITEM[new_id] = image_tiling_item
 
             # Save first id item
@@ -193,7 +197,9 @@ class SliceMenu(wx.Menu):
             Publisher.sendMessage(
                 "Bright and contrast adjustment image", window=window, level=level
             )
-            Publisher.sendMessage("Update window level value", window=window, level=level)
+            Publisher.sendMessage(
+                "Update window level value", window=window, level=level
+            )
             #  Publisher.sendMessage('Update window and level text',
             #  "WL: %d  WW: %d"%(level, window))
             Publisher.sendMessage("Update slice viewer")
@@ -203,7 +209,9 @@ class SliceMenu(wx.Menu):
 
         elif key in const.SLICE_COLOR_TABLE.keys():
             values = const.SLICE_COLOR_TABLE[key]
-            Publisher.sendMessage("Change colour table from background image", values=values)
+            Publisher.sendMessage(
+                "Change colour table from background image", values=values
+            )
             Publisher.sendMessage("Update slice viewer")
 
             if sys.platform.startswith("linux"):

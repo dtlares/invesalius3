@@ -209,7 +209,12 @@ class ActorFactory:
         return actor
 
     def CreateAim(
-        self, position, orientation, colour=[1.0, 1.0, 0.0], scale=1.0, highlight_zero_angle=True
+        self,
+        position,
+        orientation,
+        colour=[1.0, 1.0, 0.0],
+        scale=1.0,
+        highlight_zero_angle=True,
     ):
         """
         Create the aim (crosshair) actor.

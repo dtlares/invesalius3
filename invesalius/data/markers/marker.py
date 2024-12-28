@@ -170,7 +170,16 @@ class Marker:
                 and field.name != "visualization"
             )
         ]
-        res.extend(["x_world", "y_world", "z_world", "alpha_world", "beta_world", "gamma_world"])
+        res.extend(
+            [
+                "x_world",
+                "y_world",
+                "z_world",
+                "alpha_world",
+                "beta_world",
+                "gamma_world",
+            ]
+        )
         return "\t".join(map(lambda x: f'"{x}"', res))
 
     def to_csv_row(self):
@@ -194,19 +203,26 @@ class Marker:
 
         if self.alpha is not None and self.beta is not None and self.gamma is not None:
             # Add world coordinates (in addition to the internal ones).
-            position_world, orientation_world = imagedata_utils.convert_invesalius_to_world(
-                position=[self.x, self.y, self.z],
-                orientation=[self.alpha, self.beta, self.gamma],
+            position_world, orientation_world = (
+                imagedata_utils.convert_invesalius_to_world(
+                    position=[self.x, self.y, self.z],
+                    orientation=[self.alpha, self.beta, self.gamma],
+                )
             )
 
         else:
-            position_world, orientation_world = imagedata_utils.convert_invesalius_to_world(
-                position=[self.x, self.y, self.z],
-                orientation=[0, 0, 0],
+            position_world, orientation_world = (
+                imagedata_utils.convert_invesalius_to_world(
+                    position=[self.x, self.y, self.z],
+                    orientation=[0, 0, 0],
+                )
             )
 
         res += "\t".join(
-            map(lambda x: "N/A" if x is None else str(x), (*position_world, *orientation_world))
+            map(
+                lambda x: "N/A" if x is None else str(x),
+                (*position_world, *orientation_world),
+            )
         )
         return res
 
@@ -255,7 +271,9 @@ class Marker:
         # 'orientation', whereas when stored in a marker file, the fields are 'x', 'y', 'z', 'alpha', 'beta', 'gamma'.
         position = d["position"] if "position" in d else [d["x"], d["y"], d["z"]]
         orientation = (
-            d["orientation"] if "orientation" in d else [d["alpha"], d["beta"], d["gamma"]]
+            d["orientation"]
+            if "orientation" in d
+            else [d["alpha"], d["beta"], d["gamma"]]
         )
         colour = d["colour"] if "colour" in d else [d["r"], d["g"], d["b"]]
         seed = d["seed"] if "seed" in d else [d["x_seed"], d["y_seed"], d["z_seed"]]
@@ -322,7 +340,9 @@ class Marker:
         # Manually copy all attributes except the visualization and the marker_uuid.
         for field in dataclasses.fields(self):
             if field.name != "visualization" and field.name != "marker_uuid":
-                setattr(new_marker, field.name, copy.deepcopy(getattr(self, field.name)))
+                setattr(
+                    new_marker, field.name, copy.deepcopy(getattr(self, field.name))
+                )
 
         # Give the duplicate marker unique uuid
         new_marker.marker_uuid = str(uuid.uuid4())

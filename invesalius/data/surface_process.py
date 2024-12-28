@@ -8,15 +8,11 @@ except ImportError:
 
 import numpy
 from vtkmodules.vtkCommonCore import vtkFileOutputWindow, vtkOutputWindow
-from vtkmodules.vtkFiltersCore import (
-    vtkAppendPolyData,
-    vtkCleanPolyData,
-    vtkContourFilter,
-    vtkMassProperties,
-    vtkPolyDataConnectivityFilter,
-    vtkPolyDataNormals,
-    vtkQuadricDecimation,
-)
+from vtkmodules.vtkFiltersCore import (vtkAppendPolyData, vtkCleanPolyData,
+                                       vtkContourFilter, vtkMassProperties,
+                                       vtkPolyDataConnectivityFilter,
+                                       vtkPolyDataNormals,
+                                       vtkQuadricDecimation)
 from vtkmodules.vtkFiltersModeling import vtkFillHolesFilter
 from vtkmodules.vtkImagingCore import vtkImageFlip, vtkImageResample
 from vtkmodules.vtkImagingGeneral import vtkImageGaussianSmooth
@@ -107,7 +103,9 @@ def create_surface_piece(
     if from_binary:
         mask = numpy.memmap(mask_filename, mode="r", dtype=mask_dtype, shape=mask_shape)
         if fill_border_holes:
-            a_mask = pad_image(mask[roi.start + 1 : roi.stop + 1, 1:, 1:], 0, pad_bottom, pad_top)
+            a_mask = pad_image(
+                mask[roi.start + 1 : roi.stop + 1, 1:, 1:], 0, pad_bottom, pad_top
+            )
         else:
             a_mask = numpy.array(mask[roi.start + 1 : roi.stop + 1, 1:, 1:])
         image = converters.to_vtk(a_mask, spacing, roi.start, "AXIAL", padding=padding)
@@ -116,7 +114,9 @@ def create_surface_piece(
         image = numpy.memmap(filename, mode="r", dtype=dtype, shape=shape)
         mask = numpy.memmap(mask_filename, mode="r", dtype=mask_dtype, shape=mask_shape)
         if fill_border_holes:
-            a_image = pad_image(image[roi], numpy.iinfo(image.dtype).min, pad_bottom, pad_top)
+            a_image = pad_image(
+                image[roi], numpy.iinfo(image.dtype).min, pad_bottom, pad_top
+            )
         else:
             a_image = numpy.array(image[roi])
         #  if z_iadd:
@@ -129,7 +129,9 @@ def create_surface_piece(
             a_image[a_mask == 1] = a_image.min() - 1
             a_image[a_mask == 254] = (min_value + max_value) / 2.0
 
-            image = converters.to_vtk(a_image, spacing, roi.start, "AXIAL", padding=padding)
+            image = converters.to_vtk(
+                a_image, spacing, roi.start, "AXIAL", padding=padding
+            )
 
             gauss = vtkImageGaussianSmooth()
             gauss.SetInputData(image)
@@ -146,7 +148,9 @@ def create_surface_piece(
             #  origin = -spacing[0], -spacing[1], -spacing[2]
             #  else:
             #  origin = 0, -spacing[1], -spacing[2]
-            image = converters.to_vtk(a_image, spacing, roi.start, "AXIAL", padding=padding)
+            image = converters.to_vtk(
+                a_image, spacing, roi.start, "AXIAL", padding=padding
+            )
         del a_image
 
     #  if imagedata_resolution:
@@ -302,7 +306,11 @@ def join_process_surface(
         send_message("Context Aware smoothing ...")
         mesh = cy_mesh.Mesh(polydata)
         cy_mesh.ca_smoothing(
-            mesh, options["angle"], options["max distance"], options["min weight"], options["steps"]
+            mesh,
+            options["angle"],
+            options["max distance"],
+            options["min weight"],
+            options["steps"],
         )
         #  polydata = mesh.to_vtk()
 

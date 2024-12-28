@@ -95,7 +95,9 @@ class LoadDicom:
         if _has_win32api:
             try:
                 reader.SetFileName(
-                    utils.encode(win32api.GetShortPathName(self.filepath), const.FS_ENCODE)
+                    utils.encode(
+                        win32api.GetShortPathName(self.filepath), const.FS_ENCODE
+                    )
                 )
             except TypeError:
                 reader.SetFileName(win32api.GetShortPathName(self.filepath))
@@ -124,7 +126,9 @@ class LoadDicom:
                 if data_element.IsEmpty():
                     encoding_value = "ISO_IR 100"
                 else:
-                    encoding_value = str(ds.GetDataElement(tag).GetValue()).split("\\")[0]
+                    encoding_value = str(ds.GetDataElement(tag).GetValue()).split("\\")[
+                        0
+                    ]
 
                 if encoding_value.startswith("Loaded"):
                     encoding = "ISO_IR 100"
@@ -179,7 +183,9 @@ class LoadDicom:
                         data_dict[group] = {}
 
                     if not (utils.VerifyInvalidPListCharacter(data[1])):
-                        data_dict[group][field] = utils.decode(data[1], encoding, "replace")
+                        data_dict[group][field] = utils.decode(
+                            data[1], encoding, "replace"
+                        )
                     else:
                         data_dict[group][field] = "Invalid Character"
 
@@ -216,14 +222,18 @@ class LoadDicom:
             # ----------  Verify is DICOMDir -------------------------------
             is_dicom_dir = 1
             try:
-                if data_dict[str(0x002)][str(0x002)] != "1.2.840.10008.1.3.10":  # DICOMDIR
+                if (
+                    data_dict[str(0x002)][str(0x002)] != "1.2.840.10008.1.3.10"
+                ):  # DICOMDIR
                     is_dicom_dir = 0
             except KeyError:
                 is_dicom_dir = 0
 
             if not (is_dicom_dir):
                 parser = dicom.Parser()
-                parser.SetDataImage(dict_file[self.filepath], self.filepath, thumbnail_path)
+                parser.SetDataImage(
+                    dict_file[self.filepath], self.filepath, thumbnail_path
+                )
 
                 dcm = dicom.Dicom()
                 # self.l.acquire()

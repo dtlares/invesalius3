@@ -191,7 +191,8 @@ class Inv3SplashScreen(SplashScreen):
                 icon_file = "splash_" + lang + ".png"
 
             if hasattr(sys, "frozen") and (
-                getattr(sys, "frozen") == "windows_exe" or getattr(sys, "frozen") == "console_exe"
+                getattr(sys, "frozen") == "windows_exe"
+                or getattr(sys, "frozen") == "console_exe"
             ):
                 abs_file_path = os.path.abspath(".." + os.sep)
                 path = abs_file_path
@@ -206,7 +207,12 @@ class Inv3SplashScreen(SplashScreen):
             style = SPLASH_TIMEOUT | SPLASH_CENTRE_ON_SCREEN
 
             SplashScreen.__init__(
-                self, bitmap=bmp, splashStyle=style, milliseconds=1500, id=-1, parent=None
+                self,
+                bitmap=bmp,
+                splashStyle=style,
+                milliseconds=1500,
+                id=-1,
+                parent=None,
             )
             self.Bind(wx.EVT_CLOSE, self.OnClose)
             wx.GetApp().Yield()
@@ -296,7 +302,9 @@ def parse_command_line():
 
     # -d or --debug: print all pubsub messages sent
     parser.add_argument("-d", "--debug", action="store_true", dest="debug")
-    parser.add_argument("project_file", nargs="?", default="", help="InVesalius 3 project file")
+    parser.add_argument(
+        "project_file", nargs="?", default="", help="InVesalius 3 project file"
+    )
 
     parser.add_argument("--no-gui", action="store_true", dest="no_gui")
 
@@ -309,7 +317,10 @@ def parse_command_line():
     parser.add_argument("--import-folder", action="store", dest="import_folder")
 
     parser.add_argument(
-        "-o", "--import-other", dest="other_file", help="Import Nifti, Analyze, PAR/REC file"
+        "-o",
+        "--import-other",
+        dest="other_file",
+        help="Import Nifti, Analyze, PAR/REC file",
     )
 
     parser.add_argument("--remote-host", action="store", dest="remote_host")
@@ -322,9 +333,13 @@ def parse_command_line():
 
     parser.add_argument("-e", "--export", help="Export to STL.")
 
-    parser.add_argument("-a", "--export-to-all", help="Export to STL for all mask presets.")
+    parser.add_argument(
+        "-a", "--export-to-all", help="Export to STL for all mask presets."
+    )
 
-    parser.add_argument("--export-project", help="Export slices and mask to HDF5 or Nifti file.")
+    parser.add_argument(
+        "--export-project", help="Export slices and mask to HDF5 or Nifti file."
+    )
 
     parser.add_argument(
         "--no-masks",
@@ -335,7 +350,10 @@ def parse_command_line():
     )
 
     parser.add_argument(
-        "--use-pedal", action="store_true", dest="use_pedal", help="Use an external trigger pedal"
+        "--use-pedal",
+        action="store_true",
+        dest="use_pedal",
+        help="Use an external trigger pedal",
     )
 
     parser.add_argument(
@@ -345,7 +363,9 @@ def parse_command_line():
         help="Debug navigated TMS E-field computation",
     )
 
-    parser.add_argument("--cranioplasty", help="Creates an AI-based cranioplasty implant.")
+    parser.add_argument(
+        "--cranioplasty", help="Creates an AI-based cranioplasty implant."
+    )
 
     args = parser.parse_args()
     return args
@@ -355,7 +375,9 @@ def use_cmd_optargs(args):
     # If import DICOM argument...
     if args.dicom_dir:
         import_dir = args.dicom_dir
-        Publisher.sendMessage("Import directory", directory=import_dir, use_gui=not args.no_gui)
+        Publisher.sendMessage(
+            "Import directory", directory=import_dir, use_gui=not args.no_gui
+        )
 
         if args.save:
             Publisher.sendMessage("Save project", filepath=os.path.abspath(args.save))
@@ -391,7 +413,9 @@ def use_cmd_optargs(args):
 
         for patient in dcm.GetDicomGroups(args.import_all):
             for group in patient.GetGroups():
-                Publisher.sendMessage("Import group", group=group, use_gui=not args.no_gui)
+                Publisher.sendMessage(
+                    "Import group", group=group, use_gui=not args.no_gui
+                )
                 check_for_export(args, suffix=group.title, remove_surfaces=False)
                 Publisher.sendMessage("Remove masks", mask_indexes=(0,))
         return True
@@ -510,8 +534,12 @@ def export(path_, threshold_range, remove_surface=False):
             "overwrite": False,
         },
     }
-    Publisher.sendMessage("Create surface from index", surface_parameters=surface_options)
-    Publisher.sendMessage("Export surface to file", filename=path_, filetype=const.FILETYPE_STL)
+    Publisher.sendMessage(
+        "Create surface from index", surface_parameters=surface_options
+    )
+    Publisher.sendMessage(
+        "Export surface to file", filename=path_, filetype=const.FILETYPE_STL
+    )
     if remove_surface:
         Publisher.sendMessage("Remove surfaces", surface_indexes=(0,))
 

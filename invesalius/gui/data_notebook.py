@@ -27,7 +27,6 @@ except ImportError:
 
 import wx
 import wx.grid
-
 #  import invesalius.gui.widgets.listctrl as listmix
 import wx.lib.platebtn as pbtn
 
@@ -144,7 +143,9 @@ class MeasureButtonControlPanel(wx.Panel):
 
     def __init_gui(self):
         # Bitmaps to be used in plate buttons
-        BMP_NEW = wx.Bitmap(os.path.join(inv_paths.ICON_DIR, "data_new.png"), wx.BITMAP_TYPE_PNG)
+        BMP_NEW = wx.Bitmap(
+            os.path.join(inv_paths.ICON_DIR, "data_new.png"), wx.BITMAP_TYPE_PNG
+        )
         BMP_REMOVE = wx.Bitmap(
             os.path.join(inv_paths.ICON_DIR, "data_remove.png"), wx.BITMAP_TYPE_PNG
         )
@@ -166,7 +167,12 @@ class MeasureButtonControlPanel(wx.Panel):
         button_remove.SetToolTip(_("Remove measure"))
 
         button_duplicate = pbtn.PlateButton(
-            self, BTN_DUPLICATE, "", BMP_DUPLICATE, style=button_style, size=wx.Size(24, 20)
+            self,
+            BTN_DUPLICATE,
+            "",
+            BMP_DUPLICATE,
+            style=button_style,
+            size=wx.Size(24, 20),
         )
         button_duplicate.SetToolTip(_("Duplicate measure"))
         button_duplicate.Disable()
@@ -253,7 +259,9 @@ class ButtonControlPanel(wx.Panel):
 
     def __init_gui(self):
         # Bitmaps to be used in plate buttons
-        BMP_NEW = wx.Bitmap(os.path.join(inv_paths.ICON_DIR, "data_new.png"), wx.BITMAP_TYPE_PNG)
+        BMP_NEW = wx.Bitmap(
+            os.path.join(inv_paths.ICON_DIR, "data_new.png"), wx.BITMAP_TYPE_PNG
+        )
         BMP_REMOVE = wx.Bitmap(
             os.path.join(inv_paths.ICON_DIR, "data_remove.png"), wx.BITMAP_TYPE_PNG
         )
@@ -274,7 +282,12 @@ class ButtonControlPanel(wx.Panel):
         button_remove.SetToolTip(_("Remove mask"))
 
         button_duplicate = pbtn.PlateButton(
-            self, BTN_DUPLICATE, "", BMP_DUPLICATE, style=button_style, size=wx.Size(24, 20)
+            self,
+            BTN_DUPLICATE,
+            "",
+            BMP_DUPLICATE,
+            style=button_style,
+            size=wx.Size(24, 20),
         )
         button_duplicate.SetToolTip(_("Duplicate mask"))
 
@@ -583,13 +596,17 @@ class MasksListCtrlPanel(InvListCtrl):
 
         self.SetImageList(self.imagelist, wx.IMAGE_LIST_SMALL)
 
-        self.image_gray = Image.open(os.path.join(inv_paths.ICON_DIR, "object_colour.png"))
+        self.image_gray = Image.open(
+            os.path.join(inv_paths.ICON_DIR, "object_colour.png")
+        )
 
     def OnEditLabel(self, evt):
         if not evt.IsEditCancelled():
             index = evt.GetIndex()
             self.SetItem(index, 1, evt.GetLabel())
-            Publisher.sendMessage("Change mask name", index=evt.GetIndex(), name=evt.GetLabel())
+            Publisher.sendMessage(
+                "Change mask name", index=evt.GetIndex(), name=evt.GetLabel()
+            )
         evt.Skip()
 
     def OnCheckItem(self, index, flag):
@@ -603,7 +620,9 @@ class MasksListCtrlPanel(InvListCtrl):
             self.current_index = index
         Publisher.sendMessage("Show mask", index=index, value=flag)
 
-    def InsertNewItem(self, index=0, label=_("Mask"), threshold="(1000, 4500)", colour=None):
+    def InsertNewItem(
+        self, index=0, label=_("Mask"), threshold="(1000, 4500)", colour=None
+    ):
         image = self.CreateColourBitmap(colour)
         image_index = self.imagelist.Add(image)
         self.InsertItem(index, "")
@@ -620,7 +639,9 @@ class MasksListCtrlPanel(InvListCtrl):
         image_index = len(self.mask_list_index)
         if mask.index not in self.mask_list_index:
             self.mask_list_index[image_index] = mask.index
-            self.InsertNewItem(image_index, mask.name, str(mask.threshold_range), mask.colour)
+            self.InsertNewItem(
+                image_index, mask.name, str(mask.threshold_range), mask.colour
+            )
 
     def EditMaskThreshold(self, index, threshold_range):
         self.SetItem(index, 2, str(threshold_range))
@@ -682,14 +703,18 @@ class SurfaceButtonControlPanel(wx.Panel):
 
     def __init_gui(self):
         # Bitmaps to be used in plate buttons
-        BMP_NEW = wx.Bitmap(os.path.join(inv_paths.ICON_DIR, "data_new.png"), wx.BITMAP_TYPE_PNG)
+        BMP_NEW = wx.Bitmap(
+            os.path.join(inv_paths.ICON_DIR, "data_new.png"), wx.BITMAP_TYPE_PNG
+        )
         BMP_REMOVE = wx.Bitmap(
             os.path.join(inv_paths.ICON_DIR, "data_remove.png"), wx.BITMAP_TYPE_PNG
         )
         BMP_DUPLICATE = wx.Bitmap(
             os.path.join(inv_paths.ICON_DIR, "data_duplicate.png"), wx.BITMAP_TYPE_PNG
         )
-        BMP_OPEN = wx.Bitmap(os.path.join(inv_paths.ICON_DIR, "load_mesh.png"), wx.BITMAP_TYPE_PNG)
+        BMP_OPEN = wx.Bitmap(
+            os.path.join(inv_paths.ICON_DIR, "load_mesh.png"), wx.BITMAP_TYPE_PNG
+        )
 
         # Plate buttons based on previous bitmaps
         button_style = pbtn.PB_STYLE_SQUARE | pbtn.PB_STYLE_DEFAULT
@@ -704,7 +729,12 @@ class SurfaceButtonControlPanel(wx.Panel):
         button_remove.SetToolTip(_("Remove surface"))
 
         button_duplicate = pbtn.PlateButton(
-            self, BTN_DUPLICATE, "", BMP_DUPLICATE, style=button_style, size=wx.Size(24, 20)
+            self,
+            BTN_DUPLICATE,
+            "",
+            BMP_DUPLICATE,
+            style=button_style,
+            size=wx.Size(24, 20),
         )
         button_duplicate.SetToolTip(_("Duplicate surface"))
 
@@ -752,7 +782,9 @@ class SurfaceButtonControlPanel(wx.Panel):
         if ok:
             surface_options = dialog.GetValue()
 
-            Publisher.sendMessage("Create surface from index", surface_parameters=surface_options)
+            Publisher.sendMessage(
+                "Create surface from index", surface_parameters=surface_options
+            )
         dialog.Destroy()
 
     def OnRemove(self):
@@ -795,7 +827,9 @@ class SurfacesListCtrlPanel(InvListCtrl):
 
     def __init_evt(self):
         Publisher.subscribe(self.AddSurface, "Update surface info in GUI")
-        Publisher.subscribe(self.update_current_surface_data, "Update surface info in GUI")
+        Publisher.subscribe(
+            self.update_current_surface_data, "Update surface info in GUI"
+        )
         Publisher.subscribe(self.EditSurfaceTransparency, "Set surface transparency")
         Publisher.subscribe(self.EditSurfaceColour, "Set surface colour")
         Publisher.subscribe(self.OnCloseProject, "Close project data")
@@ -822,8 +856,12 @@ class SurfacesListCtrlPanel(InvListCtrl):
         colour_id = surface_context_menu.Append(start_idx, _("Change color"))
         surface_context_menu.Bind(wx.EVT_MENU, self.change_surface_color, colour_id)
 
-        transparency_id = surface_context_menu.Append(start_idx + 1, _("Change transparency"))
-        surface_context_menu.Bind(wx.EVT_MENU, self.change_transparency, transparency_id)
+        transparency_id = surface_context_menu.Append(
+            start_idx + 1, _("Change transparency")
+        )
+        surface_context_menu.Bind(
+            wx.EVT_MENU, self.change_transparency, transparency_id
+        )
 
         duplicate_id = surface_context_menu.Append(start_idx + 2, _("Duplicate"))
         surface_context_menu.Bind(wx.EVT_MENU, self.duplicate_surface, duplicate_id)
@@ -851,7 +889,9 @@ class SurfacesListCtrlPanel(InvListCtrl):
 
         new_vtk_color = [c / 255.0 for c in new_color]
 
-        Publisher.sendMessage("Set surface colour", surface_index=focused_idx, colour=new_vtk_color)
+        Publisher.sendMessage(
+            "Set surface colour", surface_index=focused_idx, colour=new_vtk_color
+        )
 
         # Select the edited surface again to update the color in the surface properties GUI
         Publisher.sendMessage("Change surface selected", surface_index=focused_idx)
@@ -875,7 +915,9 @@ class SurfacesListCtrlPanel(InvListCtrl):
         transparency_dialog.Destroy()
 
         Publisher.sendMessage(
-            "Set surface transparency", surface_index=focused_idx, transparency=new_value / 100.0
+            "Set surface transparency",
+            surface_index=focused_idx,
+            transparency=new_value / 100.0,
         )
 
         # Select the edited surface again to update the slider in the surface properties GUI
@@ -934,7 +976,9 @@ class SurfacesListCtrlPanel(InvListCtrl):
             current_index = max(selected_items[0] - 1, 0)
 
             if len(self.surface_list_index) > 0:
-                Publisher.sendMessage("Change surface selected", surface_index=current_index)
+                Publisher.sendMessage(
+                    "Change surface selected", surface_index=current_index
+                )
         else:
             dlg.SurfaceSelectionRequiredForRemoval()
 
@@ -949,7 +993,9 @@ class SurfacesListCtrlPanel(InvListCtrl):
         # things will stop working, e.g.: OnCheckItem
 
         last_surface_index = evt.Index
-        Publisher.sendMessage("Change surface selected", surface_index=last_surface_index)
+        Publisher.sendMessage(
+            "Change surface selected", surface_index=last_surface_index
+        )
         evt.Skip()
 
     def GetSelected(self):
@@ -996,7 +1042,9 @@ class SurfacesListCtrlPanel(InvListCtrl):
 
         self.SetImageList(self.imagelist, wx.IMAGE_LIST_SMALL)
 
-        self.image_gray = Image.open(os.path.join(inv_paths.ICON_DIR, "object_colour.png"))
+        self.image_gray = Image.open(
+            os.path.join(inv_paths.ICON_DIR, "object_colour.png")
+        )
 
     def OnBeginLabelEdit(self, evt):
         if evt.GetColumn() == 1:
@@ -1008,7 +1056,9 @@ class SurfacesListCtrlPanel(InvListCtrl):
         if not evt.IsEditCancelled():
             index = evt.GetIndex()
             self.SetItem(index, 1, evt.GetLabel())
-            Publisher.sendMessage("Change surface name", index=evt.GetIndex(), name=evt.GetLabel())
+            Publisher.sendMessage(
+                "Change surface name", index=evt.GetIndex(), name=evt.GetLabel()
+            )
         evt.Skip()
 
     def OnCheckItem(self, index, flag):
@@ -1018,7 +1068,9 @@ class SurfacesListCtrlPanel(InvListCtrl):
         for key in self.surface_list_index.keys():
             if key != index:
                 self.SetItemImage(key, not visibility)
-                Publisher.sendMessage("Show surface", index=key, visibility=not visibility)
+                Publisher.sendMessage(
+                    "Show surface", index=key, visibility=not visibility
+                )
         self.SetItemImage(index, visibility)
         Publisher.sendMessage("Show surface", index=index, visibility=visibility)
 
@@ -1026,7 +1078,9 @@ class SurfacesListCtrlPanel(InvListCtrl):
         for key in self.surface_list_index.keys():
             if key not in index_list:
                 self.SetItemImage(key, not visibility)
-                Publisher.sendMessage("Show surface", index=key, visibility=not visibility)
+                Publisher.sendMessage(
+                    "Show surface", index=key, visibility=not visibility
+                )
         for index in index_list:
             self.SetItemImage(index, visibility)
             Publisher.sendMessage("Show surface", index=index, visibility=visibility)
@@ -1247,7 +1301,9 @@ class MeasuresListCtrlPanel(InvListCtrl):
 
         self.SetImageList(self.imagelist, wx.IMAGE_LIST_SMALL)
 
-        self.image_gray = Image.open(os.path.join(inv_paths.ICON_DIR, "object_colour.png"))
+        self.image_gray = Image.open(
+            os.path.join(inv_paths.ICON_DIR, "object_colour.png")
+        )
 
     def OnBeginLabelEdit(self, evt):
         if evt.GetColumn() == 1:
@@ -1271,7 +1327,9 @@ class MeasuresListCtrlPanel(InvListCtrl):
         for key in self._list_index.keys():
             if key != index:
                 self.SetItemImage(key, not visibility)
-                Publisher.sendMessage("Show measurement", index=key, visibility=not visibility)
+                Publisher.sendMessage(
+                    "Show measurement", index=key, visibility=not visibility
+                )
         self.SetItemImage(index, visibility)
         Publisher.sendMessage("Show measurement", index=index, visibility=visibility)
 
@@ -1279,10 +1337,14 @@ class MeasuresListCtrlPanel(InvListCtrl):
         for key in self._list_index.keys():
             if key not in index_list:
                 self.SetItemImage(key, not visibility)
-                Publisher.sendMessage("Show measurement", index=key, visibility=not visibility)
+                Publisher.sendMessage(
+                    "Show measurement", index=key, visibility=not visibility
+                )
         for index in index_list:
             self.SetItemImage(index, visibility)
-            Publisher.sendMessage("Show measurement", index=index, visibility=visibility)
+            Publisher.sendMessage(
+                "Show measurement", index=index, visibility=visibility
+            )
 
     def OnLoadData(self, measurement_dict, spacing=(1.0, 1.0, 1.0)):
         for i in sorted(measurement_dict):
@@ -1439,7 +1501,9 @@ class AnnotationsListCtrlPanel(wx.ListCtrl):
         else:
             print("unchecked, ", index)
 
-    def InsertNewItem(self, index=0, name="Axial 1", type_="2d", value="bla", colour=None):
+    def InsertNewItem(
+        self, index=0, name="Axial 1", type_="2d", value="bla", colour=None
+    ):
         self.InsertItem(index, "")
         self.SetItem(index, 1, name, imageId=self.img_colour)
         self.SetItem(index, 2, type_)

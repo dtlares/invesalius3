@@ -1,6 +1,7 @@
 import numpy as np
-cimport numpy as np
+
 cimport cython
+cimport numpy as np
 
 #  ctypedef np.uint16_t image_t
 

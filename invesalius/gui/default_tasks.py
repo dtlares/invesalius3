@@ -266,7 +266,12 @@ class UpperTaskPanel(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
         fold_panel = fpb.FoldPanelBar(
-            self, -1, wx.DefaultPosition, wx.DefaultSize, FPB_DEFAULT_STYLE, fpb.FPB_SINGLE_FOLD
+            self,
+            -1,
+            wx.DefaultPosition,
+            wx.DefaultSize,
+            FPB_DEFAULT_STYLE,
+            fpb.FPB_SINGLE_FOLD,
         )
 
         image_list = wx.ImageList(16, 16)
@@ -304,7 +309,9 @@ class UpperTaskPanel(wx.Panel):
                     "%d. %s" % (i + 1, name), collapsed=True, foldIcons=image_list
                 )
             else:
-                item = fold_panel.AddFoldPanel(f"{name}", collapsed=True, foldIcons=image_list)
+                item = fold_panel.AddFoldPanel(
+                    f"{name}", collapsed=True, foldIcons=image_list
+                )
             # style = fold_panel.GetCaptionStyle(item)
             # col = style.GetFirstColour()
 

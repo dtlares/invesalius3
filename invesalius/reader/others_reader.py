@@ -76,7 +76,9 @@ def ReadOthers(dir_):
                 new_zooms = zooms[:3]  # Adjust this to your desired zooms
                 header.set_zooms(new_zooms)
 
-                imagedata = nib.Nifti1Image(selected_volume, imagedata.affine, header=header)
+                imagedata = nib.Nifti1Image(
+                    selected_volume, imagedata.affine, header=header
+                )
 
             else:
                 raise ValueError

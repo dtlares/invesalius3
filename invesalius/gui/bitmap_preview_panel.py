@@ -5,7 +5,8 @@ import wx
 from vtkmodules.vtkImagingColor import vtkImageMapToWindowLevelColors
 from vtkmodules.vtkInteractionStyle import vtkInteractorStyleImage
 from vtkmodules.vtkRenderingCore import vtkImageActor, vtkRenderer
-from vtkmodules.wx.wxVTKRenderWindowInteractor import wxVTKRenderWindowInteractor
+from vtkmodules.wx.wxVTKRenderWindowInteractor import \
+    wxVTKRenderWindowInteractor
 
 import invesalius.constants as const
 import invesalius.data.converters as converters
@@ -174,7 +175,9 @@ class Preview(wx.Panel):
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         self.sizer.Add(self.title, 0, wx.ALIGN_CENTER_HORIZONTAL)
         self.sizer.Add(self.subtitle, 0, wx.ALIGN_CENTER_HORIZONTAL)
-        self.sizer.Add(self.image_viewer, 1, wx.ALIGN_CENTRE_HORIZONTAL | wx.SHAPED | wx.ALL, 5)
+        self.sizer.Add(
+            self.image_viewer, 1, wx.ALIGN_CENTRE_HORIZONTAL | wx.SHAPED | wx.ALL, 5
+        )
         self.sizer.Fit(self)
 
         self.SetSizer(self.sizer)
@@ -338,7 +341,9 @@ class BitmapPreviewSeries(wx.Panel):
         my_evt.SetItemData(evt.GetItemData())
 
         if self.selected_dicom:
-            self.selected_dicom.selected = self.selected_dicom is evt.GetEventObject().bitmap_info
+            self.selected_dicom.selected = (
+                self.selected_dicom is evt.GetEventObject().bitmap_info
+            )
             self.selected_panel.select_on = self.selected_panel is evt.GetEventObject()
             self.selected_panel.Select()
         self.selected_panel = evt.GetEventObject()
@@ -373,7 +378,8 @@ class BitmapPreviewSeries(wx.Panel):
                     p.Hide()
                     self._display_previews()
                     Publisher.sendMessage(
-                        "Update max of slidebar in single preview image", max_value=len(self.files)
+                        "Update max of slidebar in single preview image",
+                        max_value=len(self.files),
                     )
 
                     self.Update()
@@ -488,7 +494,9 @@ class SingleImagePreview(wx.Panel):
 
         style = vtkInteractorStyleImage()
 
-        self.interactor = wxVTKRenderWindowInteractor(self.panel, -1, size=wx.Size(340, 340))
+        self.interactor = wxVTKRenderWindowInteractor(
+            self.panel, -1, size=wx.Size(340, 340)
+        )
         self.interactor.SetRenderWhenDisabled(True)
         self.interactor.GetRenderWindow().SetNumberOfLayers(2)
         self.interactor.GetRenderWindow().AddRenderer(self.renderer)
@@ -513,7 +521,12 @@ class SingleImagePreview(wx.Panel):
         self.panel = wx.Panel(self, -1)
 
         slider = wx.Slider(
-            self, id=-1, value=0, minValue=0, maxValue=99, style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS
+            self,
+            id=-1,
+            value=0,
+            minValue=0,
+            maxValue=99,
+            style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS,
         )
         slider.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
         slider.SetTickFreq(1)
@@ -543,9 +556,12 @@ class SingleImagePreview(wx.Panel):
     def __bind_pubsub(self):
         Publisher.subscribe(self.ShowBitmapByPosition, "Set bitmap in preview panel")
         Publisher.subscribe(
-            self.UpdateMaxValueSliderBar, "Update max of slidebar in single preview image"
+            self.UpdateMaxValueSliderBar,
+            "Update max of slidebar in single preview image",
         )
-        Publisher.subscribe(self.ShowBlackSlice, "Show black slice in single preview image")
+        Publisher.subscribe(
+            self.ShowBlackSlice, "Show black slice in single preview image"
+        )
 
     def ShowBitmapByPosition(self, pos):
         if pos is not None:
@@ -600,7 +616,9 @@ class SingleImagePreview(wx.Panel):
 
         self.text_image_size.SetValue("")
 
-        image = converters.to_vtk(n_array, spacing=(1, 1, 1), slice_number=1, orientation="AXIAL")
+        image = converters.to_vtk(
+            n_array, spacing=(1, 1, 1), slice_number=1, orientation="AXIAL"
+        )
 
         colorer = vtkImageMapToWindowLevelColors()
         colorer.SetInputData(image)
@@ -640,7 +658,9 @@ class SingleImagePreview(wx.Panel):
 
         n_array = bitmap_reader.ReadBitmap(bitmap[0])
 
-        image = converters.to_vtk(n_array, spacing=(1, 1, 1), slice_number=1, orientation="AXIAL")
+        image = converters.to_vtk(
+            n_array, spacing=(1, 1, 1), slice_number=1, orientation="AXIAL"
+        )
 
         # ADJUST CONTRAST
         window_level = n_array.max() / 2

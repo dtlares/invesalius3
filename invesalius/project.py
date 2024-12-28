@@ -31,7 +31,6 @@ from vtkmodules.vtkCommonCore import vtkFileOutputWindow, vtkOutputWindow
 
 import invesalius.constants as const
 from invesalius import inv_paths
-
 # from invesalius.data import imagedata_utils
 from invesalius.presets import Presets
 from invesalius.pubsub import pub as Publisher
@@ -247,7 +246,9 @@ class Project(metaclass=Singleton):
         # Saving the surfaces
         surfaces = {}
         for index in self.surface_dict:
-            surfaces[str(index)] = self.surface_dict[index].SavePlist(dir_temp, filelist)
+            surfaces[str(index)] = self.surface_dict[index].SavePlist(
+                dir_temp, filelist
+            )
         project["surfaces"] = surfaces
 
         # Saving the measurements
@@ -359,12 +360,17 @@ class Project(metaclass=Singleton):
 
         # Opening the measurements
         self.measurement_dict = {}
-        measures_file = os.path.join(dirpath, project.get("measurements", "measurements.plist"))
+        measures_file = os.path.join(
+            dirpath, project.get("measurements", "measurements.plist")
+        )
         if os.path.exists(measures_file):
             with open(measures_file, "r+b") as f:
                 measurements = plistlib.load(f, fmt=plistlib.FMT_XML)
             for index in measurements:
-                if measurements[index]["type"] in (const.DENSITY_ELLIPSE, const.DENSITY_POLYGON):
+                if measurements[index]["type"] in (
+                    const.DENSITY_ELLIPSE,
+                    const.DENSITY_POLYGON,
+                ):
                     measure = ms.DensityMeasurement()
                 else:
                     measure = ms.Measurement()
@@ -389,7 +395,11 @@ class Project(metaclass=Singleton):
             os.mkdir(folder)
         # image_file = os.path.join(folder, "matrix.dat")
         # image_mmap = imagedata_utils.array2memmap(image, image_file)
-        matrix = {"filename": "matrix.dat", "shape": image.shape, "dtype": str(image.dtype)}
+        matrix = {
+            "filename": "matrix.dat",
+            "shape": image.shape,
+            "dtype": str(image.dtype),
+        }
         project = {
             # Format info
             "format_version": const.INVESALIUS_ACTUAL_FORMAT_VERSION,
@@ -467,7 +477,9 @@ class Project(metaclass=Singleton):
             for index in self.mask_dict:
                 mask = self.mask_dict[index]
                 s.do_threshold_to_all_slices(mask)
-                mask_nifti = nib.Nifti1Image(np.swapaxes(np.fliplr(mask.matrix), 0, 2), None)
+                mask_nifti = nib.Nifti1Image(
+                    np.swapaxes(np.fliplr(mask.matrix), 0, 2), None
+                )
                 mask_nifti.header.set_zooms(s.spacing)
                 if filename.lower().endswith(".nii"):
                     basename = filename[:-4]
@@ -508,7 +520,9 @@ def Compress(
     # os.chdir(current_dir)
 
 
-def Extract(filename: Union[str, bytes, os.PathLike], folder: Union[str, bytes, os.PathLike]):
+def Extract(
+    filename: Union[str, bytes, os.PathLike], folder: Union[str, bytes, os.PathLike]
+):
     if _has_win32api:
         folder = win32api.GetShortPathName(folder)
     folder = decode(folder, const.FS_ENCODE)

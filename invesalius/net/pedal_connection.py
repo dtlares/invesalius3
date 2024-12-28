@@ -65,7 +65,9 @@ class PedalConnector:
             key_code = evt.GetKeyCode()
             if key_code == const.KEYSTROKE_PEDAL_KEY:
                 for name in list(self.panel_callbacks[panel_id].keys()):
-                    callback, remove_when_released = self.panel_callbacks[panel_id][name]
+                    callback, remove_when_released = self.panel_callbacks[panel_id][
+                        name
+                    ]
                     callback(state)
                     if remove_when_released:
                         self.panel_callbacks[panel_id].pop(name)
@@ -78,7 +80,9 @@ class PedalConnector:
             self.pedal_connection.add_callback(name, callback, remove_when_released)
 
         if self.neuronavigation_api is not None:
-            self.neuronavigation_api.add_pedal_callback(name, callback, remove_when_released)
+            self.neuronavigation_api.add_pedal_callback(
+                name, callback, remove_when_released
+            )
 
         panel = panel or self.frame
         if panel is not None and const.KEYSTROKE_PEDAL_ENABLED:
@@ -86,7 +90,9 @@ class PedalConnector:
             if panel_id not in self.panel_callbacks:
                 self._bind_callbacks_to_panel(panel)
 
-            self.panel_callbacks[panel_id].update({name: (callback, remove_when_released)})
+            self.panel_callbacks[panel_id].update(
+                {name: (callback, remove_when_released)}
+            )
 
     def remove_callback(self, name, panel=None):
         if self.pedal_connection is not None:
@@ -185,7 +191,9 @@ class MidiPedal(Thread, metaclass=Singleton):
 
     def remove_callback(self, name):
         self._callback_infos = [
-            callback_info for callback_info in self._callback_infos if callback_info["name"] != name
+            callback_info
+            for callback_info in self._callback_infos
+            if callback_info["name"] != name
         ]
 
     def run(self):

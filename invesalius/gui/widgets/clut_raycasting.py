@@ -62,7 +62,12 @@ class Node:
     """
 
     def __init__(
-        self, colour: Tuple[int, int, int], x: int, y: int, graylevel: float, opacity: float
+        self,
+        colour: Tuple[int, int, int],
+        x: int,
+        y: int,
+        graylevel: float,
+        opacity: float,
     ):
         self.colour = colour
         self.x = x
@@ -368,14 +373,18 @@ class CLUTRaycastingWidget(wx.Panel):
         distance = float(math.sin(theta) * len_A)
         return distance
 
-    def _has_clicked_in_selection_curve(self, position: "SupportsGetItem[float]") -> Optional[int]:
+    def _has_clicked_in_selection_curve(
+        self, position: "SupportsGetItem[float]"
+    ) -> Optional[int]:
         # x, y = position
         for i, curve in enumerate(self.curves):
             if self._calculate_distance(curve.wl_px, position) <= RADIUS:
                 return i
         return None
 
-    def _has_clicked_in_line(self, clicked_point: Tuple[int, int]) -> Optional[Tuple[int, int]]:
+    def _has_clicked_in_line(
+        self, clicked_point: Tuple[int, int]
+    ) -> Optional[Tuple[int, int]]:
         """
         Verify if was clicked in a line. If yes, it returns the insertion
         clicked_point in the point list.
@@ -391,7 +400,10 @@ class CLUTRaycastingWidget(wx.Panel):
 
     def _has_clicked_in_save(self, clicked_point: Tuple[int, int]) -> bool:
         x, y = clicked_point
-        if self.padding < x < self.padding + 24 and self.padding < y < self.padding + 24:
+        if (
+            self.padding < x < self.padding + 24
+            and self.padding < y < self.padding + 24
+        ):
             return True
         else:
             return False
@@ -475,7 +487,11 @@ class CLUTRaycastingWidget(wx.Panel):
             self.point_dragged = None
         # If there is textbox and the point to remove is before it, then
         # decrement the index referenced to point that have the textbox.
-        elif self.point_dragged and i == self.point_dragged[0] and j < self.point_dragged[1]:
+        elif (
+            self.point_dragged
+            and i == self.point_dragged[0]
+            and j < self.point_dragged[1]
+        ):
             new_i = self.point_dragged[0]
             new_j = self.point_dragged[1] - 1
             self.point_dragged = (new_i, new_j)
@@ -506,8 +522,18 @@ class CLUTRaycastingWidget(wx.Panel):
                 path.AddLineToPoint(int(nodej.x), nodej.y)
                 path.AddLineToPoint(int(nodej.x), height)
 
-                colouri = nodei.colour[0], nodei.colour[1], nodei.colour[2], GRADIENT_RGBA
-                colourj = nodej.colour[0], nodej.colour[1], nodej.colour[2], GRADIENT_RGBA
+                colouri = (
+                    nodei.colour[0],
+                    nodei.colour[1],
+                    nodei.colour[2],
+                    GRADIENT_RGBA,
+                )
+                colourj = (
+                    nodej.colour[0],
+                    nodej.colour[1],
+                    nodej.colour[2],
+                    GRADIENT_RGBA,
+                )
                 b = ctx.CreateLinearGradientBrush(
                     int(nodei.x), height, int(nodej.x), height, colouri, colourj
                 )
@@ -586,7 +612,9 @@ class CLUTRaycastingWidget(wx.Panel):
         ctx.StrokePath(path)
         ctx.PopState()
         path.AddLineToPoint(x, height + self.padding)
-        path.AddLineToPoint(self.HounsfieldToPixel(self.Histogram.init), height + self.padding)
+        path.AddLineToPoint(
+            self.HounsfieldToPixel(self.Histogram.init), height + self.padding
+        )
         x, y = self.Histogram.points[0]
         path.AddLineToPoint(x, y)
         ctx.FillPath(path)
@@ -597,7 +625,10 @@ class CLUTRaycastingWidget(wx.Panel):
         for curve in self.curves:
             x_center, y_center = curve.wl_px
             ctx.DrawRectangle(
-                x_center - SELECTION_SIZE / 2.0, y_center, SELECTION_SIZE, SELECTION_SIZE
+                x_center - SELECTION_SIZE / 2.0,
+                y_center,
+                SELECTION_SIZE,
+                SELECTION_SIZE,
             )
 
     def _draw_tool_bar(self, ctx: wx.GraphicsContext, height: int) -> None:
@@ -611,7 +642,9 @@ class CLUTRaycastingWidget(wx.Panel):
         self.save_button.position = (x, y)
         ctx.DrawBitmap(image, x, y, w, h)
 
-    def Render(self, dc: Union[wx.WindowDC, wx.MemoryDC, wx.PrinterDC, wx.MetafileDC]) -> None:
+    def Render(
+        self, dc: Union[wx.WindowDC, wx.MemoryDC, wx.PrinterDC, wx.MetafileDC]
+    ) -> None:
         ctx = wx.GraphicsContext.Create(dc)
         width, height = self.GetVirtualSize()
         height -= self.padding * 2
@@ -660,7 +693,9 @@ class CLUTRaycastingWidget(wx.Panel):
         width when the user interacts with this widgets.
         """
         for n, (point, colour) in enumerate(zip(self.points, self.colours)):
-            point_colour: Iterable[Tuple[Dict[str, float], Dict[str, float]]] = zip(point, colour)
+            point_colour: Iterable[Tuple[Dict[str, float], Dict[str, float]]] = zip(
+                point, colour
+            )
             point_colour = sorted(point_colour, key=lambda x: x[0]["x"])
             self.points[n] = [i[0] for i in point_colour]
             self.colours[n] = [i[1] for i in point_colour]
@@ -744,7 +779,9 @@ class CLUTRaycastingWidget(wx.Panel):
             self.to_draw_points = False
         self.Refresh()
 
-    def SetHistogramArray(self, h_array: "np.ndarray", range: Tuple[float, float]) -> None:
+    def SetHistogramArray(
+        self, h_array: "np.ndarray", range: Tuple[float, float]
+    ) -> None:
         self.histogram_array = h_array
         self.Histogram.init = range[0]
         self.Histogram.end = range[1]

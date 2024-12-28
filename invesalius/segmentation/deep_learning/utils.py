@@ -28,7 +28,9 @@ def get_torch_devices():
 def prepare_plaidml():
     # Linux if installed plaidml with pip3 install --user
     if sys.platform.startswith("linux"):
-        local_user_plaidml = pathlib.Path("~/.local/share/plaidml/").expanduser().absolute()
+        local_user_plaidml = (
+            pathlib.Path("~/.local/share/plaidml/").expanduser().absolute()
+        )
         if local_user_plaidml.exists():
             os.environ["RUNFILES_DIR"] = str(local_user_plaidml)
             os.environ["PLAIDML_NATIVE_PATH"] = str(
@@ -44,7 +46,9 @@ def prepare_plaidml():
             )
     elif sys.platform == "win32":
         if "VIRTUAL_ENV" in os.environ:
-            local_user_plaidml = pathlib.Path(os.environ["VIRTUAL_ENV"]).joinpath("share/plaidml")
+            local_user_plaidml = pathlib.Path(os.environ["VIRTUAL_ENV"]).joinpath(
+                "share/plaidml"
+            )
             plaidml_dll = pathlib.Path(os.environ["VIRTUAL_ENV"]).joinpath(
                 "library/bin/plaidml.dll"
             )

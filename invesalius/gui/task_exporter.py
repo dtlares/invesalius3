@@ -107,7 +107,9 @@ class TaskPanel(wx.Panel):
         inner_panel = InnerTaskPanel(self)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(inner_panel, 1, wx.EXPAND | wx.GROW | wx.BOTTOM | wx.RIGHT | wx.LEFT, 7)
+        sizer.Add(
+            inner_panel, 1, wx.EXPAND | wx.GROW | wx.BOTTOM | wx.RIGHT | wx.LEFT, 7
+        )
         sizer.Fit(self)
 
         self.SetSizer(sizer)
@@ -178,7 +180,8 @@ class InnerTaskPanel(wx.Panel):
         # Image(s) for buttons
         BMP_EXPORT_SURFACE = (
             wx.Bitmap(
-                os.path.join(inv_paths.ICON_DIR, "surface_export_original.png"), wx.BITMAP_TYPE_PNG
+                os.path.join(inv_paths.ICON_DIR, "surface_export_original.png"),
+                wx.BITMAP_TYPE_PNG,
             )
             .ConvertToImage()
             .Rescale(25, 25)
@@ -186,7 +189,8 @@ class InnerTaskPanel(wx.Panel):
         )
         BMP_TAKE_PICTURE = (
             wx.Bitmap(
-                os.path.join(inv_paths.ICON_DIR, "tool_photo_original.png"), wx.BITMAP_TYPE_PNG
+                os.path.join(inv_paths.ICON_DIR, "tool_photo_original.png"),
+                wx.BITMAP_TYPE_PNG,
             )
             .ConvertToImage()
             .Rescale(25, 25)
@@ -270,7 +274,10 @@ class InnerTaskPanel(wx.Panel):
         if value:
             filename, filetype = value
             Publisher.sendMessage(
-                "Export picture to file", orientation=id, filename=filename, filetype=filetype
+                "Export picture to file",
+                orientation=id,
+                filename=filename,
+                filetype=filetype,
             )
 
     def OnLinkExportPicture(self, evt=None):
@@ -300,7 +307,9 @@ class InnerTaskPanel(wx.Panel):
                 if filename.split(".")[-1] != extension:
                     filename = filename + "." + extension
             filetype = const.FILETYPE_IMAGEDATA
-            Publisher.sendMessage("Export mask to file", filename=filename, filetype=filetype)
+            Publisher.sendMessage(
+                "Export mask to file", filename=filename, filetype=filetype
+            )
 
     def OnLinkExportSurface(self, evt=None):
         "OnLinkExportSurface"
@@ -326,7 +335,9 @@ class InnerTaskPanel(wx.Panel):
             convert_to_world = False
             if Slice().has_affine():
                 dlg = dlgs.FileSelectionDialog(
-                    title=dlg_message, default_dir=last_directory, wildcard=WILDCARD_SAVE_3D
+                    title=dlg_message,
+                    default_dir=last_directory,
+                    wildcard=WILDCARD_SAVE_3D,
                 )
                 conversion_radio_box = wx.RadioBox(
                     dlg,
@@ -381,7 +392,8 @@ class InnerTaskPanel(wx.Panel):
         else:
             dlg = wx.MessageDialog(
                 None,
-                _("You need to create a surface and make it ") + _("visible before exporting it."),
+                _("You need to create a surface and make it ")
+                + _("visible before exporting it."),
                 "InVesalius 3",
                 wx.OK | wx.ICON_INFORMATION,
             )

@@ -19,24 +19,15 @@
 
 import sys
 from abc import ABC, abstractmethod
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    Dict,
-    List,
-    Literal,
-    Optional,
-    Tuple,
-    Union,
-    overload,
-)
+from typing import (TYPE_CHECKING, Any, Callable, Dict, List, Literal,
+                    Optional, Tuple, Union, overload)
 from weakref import WeakMethod
 
 import numpy as np
 import wx
 from typing_extensions import Self
-from vtkmodules.vtkRenderingCore import vtkActor2D, vtkCoordinate, vtkImageMapper
+from vtkmodules.vtkRenderingCore import (vtkActor2D, vtkCoordinate,
+                                         vtkImageMapper)
 
 from invesalius.data import converters
 
@@ -46,8 +37,10 @@ if TYPE_CHECKING:
 
     from invesalius.data.viewer_slice import Viewer as sliceViewer
     from invesalius.data.viewer_volume import Viewer as volumeViewer
-    from invesalius.gui.bitmap_preview_panel import SingleImagePreview as bitmapSingleImagePreview
-    from invesalius.gui.dicom_preview_panel import SingleImagePreview as dicomSingleImagePreview
+    from invesalius.gui.bitmap_preview_panel import \
+        SingleImagePreview as bitmapSingleImagePreview
+    from invesalius.gui.dicom_preview_panel import \
+        SingleImagePreview as dicomSingleImagePreview
     from typings.utils import CanvasElement, CanvasObjects
 
 
@@ -141,7 +134,9 @@ class CanvasRendererCTX:
                 self._callback_events[event].pop(n)
                 return
 
-    def propagate_event(self, root: Optional["CanvasObjects"], event: CanvasEvent) -> None:
+    def propagate_event(
+        self, root: Optional["CanvasObjects"], event: CanvasEvent
+    ) -> None:
         print("propagating", event.event_name, "from", root)
         node = root
         callback_name = f"on_{event.event_name}"
@@ -510,7 +505,9 @@ class CanvasRendererCTX:
 
         return arr
 
-    def calc_text_size(self, text: str, font: Optional[wx.Font] = None) -> Tuple[int, int]:
+    def calc_text_size(
+        self, text: str, font: Optional[wx.Font] = None
+    ) -> Tuple[int, int]:
         """
         Given an unicode text and a font returns the width and height of the
         rendered text in pixels.
@@ -868,7 +865,9 @@ class CanvasRendererCTX:
             ea = a0
 
         path = gc.CreatePath()
-        path.AddArc(float(c[0]), float(c[1]), float(min(s0, s1)), float(sa), float(ea), True)
+        path.AddArc(
+            float(c[0]), float(c[1]), float(min(s0, s1)), float(sa), float(ea), True
+        )
         gc.StrokePath(path)
         self._drawn = True
 
@@ -981,11 +980,16 @@ class TextBox(CanvasHandlerBase):
             px, py = self._3d_to_2d(canvas.evt_renderer, self.position)
 
             x, y, w, h = canvas.draw_text_box(
-                self.text, (px, py), txt_colour=self.text_colour, bg_colour=self.box_colour
+                self.text,
+                (px, py),
+                txt_colour=self.text_colour,
+                bg_colour=self.box_colour,
             )
             if self._highlight:
                 rw, rh = canvas.evt_renderer.GetSize()
-                canvas.draw_rectangle((px, py - h), w, h, (255, 0, 0, 25), (255, 0, 0, 25))
+                canvas.draw_rectangle(
+                    (px, py - h), w, h, (255, 0, 0, 25), (255, 0, 0, 25)
+                )
 
             self.bbox = (x, y - h, x + w, y)
 
@@ -999,7 +1003,8 @@ class TextBox(CanvasHandlerBase):
         mx, my = evt.position
         x, y, z = evt.viewer.get_coordinate_cursor(mx, my)
         self.position = [
-            i - j + k for (i, j, k) in zip((x, y, z), self._last_position, self.position)
+            i - j + k
+            for (i, j, k) in zip((x, y, z), self._last_position, self.position)
         ]
 
         self._last_position = (x, y, z)
@@ -1097,7 +1102,9 @@ class Polygon(CanvasHandlerBase):
         self.children = []
 
         if points is None:
-            self.points: List[Union[Tuple[float, float], Tuple[float, float, float]]] = []
+            self.points: List[
+                Union[Tuple[float, float], Tuple[float, float, float]]
+            ] = []
         else:
             self.points = points
 
@@ -1135,7 +1142,12 @@ class Polygon(CanvasHandlerBase):
             else:
                 points = self.points
             self._path = canvas.draw_polygon(
-                points, self.fill, self.closed, self.line_colour, self.fill_colour, self.width
+                points,
+                self.fill,
+                self.closed,
+                self.line_colour,
+                self.fill_colour,
+                self.width,
             )
 
             #  if self.closed:
@@ -1149,8 +1161,12 @@ class Polygon(CanvasHandlerBase):
         #  for handler in self.handlers:
         #  handler.draw_to_canvas(gc, canvas)
 
-    def append_point(self, point: Union[Tuple[float, float], Tuple[float, float]]) -> None:
-        handler = CircleHandler(self, point, is_3d=self.is_3d, fill_colour=(255, 0, 0, 255))
+    def append_point(
+        self, point: Union[Tuple[float, float], Tuple[float, float]]
+    ) -> None:
+        handler = CircleHandler(
+            self, point, is_3d=self.is_3d, fill_colour=(255, 0, 0, 255)
+        )
         handler.layer = 1
         self.add_child(handler)
         #  handler.on_move(self.on_move_point)
@@ -1222,7 +1238,8 @@ class Polygon(CanvasHandlerBase):
     def convex_hull(
         self, points: List[Tuple[float, float]], merge: bool = True
     ) -> Union[
-        List[Tuple[float, float]], Tuple[List[Tuple[float, float]], List[Tuple[float, float]]]
+        List[Tuple[float, float]],
+        Tuple[List[Tuple[float, float]], List[Tuple[float, float]]],
     ]:
         spoints = sorted(points)
         U: List[Tuple[float, float]] = []
@@ -1256,9 +1273,9 @@ class Polygon(CanvasHandlerBase):
                 j -= 1
             elif j == 0:
                 i += 1
-            elif (U[i + 1][1] - U[i][1]) * (L[j][0] - L[j - 1][0]) > (L[j][1] - L[j - 1][1]) * (
-                U[i + 1][0] - U[i][0]
-            ):
+            elif (U[i + 1][1] - U[i][1]) * (L[j][0] - L[j - 1][0]) > (
+                L[j][1] - L[j - 1][1]
+            ) * (U[i + 1][0] - U[i][0]):
                 i += 1
             else:
                 j -= 1
@@ -1299,9 +1316,13 @@ class Ellipse(CanvasHandlerBase):
         self._interactive = interactive
         self.is_3d = is_3d
 
-        self.handler_1 = CircleHandler(self, self.point1, is_3d=is_3d, fill_colour=(255, 0, 0, 255))
+        self.handler_1 = CircleHandler(
+            self, self.point1, is_3d=is_3d, fill_colour=(255, 0, 0, 255)
+        )
         self.handler_1.layer = 1
-        self.handler_2 = CircleHandler(self, self.point2, is_3d=is_3d, fill_colour=(255, 0, 0, 255))
+        self.handler_2 = CircleHandler(
+            self, self.point2, is_3d=is_3d, fill_colour=(255, 0, 0, 255)
+        )
         self.handler_2.layer = 1
 
         self.add_child(self.handler_1)

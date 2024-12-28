@@ -100,7 +100,9 @@ class MarkerTransformator:
         )
 
         # Move the marker along the scalp tangent by the desired displacement.
-        desired_distance_along_scalp_tangent = np.linalg.norm(displacement_along_scalp_tangent)
+        desired_distance_along_scalp_tangent = np.linalg.norm(
+            displacement_along_scalp_tangent
+        )
 
         distance = None
         scale = 1
@@ -119,7 +121,9 @@ class MarkerTransformator:
                 opposite_side=False,
             )
 
-            distance = np.linalg.norm(np.array(marker.position) - np.array(old_position))
+            distance = np.linalg.norm(
+                np.array(marker.position) - np.array(old_position)
+            )
             scale += 1
 
             # XXX: Avoid infinite loop.
@@ -155,7 +159,9 @@ class MarkerTransformator:
         marker_position = list(marker.position)
         marker_position[1] = -marker_position[1]
 
-        closest_point, _ = self.surface_geometry.GetClosestPointOnSurface("scalp", marker_position)
+        closest_point, _ = self.surface_geometry.GetClosestPointOnSurface(
+            "scalp", marker_position
+        )
 
         distance = np.linalg.norm(np.array(marker_position) - np.array(closest_point))
 
@@ -182,8 +188,8 @@ class MarkerTransformator:
             new_position = np.array(closest_point) + 1.1 * direction_vector
 
             # Re-compute the closest point and normal, but now for the new position.
-            closest_point, closest_normal = self.surface_geometry.GetClosestPointOnSurface(
-                "scalp", new_position
+            closest_point, closest_normal = (
+                self.surface_geometry.GetClosestPointOnSurface("scalp", new_position)
             )
 
         # The reference direction vector that we want to align the normal to.
@@ -244,7 +250,9 @@ class MarkerTransformator:
         The marker can only be moved if the navigation is off, except for the '+' and '-' keys.
         """
         marker = (
-            self.target if self.is_target_mode and self.target is not None else self.selected_marker
+            self.target
+            if self.is_target_mode and self.target is not None
+            else self.selected_marker
         )
 
         # Return early if no marker is selected.
@@ -280,7 +288,10 @@ class MarkerTransformator:
             direction = [0, 0, 0, 0, 0, -15]
             marker.z_rotation -= 15
 
-        elif keycode == const.ROTATE_MARKER_COUNTERCLOCKWISE_15 and not self.is_navigating:
+        elif (
+            keycode == const.ROTATE_MARKER_COUNTERCLOCKWISE_15
+            and not self.is_navigating
+        ):
             stay_on_scalp = False
             direction = [0, 0, 0, 0, 0, 15]
             marker.z_rotation += 15

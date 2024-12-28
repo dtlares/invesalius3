@@ -75,7 +75,8 @@ def InstallLanguage(language: str) -> Callable[[str], str]:
     file_path = os.path.split(__file__)[0]
     language_dir = LOCALE_DIR
     if hasattr(sys, "frozen") and (
-        getattr(sys, "frozen") == "windows_exe" or getattr(sys, "frozen") == "console_exe"
+        getattr(sys, "frozen") == "windows_exe"
+        or getattr(sys, "frozen") == "console_exe"
     ):
         abs_file_path = os.path.abspath(file_path + os.sep + "..")
         abs_file_path = os.path.abspath(abs_file_path + os.sep + ".." + os.sep + "..")

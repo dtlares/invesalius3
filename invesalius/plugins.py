@@ -33,7 +33,9 @@ if TYPE_CHECKING:
     import os
 
 
-def import_source(module_name: str, module_file_path: "str | bytes | os.PathLike") -> ModuleType:
+def import_source(
+    module_name: str, module_file_path: "str | bytes | os.PathLike"
+) -> ModuleType:
     module_spec = importlib.util.spec_from_file_location(module_name, module_file_path)
     if module_spec is None:
         raise ImportError(f"No module named {module_name}")
@@ -55,9 +57,13 @@ class PluginManager:
     def find_plugins(self) -> None:
         self.plugins = {}
         for p in chain(
-            glob.glob(str(inv_paths.PLUGIN_DIRECTORY.joinpath("**/plugin.json")), recursive=True),
             glob.glob(
-                str(inv_paths.USER_PLUGINS_DIRECTORY.joinpath("**/plugin.json")), recursive=True
+                str(inv_paths.PLUGIN_DIRECTORY.joinpath("**/plugin.json")),
+                recursive=True,
+            ),
+            glob.glob(
+                str(inv_paths.USER_PLUGINS_DIRECTORY.joinpath("**/plugin.json")),
+                recursive=True,
             ),
         ):
             try:

@@ -47,7 +47,9 @@ actionDictionary00 = {
 class ConsoleLogHandler(logging.StreamHandler):
     def __init__(self, textctrl):
         logging.StreamHandler.__init__(self)
-        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        formatter = logging.Formatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
         self.setFormatter(formatter)
         self.textctrl = textctrl
 
@@ -237,7 +239,9 @@ class InvesaliusLogger:  # metaclass=Singleton):
                             & os.path.exists(logging_file)
                             & (
                                 os.path.normcase(os.path.abspath(logging_file))
-                                == os.path.normcase(os.path.abspath(handler.baseFilename))
+                                == os.path.normcase(
+                                    os.path.abspath(handler.baseFilename)
+                                )
                             )
                         ):
                             # os.path.samefile(logging_file,handler.baseFilename): #it doesn't seem to work
@@ -249,14 +253,20 @@ class InvesaliusLogger:  # metaclass=Singleton):
                             msg = f"Closing current log file {handler.baseFilename} as new log file {logging_file} requested."
                             self._logger.info(msg)
                             self._logger.removeHandler(handler)
-                            msg = f"Removed existing FILE handler {handler.baseFilename}"
+                            msg = (
+                                f"Removed existing FILE handler {handler.baseFilename}"
+                            )
                             print(msg)
                             self._logger.info(msg)
                 if addFileHandler:
                     if os.path.exists(logging_file) & append_log_file:
-                        fh = logging.FileHandler(os.path.abspath(logging_file), "a", encoding=None)
+                        fh = logging.FileHandler(
+                            os.path.abspath(logging_file), "a", encoding=None
+                        )
                     else:
-                        fh = logging.FileHandler(os.path.abspath(logging_file), "w", encoding=None)
+                        fh = logging.FileHandler(
+                            os.path.abspath(logging_file), "w", encoding=None
+                        )
 
                     fh.setFormatter(formatter)
                     self._logger.addHandler(fh)
@@ -315,7 +325,9 @@ def error_handling_decorator01(func: Callable[[str], None]):
             # print(f"{func.__name__} called")
             func(*args, **kwargs)
         except Exception as e:
-            invLogger._logger.error(f"Exception {e} encountered in Function {func.__name__} call")
+            invLogger._logger.error(
+                f"Exception {e} encountered in Function {func.__name__} call"
+            )
             raise
 
     return wrapper_function

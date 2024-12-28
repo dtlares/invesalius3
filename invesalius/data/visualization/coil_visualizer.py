@@ -42,7 +42,9 @@ class CoilVisualizer:
         self.target_coil_actor = None
 
         # The assembly for showing the vector field relative to the coil in the volume viewer.
-        self.vector_field_assembly = self.vector_field_visualizer.CreateVectorFieldAssembly()
+        self.vector_field_assembly = (
+            self.vector_field_visualizer.CreateVectorFieldAssembly()
+        )
 
         # Add the vector field assembly to the renderer, but make it invisible until the coil is shown.
         self.renderer.AddActor(self.vector_field_assembly)
@@ -83,7 +85,9 @@ class CoilVisualizer:
         Update the vector field assembly to reflect the current vector field.
         """
         # Create a new vector field assembly.
-        new_vector_field_assembly = self.vector_field_visualizer.CreateVectorFieldAssembly()
+        new_vector_field_assembly = (
+            self.vector_field_visualizer.CreateVectorFieldAssembly()
+        )
 
         # Replace the old vector field assembly with the new one.
         self.actor_factory.ReplaceActor(
@@ -104,7 +108,9 @@ class CoilVisualizer:
 
         # Set the color of the target coil based on whether the coil is at the target or not.
         target_coil_color = (
-            vtk_colors.GetColor3d("Green") if state else vtk_colors.GetColor3d("DarkOrange")
+            vtk_colors.GetColor3d("Green")
+            if state
+            else vtk_colors.GetColor3d("DarkOrange")
         )
 
         # Set the color of both target coil (representing the target) and the coil center (representing the actual coil).
@@ -122,16 +128,22 @@ class CoilVisualizer:
         if coil_name is None:  # Show/hide all coils
             for coil in self.coils.values():
                 coil["actor"].SetVisibility(state)
-                coil["center_actor"].SetVisibility(True)  # Always show the center donut actor
+                coil["center_actor"].SetVisibility(
+                    True
+                )  # Always show the center donut actor
 
         elif (coil := self.coils.get(coil_name, None)) is not None:
             # Just toggle the visibility when dealing with specific coils
             new_state = not coil["actor"].GetVisibility()
             coil["actor"].SetVisibility(new_state)
-            coil["center_actor"].SetVisibility(True)  # Always show the center donut actor
+            coil["center_actor"].SetVisibility(
+                True
+            )  # Always show the center donut actor
 
             # If all coils are hidden/shown, update the color of Show-coil button
-            coils_visible = [coil["actor"].GetVisibility() for coil in self.coils.values()]
+            coils_visible = [
+                coil["actor"].GetVisibility() for coil in self.coils.values()
+            ]
             if not any(coils_visible):  # all coils are hidden
                 Publisher.sendMessage("Press show-coil button", pressed=False)
             elif all(coils_visible):  # all coils are shown
@@ -139,7 +151,9 @@ class CoilVisualizer:
 
         if self.target_coil_actor is not None:
             self.target_coil_actor.SetVisibility(state)
-        self.vector_field_assembly.SetVisibility(state)  # LUKATODO: Keep this hidden for now
+        self.vector_field_assembly.SetVisibility(
+            state
+        )  # LUKATODO: Keep this hidden for now
 
         if not self.is_navigating:
             Publisher.sendMessage("Render volume viewer")
@@ -185,7 +199,9 @@ class CoilVisualizer:
 
         self.target_coil_actor = vtk.vtkActor()
         self.target_coil_actor.SetMapper(obj_mapper)
-        self.target_coil_actor.GetProperty().SetDiffuseColor(vtk_colors.GetColor3d("DarkOrange"))
+        self.target_coil_actor.GetProperty().SetDiffuseColor(
+            vtk_colors.GetColor3d("DarkOrange")
+        )
         self.target_coil_actor.GetProperty().SetSpecular(0.5)
         self.target_coil_actor.GetProperty().SetSpecularPower(10)
         self.target_coil_actor.GetProperty().SetOpacity(0.3)

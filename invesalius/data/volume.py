@@ -29,18 +29,13 @@ from vtkmodules.vtkImagingCore import vtkImageFlip, vtkImageShiftScale
 from vtkmodules.vtkImagingGeneral import vtkImageConvolve
 from vtkmodules.vtkImagingStatistics import vtkImageAccumulate
 from vtkmodules.vtkInteractionWidgets import vtkImagePlaneWidget
-from vtkmodules.vtkRenderingCore import (
-    vtkActor,
-    vtkColorTransferFunction,
-    vtkPolyDataMapper,
-    vtkVolume,
-    vtkVolumeProperty,
-)
-from vtkmodules.vtkRenderingVolume import (
-    vtkFixedPointVolumeRayCastMapper,
-    vtkGPUVolumeRayCastMapper,
-)
-from vtkmodules.vtkRenderingVolumeOpenGL2 import vtkOpenGLGPUVolumeRayCastMapper
+from vtkmodules.vtkRenderingCore import (vtkActor, vtkColorTransferFunction,
+                                         vtkPolyDataMapper, vtkVolume,
+                                         vtkVolumeProperty)
+from vtkmodules.vtkRenderingVolume import (vtkFixedPointVolumeRayCastMapper,
+                                           vtkGPUVolumeRayCastMapper)
+from vtkmodules.vtkRenderingVolumeOpenGL2 import \
+    vtkOpenGLGPUVolumeRayCastMapper
 
 import invesalius.constants as const
 import invesalius.data.converters as converters
@@ -138,7 +133,9 @@ class Volume:
         )
         Publisher.subscribe(self.OnEnableTool, "Enable raycasting tool")
         Publisher.subscribe(self.OnCloseProject, "Close project data")
-        Publisher.subscribe(self.ChangeBackgroundColour, "Change volume viewer background colour")
+        Publisher.subscribe(
+            self.ChangeBackgroundColour, "Change volume viewer background colour"
+        )
 
         Publisher.subscribe(self.ResetRayCasting, "Reset Raycasting")
 
@@ -206,7 +203,9 @@ class Volume:
             Publisher.sendMessage("Render volume viewer")
         else:
             print("Volume doesnt exit")
-            Publisher.sendMessage("Load raycasting preset", preset_name=const.RAYCASTING_LABEL)
+            Publisher.sendMessage(
+                "Load raycasting preset", preset_name=const.RAYCASTING_LABEL
+            )
             self.LoadConfig()
             self.LoadVolume()
             self.exist = 1
@@ -229,7 +228,9 @@ class Volume:
                 self.exist = 1
 
             colour = self.GetBackgroundColour()
-            Publisher.sendMessage("Change volume viewer background colour", colour=colour)
+            Publisher.sendMessage(
+                "Change volume viewer background colour", colour=colour
+            )
             Publisher.sendMessage("Change volume viewer gui colour", colour=colour)
         else:
             Publisher.sendMessage("Unload volume", volume=self.volume)
@@ -365,7 +366,9 @@ class Volume:
                 b = color_table[i][j]["blue"]
 
                 colors.append((gray_level, r, g, b))
-                color_transfer.AddRGBPoint(self.TranslateScale(scale, gray_level), r, g, b)
+                color_transfer.AddRGBPoint(
+                    self.TranslateScale(scale, gray_level), r, g, b
+                )
         self.color_transfer = color_transfer
 
     def Create8bColorTable(self, scale):
@@ -377,7 +380,9 @@ class Volume:
         color_preset = self.config["CLUT"]
         if color_preset != "No CLUT":
             path = os.path.join(
-                inv_paths.RAYCASTING_PRESETS_DIRECTORY, "color_list", color_preset + ".plist"
+                inv_paths.RAYCASTING_PRESETS_DIRECTORY,
+                "color_list",
+                color_preset + ".plist",
             )
             with open(path, "rb") as f:
                 p = plistlib.load(f, fmt=plistlib.FMT_XML)
@@ -431,7 +436,9 @@ class Volume:
                 # else:
                 opacity = lopacity["y"]
                 opacities.append((gray_level, opacity))
-                opacity_transfer_func.AddPoint(self.TranslateScale(scale, gray_level), opacity)
+                opacity_transfer_func.AddPoint(
+                    self.TranslateScale(scale, gray_level), opacity
+                )
         self.opacity_transfer_func = opacity_transfer_func
 
     def Create8bOpacityTable(self, scale):
@@ -489,9 +496,9 @@ class Volume:
         self.volume_properties.SetSpecularPower(shading["specularPower"])
 
     def SetTypeRaycasting(self):
-        if self.volume_mapper.IsA("vtkFixedPointVolumeRayCastMapper") or self.volume_mapper.IsA(
-            "vtkGPUVolumeRayCastMapper"
-        ):
+        if self.volume_mapper.IsA(
+            "vtkFixedPointVolumeRayCastMapper"
+        ) or self.volume_mapper.IsA("vtkGPUVolumeRayCastMapper"):
             if self.config.get("MIP", False):
                 self.volume_mapper.SetBlendModeToMaximumIntensity()
             else:
@@ -568,7 +575,8 @@ class Volume:
 
         flip_ref = weakref.ref(flip)
         flip_ref().AddObserver(
-            "ProgressEvent", lambda obj, evt: update_progress(flip_ref(), "Rendering...")
+            "ProgressEvent",
+            lambda obj, evt: update_progress(flip_ref(), "Rendering..."),
         )
         flip.Update()
         image = flip.GetOutput()
@@ -583,7 +591,8 @@ class Volume:
         #  cast.ReleaseDataFlagOn()
         cast_ref = weakref.ref(cast)
         cast_ref().AddObserver(
-            "ProgressEvent", lambda obj, evt: update_progress(cast_ref(), "Rendering...")
+            "ProgressEvent",
+            lambda obj, evt: update_progress(cast_ref(), "Rendering..."),
         )
         cast.Update()
         image2 = cast
@@ -662,7 +671,11 @@ class Volume:
             self.plane.SetVolumeMapper(volume_mapper)
 
         Publisher.sendMessage(
-            "Load volume into viewer", volume=volume, colour=colour, ww=self.ww, wl=self.wl
+            "Load volume into viewer",
+            volume=volume,
+            colour=colour,
+            ww=self.ww,
+            wl=self.wl,
         )
 
         del flip
@@ -691,7 +704,9 @@ class Volume:
         accumulate.SetComponentOrigin(image.GetScalarRange()[0], 0, 0)
         #  accumulate.ReleaseDataFlagOn()
         accumulate.Update()
-        n_image = numpy_support.vtk_to_numpy(accumulate.GetOutput().GetPointData().GetScalars())
+        n_image = numpy_support.vtk_to_numpy(
+            accumulate.GetOutput().GetPointData().GetScalars()
+        )
         del accumulate
         init, end = image.GetScalarRange()
         Publisher.sendMessage("Load histogram", histogram=n_image, init=init, end=end)
@@ -883,7 +898,9 @@ class CutPlane:
         Publisher.sendMessage("Render volume viewer")
 
     def DestroyObjs(self):
-        Publisher.sendMessage("Remove surface actor from viewer", actor=self.plane_actor)
+        Publisher.sendMessage(
+            "Remove surface actor from viewer", actor=self.plane_actor
+        )
         self.Disable()
         del self.plane_widget
         del self.plane_source

@@ -66,7 +66,9 @@ class TaskPanel(wx.Panel):
         inner_panel = InnerTaskPanel(self, navigation)
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add(inner_panel, 1, wx.EXPAND | wx.GROW | wx.BOTTOM | wx.RIGHT | wx.LEFT, 7)
+        sizer.Add(
+            inner_panel, 1, wx.EXPAND | wx.GROW | wx.BOTTOM | wx.RIGHT | wx.LEFT, 7
+        )
         sizer.Fit(self)
 
         self.SetSizer(sizer)
@@ -97,7 +99,9 @@ class InnerTaskPanel(wx.Panel):
         enable_efield = wx.CheckBox(self, -1, _("Enable E-field"))
         enable_efield.SetValue(False)
         enable_efield.Enable(True)
-        enable_efield.Bind(wx.EVT_CHECKBOX, partial(self.OnEnableEfield, ctrl=enable_efield))
+        enable_efield.Bind(
+            wx.EVT_CHECKBOX, partial(self.OnEnableEfield, ctrl=enable_efield)
+        )
         self.enable_efield = enable_efield
 
         # plot_vectors = wx.CheckBox(self, -1, _('Plot Efield vectors'))
@@ -109,28 +113,32 @@ class InnerTaskPanel(wx.Panel):
         show_area.SetValue(False)
         show_area.Enable(True)
         show_area.Bind(
-            wx.EVT_CHECKBOX, partial(self.OnEnableShowAreaAboveThreshold, ctrl=show_area)
+            wx.EVT_CHECKBOX,
+            partial(self.OnEnableShowAreaAboveThreshold, ctrl=show_area),
         )
 
         efield_tools = wx.CheckBox(self, -1, _("Enable Efield targeting tools"))
         efield_tools.SetValue(False)
         efield_tools.Enable(True)
         efield_tools.Bind(
-            wx.EVT_CHECKBOX, partial(self.OnEnableEfieldTargetingTools, ctrl=efield_tools)
+            wx.EVT_CHECKBOX,
+            partial(self.OnEnableEfieldTargetingTools, ctrl=efield_tools),
         )
 
         efield_cortex_markers = wx.CheckBox(self, -1, _("View cortex Markers"))
         efield_cortex_markers.SetValue(True)
         efield_cortex_markers.Enable(True)
         efield_cortex_markers.Bind(
-            wx.EVT_CHECKBOX, partial(self.OnViewCortexMarkers, ctrl=efield_cortex_markers)
+            wx.EVT_CHECKBOX,
+            partial(self.OnViewCortexMarkers, ctrl=efield_cortex_markers),
         )
 
         efield_save_automatically = wx.CheckBox(self, -1, _("Save Automatically"))
         efield_save_automatically.SetValue(False)
         efield_save_automatically.Enable(True)
         efield_save_automatically.Bind(
-            wx.EVT_CHECKBOX, partial(self.OnSaveEfieldAutomatically, ctrl=efield_save_automatically)
+            wx.EVT_CHECKBOX,
+            partial(self.OnSaveEfieldAutomatically, ctrl=efield_save_automatically),
         )
 
         tooltip2 = _("Load Brain Json config")
@@ -146,7 +154,9 @@ class InnerTaskPanel(wx.Panel):
         self.btn_save.Enable(False)
 
         tooltip3 = _("Save All Efield")
-        self.btn_all_save = wx.Button(self, -1, _("Save All Efield"), size=wx.Size(80, -1))
+        self.btn_all_save = wx.Button(
+            self, -1, _("Save All Efield"), size=wx.Size(80, -1)
+        )
         self.btn_all_save.SetToolTip(tooltip3)
         self.btn_all_save.Bind(wx.EVT_BUTTON, self.OnSaveAllDataEfield)
         self.btn_all_save.Enable(False)
@@ -164,19 +174,31 @@ class InnerTaskPanel(wx.Panel):
         spin_threshold.Enable(True)
         spin_threshold.SetRange(0.1, 1)
         spin_threshold.SetValue(const.EFIELD_MAX_RANGE_SCALE)
-        spin_threshold.Bind(wx.EVT_TEXT, partial(self.OnSelectThreshold, ctrl=spin_threshold))
-        spin_threshold.Bind(wx.EVT_SPINCTRL, partial(self.OnSelectThreshold, ctrl=spin_threshold))
+        spin_threshold.Bind(
+            wx.EVT_TEXT, partial(self.OnSelectThreshold, ctrl=spin_threshold)
+        )
+        spin_threshold.Bind(
+            wx.EVT_SPINCTRL, partial(self.OnSelectThreshold, ctrl=spin_threshold)
+        )
 
         text_ROI_size = wx.StaticText(self, -1, _("ROI size:"))
         spin_ROI_size = wx.SpinCtrlDouble(self, -1, "", size=wx.Size(50, 23), inc=0.01)
         spin_ROI_size.Enable(True)
         spin_ROI_size.SetValue(const.EFIELD_ROI_SIZE)
-        spin_ROI_size.Bind(wx.EVT_TEXT, partial(self.OnSelectROISize, ctrl=spin_ROI_size))
-        spin_ROI_size.Bind(wx.EVT_SPINCTRL, partial(self.OnSelectROISize, ctrl=spin_ROI_size))
+        spin_ROI_size.Bind(
+            wx.EVT_TEXT, partial(self.OnSelectROISize, ctrl=spin_ROI_size)
+        )
+        spin_ROI_size.Bind(
+            wx.EVT_SPINCTRL, partial(self.OnSelectROISize, ctrl=spin_ROI_size)
+        )
 
         combo_surface_name_title = wx.StaticText(self, -1, _("Change coil:"))
         self.combo_change_coil = wx.ComboBox(
-            self, -1, size=(100, 23), pos=(25, 20), style=wx.CB_DROPDOWN | wx.CB_READONLY
+            self,
+            -1,
+            size=(100, 23),
+            pos=(25, 20),
+            style=wx.CB_DROPDOWN | wx.CB_READONLY,
         )
         # combo_surface_name.SetSelection(0)
         self.combo_change_coil.Bind(wx.EVT_COMBOBOX_DROPDOWN, self.OnComboCoilNameClic)
@@ -186,38 +208,50 @@ class InnerTaskPanel(wx.Panel):
 
         value = str(0)
         tooltip = _("dt(\u03bc s)")
-        self.input_dt = wx.TextCtrl(self, value=str(60), size=wx.Size(60, -1), style=wx.TE_CENTRE)
+        self.input_dt = wx.TextCtrl(
+            self, value=str(60), size=wx.Size(60, -1), style=wx.TE_CENTRE
+        )
         self.input_dt.SetFont(wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.BOLD))
         self.input_dt.SetBackgroundColour("WHITE")
         self.input_dt.SetEditable(1)
         self.input_dt.SetToolTip(tooltip)
 
         tooltip = _("dI")
-        self.input_coil1 = wx.TextCtrl(self, value=value, size=wx.Size(60, -1), style=wx.TE_CENTRE)
+        self.input_coil1 = wx.TextCtrl(
+            self, value=value, size=wx.Size(60, -1), style=wx.TE_CENTRE
+        )
         self.input_coil1.SetFont(wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.BOLD))
         self.input_coil1.SetBackgroundColour("WHITE")
         self.input_coil1.SetEditable(1)
         self.input_coil1.SetToolTip(tooltip)
 
-        self.input_coil2 = wx.TextCtrl(self, value=value, size=wx.Size(60, -1), style=wx.TE_CENTRE)
+        self.input_coil2 = wx.TextCtrl(
+            self, value=value, size=wx.Size(60, -1), style=wx.TE_CENTRE
+        )
         self.input_coil2.SetFont(wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.BOLD))
         self.input_coil2.SetBackgroundColour("WHITE")
         self.input_coil2.SetEditable(1)
         self.input_coil2.SetToolTip(tooltip)
 
-        self.input_coil3 = wx.TextCtrl(self, value=value, size=wx.Size(60, -1), style=wx.TE_CENTRE)
+        self.input_coil3 = wx.TextCtrl(
+            self, value=value, size=wx.Size(60, -1), style=wx.TE_CENTRE
+        )
         self.input_coil3.SetFont(wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.BOLD))
         self.input_coil3.SetBackgroundColour("WHITE")
         self.input_coil3.SetEditable(1)
         self.input_coil3.SetToolTip(tooltip)
 
-        self.input_coil4 = wx.TextCtrl(self, value=value, size=wx.Size(60, -1), style=wx.TE_CENTRE)
+        self.input_coil4 = wx.TextCtrl(
+            self, value=value, size=wx.Size(60, -1), style=wx.TE_CENTRE
+        )
         self.input_coil4.SetFont(wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.BOLD))
         self.input_coil4.SetBackgroundColour("WHITE")
         self.input_coil4.SetEditable(1)
         self.input_coil4.SetToolTip(tooltip)
 
-        self.input_coil5 = wx.TextCtrl(self, value=value, size=wx.Size(60, -1), style=wx.TE_CENTRE)
+        self.input_coil5 = wx.TextCtrl(
+            self, value=value, size=wx.Size(60, -1), style=wx.TE_CENTRE
+        )
         self.input_coil5.SetFont(wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.BOLD))
         self.input_coil5.SetBackgroundColour("WHITE")
         self.input_coil5.SetEditable(1)
@@ -225,14 +259,18 @@ class InnerTaskPanel(wx.Panel):
 
         tooltip = _("mtms coords")
         text_input_coord = wx.StaticText(self, -1, _("mtms coords:"))
-        self.input_coord = wx.TextCtrl(self, value=value, size=wx.Size(60, -1), style=wx.TE_CENTRE)
+        self.input_coord = wx.TextCtrl(
+            self, value=value, size=wx.Size(60, -1), style=wx.TE_CENTRE
+        )
         self.input_coord.SetFont(wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.BOLD))
         self.input_coord.SetBackgroundColour("WHITE")
         self.input_coord.SetEditable(1)
         self.input_coord.SetToolTip(tooltip)
 
         tooltip = _("Enter mtms coord")
-        btn_enter_mtms_coord = wx.Button(self, -1, _("Enter mtms coord"), size=wx.Size(80, -1))
+        btn_enter_mtms_coord = wx.Button(
+            self, -1, _("Enter mtms coord"), size=wx.Size(80, -1)
+        )
         btn_enter_mtms_coord.SetToolTip(tooltip)
         btn_enter_mtms_coord.Bind(wx.EVT_BUTTON, self.OnEnterMtmsCoords)
         btn_enter_mtms_coord.Enable(True)
@@ -359,10 +397,16 @@ class InnerTaskPanel(wx.Panel):
         filename = dlg.LoadConfigEfield()
         if filename:
             convert_to_inv = dlg.ImportMeshCoordSystem()
-            Publisher.sendMessage("Update status in GUI", value=50, label="Loading E-field...")
-            Publisher.sendMessage("Update convert_to_inv flag", convert_to_inv=convert_to_inv)
             Publisher.sendMessage(
-                "Read json config file for efield", filename=filename, convert_to_inv=convert_to_inv
+                "Update status in GUI", value=50, label="Loading E-field..."
+            )
+            Publisher.sendMessage(
+                "Update convert_to_inv flag", convert_to_inv=convert_to_inv
+            )
+            Publisher.sendMessage(
+                "Read json config file for efield",
+                filename=filename,
+                convert_to_inv=convert_to_inv,
             )
             self.e_field_brain = brain.E_field_brain(self.e_field_mesh)
             self.Init_efield()
@@ -401,7 +445,9 @@ class InnerTaskPanel(wx.Panel):
                     self.enable_efield.Enable(False)
                     self.e_field_loaded = False
                     return
-            Publisher.sendMessage("Initialize E-field brain", e_field_brain=self.e_field_brain)
+            Publisher.sendMessage(
+                "Initialize E-field brain", e_field_brain=self.e_field_brain
+            )
 
             Publisher.sendMessage("Initialize color array")
             self.e_field_loaded = True
@@ -442,7 +488,9 @@ class InnerTaskPanel(wx.Panel):
         self.combo_change_coil.Clear()
         if self.multilocus_coil is not None:
             for elements in range(len(self.multilocus_coil)):
-                coil_name = self.multilocus_coil[elements].split("/")[-1].split(".bin")[0]
+                coil_name = (
+                    self.multilocus_coil[elements].split("/")[-1].split(".bin")[0]
+                )
                 self.combo_change_coil.Insert(coil_name, elements)
 
     def OnComboCoil(self, evt):
@@ -487,7 +535,9 @@ class InnerTaskPanel(wx.Panel):
         self.surface_index = surface_index_cortex
         Publisher.sendMessage("Get Actor", surface_index=self.surface_index)
 
-    def OnGetEfieldPaths(self, path_meshes, cortex_file, meshes_file, coil, ci, co, dIperdt_list):
+    def OnGetEfieldPaths(
+        self, path_meshes, cortex_file, meshes_file, coil, ci, co, dIperdt_list
+    ):
         self.path_meshes = path_meshes
         self.cortex_file = cortex_file
         self.meshes_file = meshes_file
@@ -513,8 +563,12 @@ class InnerTaskPanel(wx.Panel):
 
         proj = prj.Project()
         timestamp = time.localtime(time.time())
-        stamp_date = f"{timestamp.tm_year:0>4d}{timestamp.tm_mon:0>2d}{timestamp.tm_mday:0>2d}"
-        stamp_time = f"{timestamp.tm_hour:0>2d}{timestamp.tm_min:0>2d}{timestamp.tm_sec:0>2d}"
+        stamp_date = (
+            f"{timestamp.tm_year:0>4d}{timestamp.tm_mon:0>2d}{timestamp.tm_mday:0>2d}"
+        )
+        stamp_time = (
+            f"{timestamp.tm_hour:0>2d}{timestamp.tm_min:0>2d}{timestamp.tm_sec:0>2d}"
+        )
         sep = "-"
         if self.path_meshes is None:
             import os
@@ -558,7 +612,14 @@ class InnerTaskPanel(wx.Panel):
                 current_folder_path = os.getcwd()
             else:
                 current_folder_path = self.path_meshes
-            parts = [current_folder_path, "/", stamp_date, stamp_time, proj.name, "Efield"]
+            parts = [
+                current_folder_path,
+                "/",
+                stamp_date,
+                stamp_time,
+                proj.name,
+                "Efield",
+            ]
             default_filename = sep.join(parts) + ".csv"
 
             filename = dlg.ShowLoadSaveDialog(
@@ -577,7 +638,8 @@ class InnerTaskPanel(wx.Panel):
 
     def SendNeuronavigationApi(self):
         Publisher.sendMessage(
-            "Get Neuronavigation Api", neuronavigation_api=self.navigation.neuronavigation_api
+            "Get Neuronavigation Api",
+            neuronavigation_api=self.navigation.neuronavigation_api,
         )
 
     def GetEfieldDataStatus(self, efield_data_loaded, indexes_saved_list):
@@ -624,4 +686,6 @@ class InnerTaskPanel(wx.Panel):
         self.SenddI(dIs)
 
     def OnReset(self, evt):
-        Publisher.sendMessage("Get targets Ids for mtms", target1_origin=[0, 0], target2=[0, 0])
+        Publisher.sendMessage(
+            "Get targets Ids for mtms", target1_origin=[0, 0], target2=[0, 0]
+        )

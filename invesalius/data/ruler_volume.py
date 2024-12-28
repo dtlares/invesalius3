@@ -135,7 +135,9 @@ class RulerVolume(ABC):
             wl_text.text, wl_text_font
         )  # w, h are in pixels
         if wl_text.position == const.TEXT_POS_LEFT_UP:
-            x, y = const.TEXT_POS_LEFT_DOWN  # x, y are in proportions relative to window size
+            x, y = (
+                const.TEXT_POS_LEFT_DOWN
+            )  # x, y are in proportions relative to window size
         return x, y, w / self.GetWindowSize()[0], h / self.GetWindowSize()[1]
 
     def GetVolumeSize(self):
@@ -149,11 +151,14 @@ class RulerVolume(ABC):
         # initial_rotational_axis = (0, 1, 0)  # y-axis
         bounds = self.viewer_volume.surface.GetBounds()
         bounds_matrix = np.abs(
-            np.array([bounds[0] - bounds[1], bounds[2] - bounds[3], bounds[4] - bounds[5]])
+            np.array(
+                [bounds[0] - bounds[1], bounds[2] - bounds[3], bounds[4] - bounds[5]]
+            )
         )
-        return bounds_matrix[0], bounds_matrix[
-            2
-        ]  # x-axis is the width, z-axis is the height; initially
+        return (
+            bounds_matrix[0],
+            bounds_matrix[2],
+        )  # x-axis is the width, z-axis is the height; initially
 
     def RoundToMultiple(self, number, multiples, floor=True):
         """
@@ -193,7 +198,9 @@ class RulerVolume(ABC):
             pixel_data.SetNumberOfComponents(4)
             pixel_data.SetNumberOfTuples(width * height)
             # TODO: Optimize to only get the pixel data of the area the ruler was drawn instead of the whole window
-            pixel_data = renderer_window.GetRGBAPixelData(0, 0, width - 1, height - 1, vtk.VTK_RGBA)
+            pixel_data = renderer_window.GetRGBAPixelData(
+                0, 0, width - 1, height - 1, vtk.VTK_RGBA
+            )
             # TODO: Create an algorithm to check for a suitable contrasting colour by examining the pixel data
 
     @abstractmethod
@@ -310,10 +317,16 @@ class GenericLeftRulerVolume(RulerVolume):
         ]
         r, g, b = self.colour
         for line in lines:
-            canvas.draw_line(line[0], line[1], colour=(r * 255, g * 255, b * 255, 255), width=1)
-        text_size = self.GetTextSize("{:.{}f} mm".format(ruler_height, decimals), self.font_size)
+            canvas.draw_line(
+                line[0], line[1], colour=(r * 255, g * 255, b * 255, 255), width=1
+            )
+        text_size = self.GetTextSize(
+            "{:.{}f} mm".format(ruler_height, decimals), self.font_size
+        )
         x_text = (
-            2 * ruler_min_x + self.edge_mark * window_size[0] - (text_size[0] * window_size[0])
+            2 * ruler_min_x
+            + self.edge_mark * window_size[0]
+            - (text_size[0] * window_size[0])
         ) / 2
         y_text = (window_size[1] - ruler_height_pixels) / 2 - self.scale_text_padding
         canvas.draw_text(

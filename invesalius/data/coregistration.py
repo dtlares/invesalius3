@@ -101,7 +101,13 @@ def tracker_to_image(m_change, m_probe_ref, r_obj_img, m_obj_raw, s0_dyn):
     """
 
     m_img = m_change @ m_probe_ref
-    r_obj = r_obj_img @ np.linalg.inv(m_obj_raw) @ np.linalg.inv(s0_dyn) @ m_probe_ref @ m_obj_raw
+    r_obj = (
+        r_obj_img
+        @ np.linalg.inv(m_obj_raw)
+        @ np.linalg.inv(s0_dyn)
+        @ m_probe_ref
+        @ m_obj_raw
+    )
     m_img[:3, :3] = r_obj[:3, :3]
     return m_img
 
@@ -142,7 +148,11 @@ def image_to_tracker(m_change, coord_raw, target, icp, obj_data):
     m_trk_flip[2, -1] = -m_trk_flip[2, -1]
     # finds the inverse rotation matrix from invesalius coordinate system to head base in tracker coordinate system
     m_probe_ref = (
-        s0_dyn @ m_obj_raw @ np.linalg.inv(r_obj_img) @ m_target_in_image @ np.linalg.inv(m_obj_raw)
+        s0_dyn
+        @ m_obj_raw
+        @ np.linalg.inv(r_obj_img)
+        @ m_target_in_image
+        @ np.linalg.inv(m_obj_raw)
     )
     m_trk_flip[:3, :3] = m_probe_ref[:3, :3]
 
@@ -298,7 +308,9 @@ def apply_icp(m_img, icp):
     return m_img
 
 
-def ComputeRelativeDistanceToTarget(target_coord=None, img_coord=None, m_target=None, m_img=None):
+def ComputeRelativeDistanceToTarget(
+    target_coord=None, img_coord=None, m_target=None, m_img=None
+):
     if m_target is None:
         m_target = dco.coordinates_to_transformation_matrix(
             position=target_coord[:3],
@@ -379,7 +391,9 @@ class CoordinateCorregistrate(threading.Thread):
         obj_datas = self.obj_datas
 
         corregistrate_object = (
-            corregistrate_object_dynamic if self.ref_mode_id else corregistrate_object_static
+            corregistrate_object_dynamic
+            if self.ref_mode_id
+            else corregistrate_object_static
         )
 
         icp = (self.use_icp, self.m_icp)
@@ -388,7 +402,9 @@ class CoordinateCorregistrate(threading.Thread):
                 if not self.object_at_target_queue.empty():
                     self.target_flag = self.object_at_target_queue.get_nowait()
 
-                coord_raw, marker_visibilities = self.tracker.TrackerCoordinates.GetCoordinates()
+                coord_raw, marker_visibilities = (
+                    self.tracker.TrackerCoordinates.GetCoordinates()
+                )
 
                 coord_probe, m_img_probe = corregistrate_probe(
                     m_change, r_stylus, coord_raw, self.ref_mode_id, icp=icp
@@ -415,7 +431,10 @@ class CoordinateCorregistrate(threading.Thread):
                 #      Ideally, the transformation from the tracker space to the image space (the function
                 #      corregistrate_object_dynamic above) would be encapsulated in a class together with the
                 #      tracker, and then the whole class would be mocked when using the debug tracker.
-                if self.tracker_id == const.DEBUGTRACKAPPROACH and self.target is not None:
+                if (
+                    self.tracker_id == const.DEBUGTRACKAPPROACH
+                    and self.target is not None
+                ):
                     if self.last_coord is None:
                         self.last_coord = np.array(coord)
                     else:
@@ -423,9 +442,15 @@ class CoordinateCorregistrate(threading.Thread):
                         coords[main_coil] = coord
                         self.last_coord = coord
 
-                    angles = [np.radians(coord[3]), np.radians(coord[4]), np.radians(coord[5])]
+                    angles = [
+                        np.radians(coord[3]),
+                        np.radians(coord[4]),
+                        np.radians(coord[5]),
+                    ]
                     translate = coord[0:3]
-                    m_imgs[main_coil] = tr.compose_matrix(angles=angles, translate=translate)
+                    m_imgs[main_coil] = tr.compose_matrix(
+                        angles=angles, translate=translate
+                    )
 
                 self.coord_queue.put_nowait([coords, marker_visibilities, m_imgs])
 

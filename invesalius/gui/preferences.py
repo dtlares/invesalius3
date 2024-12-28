@@ -167,7 +167,9 @@ class VisualizationTab(wx.Panel):
         self.conf["mep_colormap"] = self.conf.get("mep_colormap", "Viridis")
 
         bsizer = wx.StaticBoxSizer(wx.VERTICAL, self, _("3D Visualization"))
-        lbl_inter = wx.StaticText(bsizer.GetStaticBox(), -1, _("Surface Interpolation "))
+        lbl_inter = wx.StaticText(
+            bsizer.GetStaticBox(), -1, _("Surface Interpolation ")
+        )
         rb_inter = self.rb_inter = wx.RadioBox(
             bsizer.GetStaticBox(),
             -1,
@@ -192,7 +194,9 @@ class VisualizationTab(wx.Panel):
         bsizer.Add(rb_rendering, 0, wx.TOP | wx.LEFT | wx.FIXED_MINSIZE, 0)
 
         bsizer_slices = wx.StaticBoxSizer(wx.VERTICAL, self, _("2D Visualization"))
-        lbl_inter_sl = wx.StaticText(bsizer_slices.GetStaticBox(), -1, _("Slice Interpolation "))
+        lbl_inter_sl = wx.StaticText(
+            bsizer_slices.GetStaticBox(), -1, _("Slice Interpolation ")
+        )
         rb_inter_sl = self.rb_inter_sl = wx.RadioBox(
             bsizer_slices.GetStaticBox(),
             -1,
@@ -254,7 +258,10 @@ class VisualizationTab(wx.Panel):
         self.proj = prj.Project()
 
         combo_brain_surface_name = wx.ComboBox(
-            bsizer_mep.GetStaticBox(), -1, size=(210, 23), style=wx.CB_DROPDOWN | wx.CB_READONLY
+            bsizer_mep.GetStaticBox(),
+            -1,
+            size=(210, 23),
+            style=wx.CB_DROPDOWN | wx.CB_READONLY,
         )
         if sys.platform != "win32":
             combo_brain_surface_name.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
@@ -280,7 +287,9 @@ class VisualizationTab(wx.Panel):
         line1.Add(combo_brain_surface_name, 1, wx.ALL | wx.EXPAND | wx.GROW, 7)
         line1.Add(button_colour, 0, wx.ALL | wx.EXPAND | wx.GROW, 7)
 
-        surface_sel_lbl = wx.StaticText(bsizer_mep.GetStaticBox(), -1, _("Brain Surface:"))
+        surface_sel_lbl = wx.StaticText(
+            bsizer_mep.GetStaticBox(), -1, _("Brain Surface:")
+        )
         surface_sel_lbl.SetFont(wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.BOLD))
         surface_sel_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
@@ -289,7 +298,9 @@ class VisualizationTab(wx.Panel):
         surface_sel_sizer.Add(line1, 0, wx.EXPAND | wx.GROW | wx.LEFT | wx.RIGHT, 5)
 
         # Gaussian Radius Line
-        lbl_gaussian_radius = wx.StaticText(bsizer_mep.GetStaticBox(), -1, _("Gaussian Radius:"))
+        lbl_gaussian_radius = wx.StaticText(
+            bsizer_mep.GetStaticBox(), -1, _("Gaussian Radius:")
+        )
         self.spin_gaussian_radius = wx.SpinCtrlDouble(
             bsizer_mep.GetStaticBox(), -1, "", size=wx.Size(64, 23), inc=0.5
         )
@@ -298,16 +309,23 @@ class VisualizationTab(wx.Panel):
         self.spin_gaussian_radius.SetValue(self.conf.get("gaussian_radius"))
 
         self.spin_gaussian_radius.Bind(
-            wx.EVT_TEXT, partial(self.OnSelectGaussianRadius, ctrl=self.spin_gaussian_radius)
+            wx.EVT_TEXT,
+            partial(self.OnSelectGaussianRadius, ctrl=self.spin_gaussian_radius),
         )
         self.spin_gaussian_radius.Bind(
-            wx.EVT_SPINCTRL, partial(self.OnSelectGaussianRadius, ctrl=self.spin_gaussian_radius)
+            wx.EVT_SPINCTRL,
+            partial(self.OnSelectGaussianRadius, ctrl=self.spin_gaussian_radius),
         )
 
         line_gaussian_radius = wx.BoxSizer(wx.HORIZONTAL)
         line_gaussian_radius.AddMany(
             [
-                (lbl_gaussian_radius, 1, wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT | wx.LEFT, 0),
+                (
+                    lbl_gaussian_radius,
+                    1,
+                    wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT | wx.LEFT,
+                    0,
+                ),
                 (self.spin_gaussian_radius, 0, wx.ALL | wx.EXPAND | wx.GROW, 0),
             ]
         )
@@ -323,7 +341,9 @@ class VisualizationTab(wx.Panel):
         self.spin_std_dev.SetRange(0.01, 5.0)
         self.spin_std_dev.SetValue(self.conf.get("gaussian_sharpness"))
 
-        self.spin_std_dev.Bind(wx.EVT_TEXT, partial(self.OnSelectStdDev, ctrl=self.spin_std_dev))
+        self.spin_std_dev.Bind(
+            wx.EVT_TEXT, partial(self.OnSelectStdDev, ctrl=self.spin_std_dev)
+        )
         self.spin_std_dev.Bind(
             wx.EVT_SPINCTRL, partial(self.OnSelectStdDev, ctrl=self.spin_std_dev)
         )
@@ -337,8 +357,12 @@ class VisualizationTab(wx.Panel):
         )
 
         # Dimensions size line
-        lbl_dims_size = wx.StaticText(bsizer_mep.GetStaticBox(), -1, _("Dimensions size:"))
-        self.spin_dims_size = wx.SpinCtrl(bsizer_mep.GetStaticBox(), -1, "", size=wx.Size(64, 23))
+        lbl_dims_size = wx.StaticText(
+            bsizer_mep.GetStaticBox(), -1, _("Dimensions size:")
+        )
+        self.spin_dims_size = wx.SpinCtrl(
+            bsizer_mep.GetStaticBox(), -1, "", size=wx.Size(64, 23)
+        )
         self.spin_dims_size.Enable(1)
         self.spin_dims_size.SetIncrement(5)
         self.spin_dims_size.SetRange(10, 100)
@@ -354,13 +378,20 @@ class VisualizationTab(wx.Panel):
         line_dims_size = wx.BoxSizer(wx.HORIZONTAL)
         line_dims_size.AddMany(
             [
-                (lbl_dims_size, 1, wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT | wx.LEFT, 0),
+                (
+                    lbl_dims_size,
+                    1,
+                    wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT | wx.LEFT,
+                    0,
+                ),
                 (self.spin_dims_size, 0, wx.ALL | wx.EXPAND | wx.GROW, 0),
             ]
         )
 
         # Select Colormap Line
-        lbl_colormap = wx.StaticText(bsizer_mep.GetStaticBox(), -1, _("Select Colormap:"))
+        lbl_colormap = wx.StaticText(
+            bsizer_mep.GetStaticBox(), -1, _("Select Colormap:")
+        )
         lbl_colormap.SetFont(wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.BOLD))
 
         self.combo_thresh = wx.ComboBox(
@@ -372,7 +403,9 @@ class VisualizationTab(wx.Panel):
         )
         self.combo_thresh.Bind(wx.EVT_COMBOBOX, self.OnSelectColormap)
         # by default use the initial value set in the configuration
-        self.combo_thresh.SetSelection(self.colormaps.index(self.conf.get("mep_colormap")))
+        self.combo_thresh.SetSelection(
+            self.colormaps.index(self.conf.get("mep_colormap"))
+        )
         # self.combo_thresh.SetSelection(0)
 
         colors_gradient = self.GenerateColormapColors(
@@ -386,7 +419,12 @@ class VisualizationTab(wx.Panel):
         colormap_gradient_sizer = wx.BoxSizer(wx.HORIZONTAL)
         colormap_gradient_sizer.AddMany(
             [
-                (self.combo_thresh, 0, wx.EXPAND | wx.GROW | wx.LEFT | wx.RIGHT | wx.BOTTOM, 5),
+                (
+                    self.combo_thresh,
+                    0,
+                    wx.EXPAND | wx.GROW | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+                    5,
+                ),
                 (self.gradient, 1, wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, 5),
             ]
         )
@@ -396,7 +434,12 @@ class VisualizationTab(wx.Panel):
         colormap_sizer.AddMany(
             [
                 (lbl_colormap, 0, wx.TOP | wx.BOTTOM | wx.LEFT, 5),
-                (colormap_gradient_sizer, 0, wx.GROW | wx.SHRINK | wx.LEFT | wx.RIGHT, 5),
+                (
+                    colormap_gradient_sizer,
+                    0,
+                    wx.GROW | wx.SHRINK | wx.LEFT | wx.RIGHT,
+                    5,
+                ),
             ]
         )
 
@@ -466,10 +509,12 @@ class VisualizationTab(wx.Panel):
             ["min", "low", "mid", "max"],
         ):
             ctrl[0].Bind(
-                wx.EVT_TEXT, partial(self.OnSelectColormapRange, ctrl=ctrl[0], key=ctrl[1])
+                wx.EVT_TEXT,
+                partial(self.OnSelectColormapRange, ctrl=ctrl[0], key=ctrl[1]),
             )
             ctrl[0].Bind(
-                wx.EVT_SPINCTRL, partial(self.OnSelectColormapRange, ctrl=ctrl[0], key=ctrl[1])
+                wx.EVT_SPINCTRL,
+                partial(self.OnSelectColormapRange, ctrl=ctrl[0], key=ctrl[1]),
             )
 
         colormap_custom.AddMany(
@@ -487,14 +532,36 @@ class VisualizationTab(wx.Panel):
         # centered button reset
         colormap_custom.Add(btn_reset, 0, wx.ALIGN_CENTER | wx.TOP, 15)
 
-        colormap_sizer.Add(colormap_custom, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, 5)
+        colormap_sizer.Add(
+            colormap_custom, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, 5
+        )
         bsizer_mep.AddMany(
             [
-                (surface_sel_sizer, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, 5),
-                (line_gaussian_radius, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, 5),
+                (
+                    surface_sel_sizer,
+                    0,
+                    wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP,
+                    5,
+                ),
+                (
+                    line_gaussian_radius,
+                    0,
+                    wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP,
+                    5,
+                ),
                 (line_std_dev, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, 5),
-                (line_dims_size, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, 5),
-                (colormap_sizer, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, 5),
+                (
+                    line_dims_size,
+                    0,
+                    wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP,
+                    5,
+                ),
+                (
+                    colormap_sizer,
+                    0,
+                    wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP,
+                    5,
+                ),
             ]
         )
 
@@ -512,7 +579,9 @@ class VisualizationTab(wx.Panel):
         self.spin_std_dev.SetValue(self.conf.get("gaussian_sharpness"))
         self.spin_dims_size.SetValue(self.conf.get("dimensions_size"))
 
-        self.combo_thresh.SetSelection(self.colormaps.index(self.conf.get("mep_colormap")))
+        self.combo_thresh.SetSelection(
+            self.colormaps.index(self.conf.get("mep_colormap"))
+        )
         partial(self.OnSelectColormap, event=None, ctrl=self.combo_thresh)
         partial(self.OnSelectColormapRange, event=None, ctrl=self.spin_min, key="min")
 
@@ -553,7 +622,9 @@ class VisualizationTab(wx.Panel):
 
     def OnSelectColormap(self, event=None):
         self.conf["mep_colormap"] = self.colormaps[self.combo_thresh.GetSelection()]
-        colors = self.GenerateColormapColors(self.conf.get("mep_colormap"), self.number_colors)
+        colors = self.GenerateColormapColors(
+            self.conf.get("mep_colormap"), self.number_colors
+        )
 
         # Save the configuration
         self.session.SetConfig("mep_configuration", self.conf)
@@ -596,7 +667,9 @@ class VisualizationTab(wx.Panel):
 
         self.proj = prj.Project()
         surface_index = self.combo_brain_surface_name.GetSelection()
-        Publisher.sendMessage("Show single surface", index=surface_index, visibility=True)
+        Publisher.sendMessage(
+            "Show single surface", index=surface_index, visibility=True
+        )
         Publisher.sendMessage("Get brain surface actor", index=surface_index)
         Publisher.sendMessage("Press motor map button", pressed=True)
 
@@ -630,7 +703,9 @@ class LoggingTab(wx.Panel):
             majorDimension=2,
             style=wx.RA_SPECIFY_COLS | wx.NO_BORDER | wx.FIXED_MINSIZE,
         )
-        bsizer_file_logging.Add(rb_file_logging, 0, wx.TOP | wx.LEFT | wx.FIXED_MINSIZE, 5)
+        bsizer_file_logging.Add(
+            rb_file_logging, 0, wx.TOP | wx.LEFT | wx.FIXED_MINSIZE, 5
+        )
 
         rb_append_file = self.rb_append_file = wx.RadioBox(
             self,  # bsizer_file_logging.GetStaticBox(),
@@ -648,9 +723,15 @@ class LoggingTab(wx.Panel):
             name="Logging Level",
             choices=const.LOGGING_LEVEL_TYPES,
         )
-        bsizer_file_logging.Add(rb_append_file, 0, wx.TOP | wx.LEFT | wx.FIXED_MINSIZE, 5)
-        bsizer_file_logging.Add(lbl_file_logging_level, 0, wx.TOP | wx.LEFT | wx.FIXED_MINSIZE, 5)
-        bsizer_file_logging.Add(cb_file_logging_level, 0, wx.TOP | wx.LEFT | wx.FIXED_MINSIZE, 5)
+        bsizer_file_logging.Add(
+            rb_append_file, 0, wx.TOP | wx.LEFT | wx.FIXED_MINSIZE, 5
+        )
+        bsizer_file_logging.Add(
+            lbl_file_logging_level, 0, wx.TOP | wx.LEFT | wx.FIXED_MINSIZE, 5
+        )
+        bsizer_file_logging.Add(
+            cb_file_logging_level, 0, wx.TOP | wx.LEFT | wx.FIXED_MINSIZE, 5
+        )
 
         bsizer_logging.Add(bsizer_file_logging, 0, wx.TOP | wx.LEFT | wx.EXPAND, 0)
 
@@ -661,16 +742,22 @@ class LoggingTab(wx.Panel):
             self, -1, "", style=wx.TE_READONLY | wx.TE_LEFT, size=(300, -1)
         )
         tc_log_file_name.SetForegroundColour(wx.BLUE)
-        bt_log_file_select = wx.Button(self, label="Modify")  # bsizer_file_logging.GetStaticBox()
+        bt_log_file_select = wx.Button(
+            self, label="Modify"
+        )  # bsizer_file_logging.GetStaticBox()
         bt_log_file_select.Bind(wx.EVT_BUTTON, self.OnModifyButton)
         bsizer_log_filename.Add(
             lbl_log_file_label, 0, wx.TOP | wx.LEFT, 0
         )  # | wx.FIXED_MINSIZE, 0)
-        bsizer_log_filename.Add(tc_log_file_name, 0, wx.TOP | wx.LEFT, 0)  # | wx.FIXED_MINSIZE, 0)
+        bsizer_log_filename.Add(
+            tc_log_file_name, 0, wx.TOP | wx.LEFT, 0
+        )  # | wx.FIXED_MINSIZE, 0)
         bsizer_log_filename.Add(
             bt_log_file_select, 0, wx.TOP | wx.LEFT, 0
         )  # | wx.FIXED_MINSIZE, 0)
-        bsizer_logging.Add(bsizer_log_filename, 0, wx.TOP | wx.LEFT | wx.FIXED_MINSIZE, 0)
+        bsizer_logging.Add(
+            bsizer_log_filename, 0, wx.TOP | wx.LEFT | wx.FIXED_MINSIZE, 0
+        )
 
         # Console Logging Selection
         bsizer_console_logging = wx.StaticBoxSizer(
@@ -685,7 +772,9 @@ class LoggingTab(wx.Panel):
             majorDimension=2,
             style=wx.RA_SPECIFY_COLS | wx.NO_BORDER | wx.FIXED_MINSIZE,
         )
-        bsizer_console_logging.Add(rb_console_logging, 0, wx.TOP | wx.LEFT | wx.FIXED_MINSIZE, 5)
+        bsizer_console_logging.Add(
+            rb_console_logging, 0, wx.TOP | wx.LEFT | wx.FIXED_MINSIZE, 5
+        )
         lbl_console_logging_level = wx.StaticText(
             bsizer_console_logging.GetStaticBox(), -1, _(" Logging Level ")
         )
@@ -703,7 +792,9 @@ class LoggingTab(wx.Panel):
 
         border = wx.BoxSizer(wx.VERTICAL)
         border.Add(bsizer_logging, 1, wx.EXPAND | wx.ALL, 10)  # | wx.FIXED_MINSIZE, 10)
-        border.Add(bsizer_console_logging, 1, wx.EXPAND | wx.ALL, 10)  # | wx.FIXED_MINSIZE, 10)
+        border.Add(
+            bsizer_console_logging, 1, wx.EXPAND | wx.ALL, 10
+        )  # | wx.FIXED_MINSIZE, 10)
         self.SetSizerAndFit(border)
 
         self.Layout()
@@ -785,7 +876,9 @@ class NavigationTab(wx.Panel):
         self.LoadConfig()
 
         text_note = wx.StaticText(
-            self, -1, _("Note: Using too low sleep times can result in Invesalius crashing!")
+            self,
+            -1,
+            _("Note: Using too low sleep times can result in Invesalius crashing!"),
         )
         # Change sleep pause between navigation loops
         nav_sleep = wx.StaticText(self, -1, _("Navigation Sleep (s):"))
@@ -793,16 +886,24 @@ class NavigationTab(wx.Panel):
         spin_nav_sleep.Enable(1)
         spin_nav_sleep.SetRange(0.01, 10.0)
         spin_nav_sleep.SetValue(self.sleep_nav)
-        spin_nav_sleep.Bind(wx.EVT_TEXT, partial(self.OnSelectNavSleep, ctrl=spin_nav_sleep))
-        spin_nav_sleep.Bind(wx.EVT_SPINCTRL, partial(self.OnSelectNavSleep, ctrl=spin_nav_sleep))
+        spin_nav_sleep.Bind(
+            wx.EVT_TEXT, partial(self.OnSelectNavSleep, ctrl=spin_nav_sleep)
+        )
+        spin_nav_sleep.Bind(
+            wx.EVT_SPINCTRL, partial(self.OnSelectNavSleep, ctrl=spin_nav_sleep)
+        )
 
         # Change sleep pause between coordinate update
         coord_sleep = wx.StaticText(self, -1, _("Coordinate Sleep (s):"))
-        spin_coord_sleep = wx.SpinCtrlDouble(self, -1, "", size=wx.Size(50, 23), inc=0.01)
+        spin_coord_sleep = wx.SpinCtrlDouble(
+            self, -1, "", size=wx.Size(50, 23), inc=0.01
+        )
         spin_coord_sleep.Enable(1)
         spin_coord_sleep.SetRange(0.01, 10.0)
         spin_coord_sleep.SetValue(self.sleep_coord)
-        spin_coord_sleep.Bind(wx.EVT_TEXT, partial(self.OnSelectCoordSleep, ctrl=spin_coord_sleep))
+        spin_coord_sleep.Bind(
+            wx.EVT_TEXT, partial(self.OnSelectCoordSleep, ctrl=spin_coord_sleep)
+        )
         spin_coord_sleep.Bind(
             wx.EVT_SPINCTRL, partial(self.OnSelectCoordSleep, ctrl=spin_coord_sleep)
         )
@@ -828,8 +929,18 @@ class NavigationTab(wx.Panel):
         conf_sizer.AddMany(
             [
                 (text_note, 0, wx.ALL, 10),
-                (line_nav_sleep, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, 5),
-                (line_coord_sleep, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, 5),
+                (
+                    line_nav_sleep,
+                    0,
+                    wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP,
+                    5,
+                ),
+                (
+                    line_coord_sleep,
+                    0,
+                    wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP,
+                    5,
+                ),
             ]
         )
 
@@ -949,7 +1060,8 @@ class ObjectTab(wx.Panel):
             wx.EVT_TEXT, partial(self.OnSelectDistanceThreshold, ctrl=spin_size_dist)
         )
         spin_size_dist.Bind(
-            wx.EVT_SPINCTRL, partial(self.OnSelectDistanceThreshold, ctrl=spin_size_dist)
+            wx.EVT_SPINCTRL,
+            partial(self.OnSelectDistanceThreshold, ctrl=spin_size_dist),
         )
 
         # Create a horizontal sizer to threshold configs
@@ -972,8 +1084,18 @@ class ObjectTab(wx.Panel):
         conf_sizer = wx.StaticBoxSizer(wx.VERTICAL, self, _("Settings"))
         conf_sizer.AddMany(
             [
-                (line_angle_threshold, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, 10),
-                (line_dist_threshold, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, 10),
+                (
+                    line_angle_threshold,
+                    0,
+                    wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP,
+                    10,
+                ),
+                (
+                    line_dist_threshold,
+                    0,
+                    wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP,
+                    10,
+                ),
             ]
         )
 
@@ -992,9 +1114,13 @@ class ObjectTab(wx.Panel):
         self.no_coils_lbl = None
         if len(self.coil_registrations) == 0:
             self.no_coils_lbl = wx.StaticText(
-                self, -1, _("No coils found in config.json. Create or load new coils below.")
+                self,
+                -1,
+                _("No coils found in config.json. Create or load new coils below."),
             )
-            inner_sel_sizer.Add(self.no_coils_lbl, 1, wx.EXPAND | wx.ALIGN_CENTER_VERTICAL, 5)
+            inner_sel_sizer.Add(
+                self.no_coils_lbl, 1, wx.EXPAND | wx.ALIGN_CENTER_VERTICAL, 5
+            )
         sel_sizer.Add(inner_sel_sizer, 0, wx.ALL | wx.EXPAND, 10)
 
         ### Sizer for choosing which coil is attached to the robot (multicoil) ###
@@ -1005,7 +1131,9 @@ class ObjectTab(wx.Panel):
         )
         self.inner_robot_sizer = inner_robot_sizer = wx.FlexGridSizer(2, 1, 1)
 
-        self.robot_lbl = wx.StaticText(self, -1, _("Robot is connected. Coil attached to robot: "))
+        self.robot_lbl = wx.StaticText(
+            self, -1, _("Robot is connected. Coil attached to robot: ")
+        )
         self.choice_robot_coil = choice_robot_coil = wx.ComboBox(
             self,
             -1,
@@ -1054,7 +1182,8 @@ class ObjectTab(wx.Panel):
     def __bind_events(self):
         Publisher.subscribe(self.OnSetCoilCount, "Reset coil selection")
         Publisher.subscribe(
-            self.OnRobotConnectionStatus, "Robot to Neuronavigation: Robot connection status"
+            self.OnRobotConnectionStatus,
+            "Robot to Neuronavigation: Robot connection status",
         )
 
     def OnRobotConnectionStatus(self, data):
@@ -1081,13 +1210,20 @@ class ObjectTab(wx.Panel):
             coil_btn = wx.ToggleButton(self, -1, coil_name[:8], size=wx.Size(88, 17))
             coil_btn.SetToolTip(coil_name)
             coil_btn.Bind(
-                wx.EVT_TOGGLEBUTTON, lambda event, name=coil_name: self.OnSelectCoil(event, name)
+                wx.EVT_TOGGLEBUTTON,
+                lambda event, name=coil_name: self.OnSelectCoil(event, name),
             )
             coil_btn.Bind(
-                wx.EVT_RIGHT_DOWN, lambda event, name=coil_name: self.OnRightClickCoil(event, name)
+                wx.EVT_RIGHT_DOWN,
+                lambda event, name=coil_name: self.OnRightClickCoil(event, name),
             )
             coil_btn.Show(show_button)
-            self.coil_btns[coil_name] = (coil_btn, 1, wx.EXPAND | wx.ALIGN_CENTER_VERTICAL, 5)
+            self.coil_btns[coil_name] = (
+                coil_btn,
+                1,
+                wx.EXPAND | wx.ALIGN_CENTER_VERTICAL,
+                5,
+            )
 
             self.inner_sel_sizer.Add(coil_btn, 1, wx.EXPAND, 5)
 
@@ -1113,7 +1249,9 @@ class ObjectTab(wx.Panel):
 
         if multicoil_mode:
             # Update multicoil GUI elements
-            self.sel_sizer.GetStaticBox().SetLabel(f"TMS coil selection (0 out of {n_coils})")
+            self.sel_sizer.GetStaticBox().SetLabel(
+                f"TMS coil selection (0 out of {n_coils})"
+            )
 
             # Reset (enable and unpress) all coil-buttons
             for btn, *junk in self.coil_btns.values():
@@ -1165,13 +1303,17 @@ class ObjectTab(wx.Panel):
     def OnSelectCoil(self, event=None, name=None, select=False):
         if name is None:
             if not select:  # Unselect all coils
-                Publisher.sendMessage("Reset coil selection", n_coils=self.navigation.n_coils)
+                Publisher.sendMessage(
+                    "Reset coil selection", n_coils=self.navigation.n_coils
+                )
             return
 
         coil_registration = None
         navigation = self.navigation
 
-        if select or (event is not None and event.GetSelection()):  # If coil is selected
+        if select or (
+            event is not None and event.GetSelection()
+        ):  # If coil is selected
             coil_registration = self.coil_registrations[name]
 
             # Check that the index of the chosen coil does not conflict with other selected coils
@@ -1198,7 +1340,9 @@ class ObjectTab(wx.Panel):
                 return
 
             # Check that the tracker used to configure the coil matches the currently used tracker
-            elif (obj_tracker_id := coil_registration["tracker_id"]) != self.tracker.tracker_id:
+            elif (
+                obj_tracker_id := coil_registration["tracker_id"]
+            ) != self.tracker.tracker_id:
                 wx.MessageBox(
                     _(
                         f"Cannot select this coil, its tracker [{const.TRACKERS[obj_tracker_id - 1]}] does not match the selected tracker [{const.TRACKERS[self.tracker.tracker_id - 1]}]"
@@ -1212,7 +1356,9 @@ class ObjectTab(wx.Panel):
             self.coil_btns[name][0].SetValue(True)
 
         # Select/Unselect coil
-        Publisher.sendMessage("Select coil", coil_name=name, coil_registration=coil_registration)
+        Publisher.sendMessage(
+            "Select coil", coil_name=name, coil_registration=coil_registration
+        )
 
         n_coils_selected = len(navigation.coil_registrations)
         n_coils = navigation.n_coils
@@ -1257,7 +1403,9 @@ class ObjectTab(wx.Panel):
         delete_coil = menu.Append(wx.ID_ANY, "Delete coil")
         save_coil = menu.Append(wx.ID_ANY, "Save coil to OBR file")
 
-        self.Bind(wx.EVT_MENU, (lambda event, name=name: DeleteCoil(event, name)), delete_coil)
+        self.Bind(
+            wx.EVT_MENU, (lambda event, name=name: DeleteCoil(event, name)), delete_coil
+        )
         self.Bind(
             wx.EVT_MENU,
             (lambda event, name=name: self.OnSaveCoilToOBR(event, coil_name=name)),
@@ -1277,11 +1425,19 @@ class ObjectTab(wx.Panel):
             )
             try:
                 if dialog.ShowModal() == wx.ID_OK:
-                    (coil_name, coil_path, obj_fiducials, obj_orients, obj_id, tracker_id) = (
-                        dialog.GetValue()
-                    )
+                    (
+                        coil_name,
+                        coil_path,
+                        obj_fiducials,
+                        obj_orients,
+                        obj_id,
+                        tracker_id,
+                    ) = dialog.GetValue()
 
-                    if coil_name in self.coil_registrations and coil_name != "default_coil":
+                    if (
+                        coil_name in self.coil_registrations
+                        and coil_name != "default_coil"
+                    ):
                         # Warn that we are overwriting an old registration
                         dialog = wx.TextEntryDialog(
                             None,
@@ -1300,7 +1456,10 @@ class ObjectTab(wx.Panel):
                             dialog.Destroy()
                             return  # Cancel the operation if the user closes the dialog or cancels
 
-                    if np.isfinite(obj_fiducials).all() and np.isfinite(obj_orients).all():
+                    if (
+                        np.isfinite(obj_fiducials).all()
+                        and np.isfinite(obj_orients).all()
+                    ):
                         coil_registration = {
                             "fiducials": obj_fiducials.tolist(),
                             "orientations": obj_orients.tolist(),
@@ -1309,8 +1468,12 @@ class ObjectTab(wx.Panel):
                             "path": coil_path.decode(const.FS_ENCODE),
                         }
                         self.coil_registrations[coil_name] = coil_registration
-                        self.session.SetConfig("coil_registrations", self.coil_registrations)
-                        self.AddCoilButton(coil_name)  # Add a button for this coil to GUI
+                        self.session.SetConfig(
+                            "coil_registrations", self.coil_registrations
+                        )
+                        self.AddCoilButton(
+                            coil_name
+                        )  # Add a button for this coil to GUI
 
                         # if we just edited a currently selected coil_name, unselect it (to avoid possible conflicts caused by new registration)
                         coil_btn = self.coil_btns[coil_name][0]
@@ -1319,7 +1482,10 @@ class ObjectTab(wx.Panel):
                             self.OnSelectCoil(name=coil_name, select=False)
 
                         # Select the coil that was just created (if all coils have not been selected)
-                        if len(self.navigation.coil_registrations) < self.navigation.n_coils:
+                        if (
+                            len(self.navigation.coil_registrations)
+                            < self.navigation.n_coils
+                        ):
                             self.OnSelectCoil(name=coil_name, select=True)
                         else:
                             coil_btn.Enable(
@@ -1339,7 +1505,8 @@ class ObjectTab(wx.Panel):
 
     def OnLoadCoilFromOBR(self, event=None):
         filename = dlg.ShowLoadSaveDialog(
-            message=_("Load object registration"), wildcard=_("Registration files (*.obr)|*.obr")
+            message=_("Load object registration"),
+            wildcard=_("Registration files (*.obr)|*.obr"),
         )
 
         try:
@@ -1355,7 +1522,9 @@ class ObjectTab(wx.Panel):
                 coil_path = data[0][1].encode(const.FS_ENCODE)
                 tracker_id = int(data[0][3])
                 obj_id = int(data[0][-1])
-                coil_name = "default_coil" if self.navigation.n_coils == 1 else coil_name
+                coil_name = (
+                    "default_coil" if self.navigation.n_coils == 1 else coil_name
+                )
 
                 # Handle old OBR file which lacks coil_name and tracker information
                 if len(data[0]) < 6:
@@ -1373,7 +1542,9 @@ class ObjectTab(wx.Panel):
                         value=coil_name,
                     )
                     if dialog.ShowModal() == wx.ID_OK:
-                        coil_name = dialog.GetValue().strip()  # Update coil_name with user input
+                        coil_name = (
+                            dialog.GetValue().strip()
+                        )  # Update coil_name with user input
                     else:
                         return  # Cancel the operation if the user closes the dialog or cancels
                     dialog.Destroy()
@@ -1394,7 +1565,9 @@ class ObjectTab(wx.Panel):
                         "path": coil_path.decode(const.FS_ENCODE),
                     }
                     self.coil_registrations[coil_name] = coil_registration
-                    self.session.SetConfig("coil_registrations", self.coil_registrations)
+                    self.session.SetConfig(
+                        "coil_registrations", self.coil_registrations
+                    )
                     self.AddCoilButton(coil_name)  # Add a button for this coil to GUI
 
                     # if we just overwrote a currently selected coil_name, unselect it (to avoid possible conflicts caused by this loaded registration)
@@ -1417,13 +1590,16 @@ class ObjectTab(wx.Panel):
                     self.Layout()
 
                 Publisher.sendMessage(
-                    "Update status text in GUI", label=_("Object file successfully loaded")
+                    "Update status text in GUI",
+                    label=_("Object file successfully loaded"),
                 )
 
                 msg = _("Object file successfully loaded")
                 wx.MessageBox(msg, _("InVesalius 3"))
         except:
-            wx.MessageBox(_("Object registration file incompatible."), _("InVesalius 3"))
+            wx.MessageBox(
+                _("Object registration file incompatible."), _("InVesalius 3")
+            )
             Publisher.sendMessage("Update status text in GUI", label="")
 
     def OnSaveCoilToOBR(self, evt, coil_name=None):
@@ -1448,7 +1624,9 @@ class ObjectTab(wx.Panel):
         coil_registration = self.coil_registrations.get(coil_name, None)
 
         if coil_registration is None:  # No registration found by this name
-            wx.MessageBox(_("Failed to save registration: No registration to save!"), _("Save"))
+            wx.MessageBox(
+                _("Failed to save registration: No registration to save!"), _("Save")
+            )
             return
 
         filename = dlg.ShowLoadSaveDialog(
@@ -1472,8 +1650,12 @@ class ObjectTab(wx.Panel):
                 + "\t"
                 + str("%d" % coil_registration["obj_id"])
             )
-            data = np.hstack([coil_registration["fiducials"], coil_registration["orientations"]])
-            np.savetxt(filename, data, fmt="%.4f", delimiter="\t", newline="\n", header=hdr)
+            data = np.hstack(
+                [coil_registration["fiducials"], coil_registration["orientations"]]
+            )
+            np.savetxt(
+                filename, data, fmt="%.4f", delimiter="\t", newline="\n", header=hdr
+            )
             wx.MessageBox(_("Object file successfully saved"), _("Save"))
 
     def OnSelectAngleThreshold(self, evt, ctrl):
@@ -1484,7 +1666,9 @@ class ObjectTab(wx.Panel):
 
     def OnSelectDistanceThreshold(self, evt, ctrl):
         self.distance_threshold = ctrl.GetValue()
-        Publisher.sendMessage("Update distance threshold", dist_threshold=self.distance_threshold)
+        Publisher.sendMessage(
+            "Update distance threshold", dist_threshold=self.distance_threshold
+        )
 
         self.session.SetConfig("distance_threshold", self.distance_threshold)
 
@@ -1519,7 +1703,9 @@ class TrackerTab(wx.Panel):
             wx.EVT_COMBOBOX, partial(self.OnChooseNoOfCoils, ctrl=select_n_coils_elem)
         )
 
-        select_n_coils_label = wx.StaticText(self, -1, _("Choose the number of coils to track:"))
+        select_n_coils_label = wx.StaticText(
+            self, -1, _("Choose the number of coils to track:")
+        )
 
         # ComboBox for spatial tracker device selection
         tracker_options = [_("Select")] + self.tracker.get_trackers()
@@ -1538,7 +1724,9 @@ class TrackerTab(wx.Panel):
             wx.EVT_COMBOBOX, partial(self.OnChooseTracker, ctrl=select_tracker_elem)
         )
 
-        select_tracker_label = wx.StaticText(self, -1, _("Choose the tracking device: "))
+        select_tracker_label = wx.StaticText(
+            self, -1, _("Choose the tracking device: ")
+        )
 
         # ComboBox for tracker reference mode
         tooltip = _("Choose the navigation reference mode")
@@ -1553,11 +1741,14 @@ class TrackerTab(wx.Panel):
         choice_ref.SetSelection(const.DEFAULT_REF_MODE)
         choice_ref.SetToolTip(tooltip)
         choice_ref.Bind(
-            wx.EVT_COMBOBOX, partial(self.OnChooseReferenceMode, ctrl=select_tracker_elem)
+            wx.EVT_COMBOBOX,
+            partial(self.OnChooseReferenceMode, ctrl=select_tracker_elem),
         )
         self.choice_ref = choice_ref
 
-        choice_ref_label = wx.StaticText(self, -1, _("Choose the navigation reference mode: "))
+        choice_ref_label = wx.StaticText(
+            self, -1, _("Choose the navigation reference mode: ")
+        )
 
         ref_sizer = wx.FlexGridSizer(rows=3, cols=2, hgap=5, vgap=5)
         ref_sizer.AddMany(
@@ -1581,7 +1772,11 @@ class TrackerTab(wx.Panel):
         tooltip = _("Choose or type the robot IP")
         robot_ip_options = [_("Select robot IP:")] + const.ROBOT_IPS
         choice_IP = wx.ComboBox(
-            self, -1, "", choices=robot_ip_options, style=wx.CB_DROPDOWN | wx.TE_PROCESS_ENTER
+            self,
+            -1,
+            "",
+            choices=robot_ip_options,
+            style=wx.CB_DROPDOWN | wx.TE_PROCESS_ENTER,
         )
         choice_IP.SetToolTip(tooltip)
         if self.robot.robot_ip is not None:
@@ -1638,14 +1833,19 @@ class TrackerTab(wx.Panel):
 
         main_sizer = wx.BoxSizer(wx.VERTICAL)
         main_sizer.AddMany(
-            [(sizer, 0, wx.ALL | wx.EXPAND, 10), (rob_static_sizer, 0, wx.ALL | wx.EXPAND, 10)]
+            [
+                (sizer, 0, wx.ALL | wx.EXPAND, 10),
+                (rob_static_sizer, 0, wx.ALL | wx.EXPAND, 10),
+            ]
         )
         self.SetSizerAndFit(main_sizer)
         self.Layout()
 
     def __bind_events(self):
         Publisher.subscribe(self.ShowParent, "Show preferences dialog")
-        Publisher.subscribe(self.OnRobotStatus, "Robot to Neuronavigation: Robot connection status")
+        Publisher.subscribe(
+            self.OnRobotStatus, "Robot to Neuronavigation: Robot connection status"
+        )
         Publisher.subscribe(
             self.OnSetRobotTransformationMatrix,
             "Neuronavigation to Robot: Set robot transformation matrix",
@@ -1685,7 +1885,9 @@ class TrackerTab(wx.Panel):
         else:
             self.HideParent()
         Publisher.sendMessage("Begin busy cursor")
-        Publisher.sendMessage("Update status text in GUI", label=_("Configuring tracker ..."))
+        Publisher.sendMessage(
+            "Update status text in GUI", label=_("Configuring tracker ...")
+        )
         if hasattr(evt, "GetSelection"):
             choice = evt.GetSelection()
         else:

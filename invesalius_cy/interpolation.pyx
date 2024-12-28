@@ -9,11 +9,11 @@
 # from interpolation cimport interpolate
 
 import numpy as np
-cimport numpy as np
-cimport cython
 
-from libc.math cimport floor, ceil, sqrt, fabs, sin, M_PI
+cimport cython
+cimport numpy as np
 from cython.parallel cimport prange
+from libc.math cimport M_PI, ceil, fabs, floor, sin, sqrt
 
 DEF LANCZOS_A = 4
 DEF SIZE_LANCZOS_TMP = LANCZOS_A * 2 - 1

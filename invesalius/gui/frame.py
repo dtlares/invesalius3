@@ -36,7 +36,6 @@ import invesalius.gui.import_bitmap_panel as imp_bmp
 import invesalius.gui.import_panel as imp
 import invesalius.gui.log as log
 import invesalius.gui.preferences as preferences
-
 #  import invesalius.gui.import_network_panel as imp_net
 import invesalius.project as prj
 import invesalius.session as ses
@@ -57,7 +56,9 @@ except ImportError:
 VIEW_TOOLS = [ID_LAYOUT, ID_TEXT, ID_RULER] = [wx.NewIdRef() for number in range(3)]
 
 WILDCARD_EXPORT_SLICE = (
-    "HDF5 (*.hdf5)|*.hdf5|" "NIfTI 1 (*.nii)|*.nii|" "Compressed NIfTI (*.nii.gz)|*.nii.gz"
+    "HDF5 (*.hdf5)|*.hdf5|"
+    "NIfTI 1 (*.nii)|*.nii|"
+    "Compressed NIfTI (*.nii.gz)|*.nii.gz"
 )
 
 IDX_EXT = {0: ".hdf5", 1: ".nii", 2: ".nii.gz"}
@@ -228,7 +229,9 @@ class Frame(wx.Frame):
 
         # First, the task panel, to be on the left fo the frame
         # This will be specific according to InVesalius application
-        aui_manager.AddPane(task_panel, wx.aui.AuiPaneInfo().Name("Tasks").CaptionVisible(False))
+        aui_manager.AddPane(
+            task_panel, wx.aui.AuiPaneInfo().Name("Tasks").CaptionVisible(False)
+        )
 
         # Then, add the viewers panel, which will contain slices and
         # volume panels. In future this might also be specific
@@ -588,9 +591,11 @@ class Frame(wx.Frame):
             axis = {const.ID_FLIP_X: 2, const.ID_FLIP_Y: 1, const.ID_FLIP_Z: 0}[id]
             self.FlipVolume(axis)
         elif id in (const.ID_SWAP_XY, const.ID_SWAP_XZ, const.ID_SWAP_YZ):
-            axes = {const.ID_SWAP_XY: (2, 1), const.ID_SWAP_XZ: (2, 0), const.ID_SWAP_YZ: (1, 0)}[
-                id
-            ]
+            axes = {
+                const.ID_SWAP_XY: (2, 1),
+                const.ID_SWAP_XZ: (2, 0),
+                const.ID_SWAP_YZ: (1, 0),
+            }[id]
             self.SwapAxes(axes)
         elif id == wx.ID_UNDO:
             self.OnUndo()
@@ -618,7 +623,9 @@ class Frame(wx.Frame):
             wwwl_dlg.Show()
 
         elif id == const.ID_THRESHOLD_SEGMENTATION:
-            Publisher.sendMessage("Show panel", panel_id=const.ID_THRESHOLD_SEGMENTATION)
+            Publisher.sendMessage(
+                "Show panel", panel_id=const.ID_THRESHOLD_SEGMENTATION
+            )
             Publisher.sendMessage("Disable actual style")
             Publisher.sendMessage("Enable style", style=const.STATE_DEFAULT)
 
@@ -628,7 +635,9 @@ class Frame(wx.Frame):
             Publisher.sendMessage("Enable style", style=const.SLICE_STATE_EDITOR)
 
         elif id == const.ID_WATERSHED_SEGMENTATION:
-            Publisher.sendMessage("Show panel", panel_id=const.ID_WATERSHED_SEGMENTATION)
+            Publisher.sendMessage(
+                "Show panel", panel_id=const.ID_WATERSHED_SEGMENTATION
+            )
             Publisher.sendMessage("Disable actual style")
             Publisher.sendMessage("Enable style", style=const.SLICE_STATE_WATERSHED)
 
@@ -677,12 +686,15 @@ class Frame(wx.Frame):
             self.OnCropMask()
 
         elif id == const.ID_MASK_3D_PREVIEW:
-            self.OnEnableMask3DPreview(value=self.tools_menu.IsChecked(const.ID_MASK_3D_PREVIEW))
+            self.OnEnableMask3DPreview(
+                value=self.tools_menu.IsChecked(const.ID_MASK_3D_PREVIEW)
+            )
 
         elif id == const.ID_MASK_3D_AUTO_RELOAD:
             session = ses.Session()
             session.SetConfig(
-                "auto_reload_preview", self.tools_menu.IsChecked(const.ID_MASK_3D_AUTO_RELOAD)
+                "auto_reload_preview",
+                self.tools_menu.IsChecked(const.ID_MASK_3D_AUTO_RELOAD),
             )
 
         elif id == const.ID_MASK_3D_RELOAD:
@@ -864,7 +876,9 @@ class Frame(wx.Frame):
                     message = f"It was not possible to save because you don't have permission to write at {dirpath}"
                 else:
                     message = "It was not possible to save because"
-                d = dlg.ErrorMessageBox(None, "Save project error", f"{message}:\n{err}")
+                d = dlg.ErrorMessageBox(
+                    None, "Save project error", f"{message}:\n{err}"
+                )
                 d.ShowModal()
                 d.Destroy()
             else:
@@ -943,7 +957,9 @@ class Frame(wx.Frame):
         Publisher.sendMessage("Enable style", style=const.SLICE_STATE_SELECT_MASK_PARTS)
 
     def OnFFillSegmentation(self):
-        Publisher.sendMessage("Enable style", style=const.SLICE_STATE_FFILL_SEGMENTATION)
+        Publisher.sendMessage(
+            "Enable style", style=const.SLICE_STATE_FFILL_SEGMENTATION
+        )
 
     def OnBrainSegmentation(self):
         from invesalius.gui import deep_learning_seg_dialog
@@ -1154,7 +1170,9 @@ class MenuBar(wx.MenuBar):
         app = file_menu.Append
         app(const.ID_DICOM_IMPORT, _("Import DICOM...\tCtrl+I"))
         # app(const.ID_DICOM_NETWORK, _("Retrieve DICOM from PACS"))
-        file_menu.Append(const.ID_IMPORT_OTHERS_FILES, _("Import other files..."), others_file_menu)
+        file_menu.Append(
+            const.ID_IMPORT_OTHERS_FILES, _("Import other files..."), others_file_menu
+        )
         app(const.ID_PROJECT_OPEN, _("Open project...\tCtrl+O"))
         app(const.ID_PROJECT_SAVE, _("Save project\tCtrl+S"))
         app(const.ID_PROJECT_SAVE_AS, _("Save project as...\tCtrl+Shift+S"))
@@ -1176,7 +1194,9 @@ class MenuBar(wx.MenuBar):
         file_edit.Append(wx.ID_UNDO, _("Undo\tCtrl+Z")).Enable(False)
         file_edit.Append(wx.ID_REDO, _("Redo\tCtrl+Y")).Enable(False)
         file_edit.Append(const.ID_GOTO_SLICE, _("Go to slice ...\tCtrl+G"))
-        file_edit.Append(const.ID_GOTO_COORD, _("Go to scanner coord ...\t")).Enable(False)
+        file_edit.Append(const.ID_GOTO_COORD, _("Go to scanner coord ...\t")).Enable(
+            False
+        )
 
         # app(const.ID_EDIT_LIST, "Show Undo List...")
         #################################################################
@@ -1187,7 +1207,9 @@ class MenuBar(wx.MenuBar):
         # Mask Menu
         mask_menu = wx.Menu()
 
-        self.new_mask_menu = mask_menu.Append(const.ID_CREATE_MASK, _("New\tCtrl+Shift+M"))
+        self.new_mask_menu = mask_menu.Append(
+            const.ID_CREATE_MASK, _("New\tCtrl+Shift+M")
+        )
         self.new_mask_menu.Enable(False)
 
         self.bool_op_menu = mask_menu.Append(
@@ -1195,7 +1217,9 @@ class MenuBar(wx.MenuBar):
         )
         self.bool_op_menu.Enable(False)
 
-        self.clean_mask_menu = mask_menu.Append(const.ID_CLEAN_MASK, _("Clean Mask\tCtrl+Shift+A"))
+        self.clean_mask_menu = mask_menu.Append(
+            const.ID_CLEAN_MASK, _("Clean Mask\tCtrl+Shift+A")
+        )
         self.clean_mask_menu.Enable(False)
 
         mask_menu.AppendSeparator()
@@ -1237,7 +1261,10 @@ class MenuBar(wx.MenuBar):
         self.mask_preview.Enable(False)
 
         self.mask_auto_reload = mask_preview_menu.Append(
-            const.ID_MASK_3D_AUTO_RELOAD, _("Auto reload") + "\tCtrl+Shift+D", "", wx.ITEM_CHECK
+            const.ID_MASK_3D_AUTO_RELOAD,
+            _("Auto reload") + "\tCtrl+Shift+D",
+            "",
+            wx.ITEM_CHECK,
         )
 
         session = ses.Session()
@@ -1269,13 +1296,21 @@ class MenuBar(wx.MenuBar):
         )
         self.ffill_segmentation.Enable(False)
         segmentation_menu.AppendSeparator()
-        segmentation_menu.Append(const.ID_SEGMENTATION_BRAIN, _("Brain segmentation (MRI T1)"))
-        segmentation_menu.Append(const.ID_SEGMENTATION_TRACHEA, _("Trachea segmentation (CT)"))
-        segmentation_menu.Append(const.ID_SEGMENTATION_MANDIBLE_CT, _("Mandible segmentation (CT)"))
+        segmentation_menu.Append(
+            const.ID_SEGMENTATION_BRAIN, _("Brain segmentation (MRI T1)")
+        )
+        segmentation_menu.Append(
+            const.ID_SEGMENTATION_TRACHEA, _("Trachea segmentation (CT)")
+        )
+        segmentation_menu.Append(
+            const.ID_SEGMENTATION_MANDIBLE_CT, _("Mandible segmentation (CT)")
+        )
 
         # Surface Menu
         surface_menu = wx.Menu()
-        self.create_surface = surface_menu.Append(const.ID_CREATE_SURFACE, ("New\tCtrl+Shift+C"))
+        self.create_surface = surface_menu.Append(
+            const.ID_CREATE_SURFACE, ("New\tCtrl+Shift+C")
+        )
         self.create_surface.Enable(False)
 
         # Image menu
@@ -1288,18 +1323,22 @@ class MenuBar(wx.MenuBar):
         flip_menu.Append(const.ID_FLIP_Z, _("Top - Bottom")).Enable(False)
 
         swap_axes_menu = wx.Menu()
-        swap_axes_menu.Append(const.ID_SWAP_XY, _("From Right-Left to Anterior-Posterior")).Enable(
-            False
-        )
-        swap_axes_menu.Append(const.ID_SWAP_XZ, _("From Right-Left to Top-Bottom")).Enable(False)
-        swap_axes_menu.Append(const.ID_SWAP_YZ, _("From Anterior-Posterior to Top-Bottom")).Enable(
-            False
-        )
+        swap_axes_menu.Append(
+            const.ID_SWAP_XY, _("From Right-Left to Anterior-Posterior")
+        ).Enable(False)
+        swap_axes_menu.Append(
+            const.ID_SWAP_XZ, _("From Right-Left to Top-Bottom")
+        ).Enable(False)
+        swap_axes_menu.Append(
+            const.ID_SWAP_YZ, _("From Anterior-Posterior to Top-Bottom")
+        ).Enable(False)
 
         image_menu.Append(wx.NewIdRef(), _("Flip"), flip_menu)
         image_menu.Append(wx.NewIdRef(), _("Swap axes"), swap_axes_menu)
 
-        reorient_menu = image_menu.Append(const.ID_REORIENT_IMG, _("Reorient image\tCtrl+Shift+O"))
+        reorient_menu = image_menu.Append(
+            const.ID_REORIENT_IMG, _("Reorient image\tCtrl+Shift+O")
+        )
         image_menu.Append(const.ID_MANUAL_WWWL, _("Set WW&&WL manually"))
 
         planning_menu = wx.Menu()
@@ -1321,7 +1360,9 @@ class MenuBar(wx.MenuBar):
 
         # View
         self.view_menu = view_menu = wx.Menu()
-        view_menu.Append(const.ID_VIEW_INTERPOLATED, _("Interpolated slices"), "", wx.ITEM_CHECK)
+        view_menu.Append(
+            const.ID_VIEW_INTERPOLATED, _("Interpolated slices"), "", wx.ITEM_CHECK
+        )
 
         v = self.SliceInterpolationStatus()
         self.view_menu.Check(const.ID_VIEW_INTERPOLATED, v)
@@ -1370,7 +1411,10 @@ class MenuBar(wx.MenuBar):
         )
         # Under development
         self.mode_dbs = nav_menu.Append(
-            const.ID_MODE_DBS, _("Deep Brain Stimulation Mode\tCtrl+B"), "", wx.ITEM_CHECK
+            const.ID_MODE_DBS,
+            _("Deep Brain Stimulation Mode\tCtrl+B"),
+            "",
+            wx.ITEM_CHECK,
         )
         self.mode_dbs.Enable(0)
         mode_menu.Append(-1, _("Navigation Mode"), nav_menu)
@@ -1448,7 +1492,9 @@ class MenuBar(wx.MenuBar):
         for item in items:
             _new_id = wx.NewIdRef()
             self._plugins_menu_ids[_new_id] = items[item]
-            menu_item = self.plugins_menu.Append(_new_id, item, items[item]["description"])
+            menu_item = self.plugins_menu.Append(
+                _new_id, item, items[item]["description"]
+            )
             menu_item.Enable(items[item]["enable_startup"])
 
     def OnEnableState(self, state):
@@ -1655,7 +1701,9 @@ class TaskBarIcon(wx_TaskBarIcon):
         wx_TaskBarIcon.__init__(self)
         self.frame = parent
 
-        icon = wx.Icon(os.path.join(inv_paths.ICON_DIR, "invesalius.ico"), wx.BITMAP_TYPE_ICO)
+        icon = wx.Icon(
+            os.path.join(inv_paths.ICON_DIR, "invesalius.ico"), wx.BITMAP_TYPE_ICO
+        )
         self.SetIcon(icon, "InVesalius")
         self.imgidx = 1
 
@@ -1678,7 +1726,9 @@ class ProjectToolBar(AuiToolBar):
 
     def __init__(self, parent):
         style = AUI_TB_PLAIN_BACKGROUND
-        AuiToolBar.__init__(self, parent, -1, wx.DefaultPosition, wx.DefaultSize, agwStyle=style)
+        AuiToolBar.__init__(
+            self, parent, -1, wx.DefaultPosition, wx.DefaultSize, agwStyle=style
+        )
         self.SetToolBitmapSize(wx.Size(32, 32))
 
         self.parent = parent
@@ -1809,7 +1859,9 @@ class ObjectToolBar(AuiToolBar):
 
     def __init__(self, parent):
         style = AUI_TB_PLAIN_BACKGROUND
-        AuiToolBar.__init__(self, parent, -1, wx.DefaultPosition, wx.DefaultSize, agwStyle=style)
+        AuiToolBar.__init__(
+            self, parent, -1, wx.DefaultPosition, wx.DefaultSize, agwStyle=style
+        )
 
         self.SetToolBitmapSize(wx.Size(32, 32))
 
@@ -2022,7 +2074,9 @@ class ObjectToolBar(AuiToolBar):
         """
         id = evt.GetId()
         state = self.GetToolToggled(id)
-        if state and ((id == const.STATE_MEASURE_DISTANCE) or (id == const.STATE_MEASURE_ANGLE)):
+        if state and (
+            (id == const.STATE_MEASURE_DISTANCE) or (id == const.STATE_MEASURE_ANGLE)
+        ):
             Publisher.sendMessage("Fold measure task")
 
         if state:
@@ -2071,7 +2125,9 @@ class SliceToolBar(AuiToolBar):
 
     def __init__(self, parent):
         style = AUI_TB_PLAIN_BACKGROUND
-        AuiToolBar.__init__(self, parent, -1, wx.DefaultPosition, wx.DefaultSize, agwStyle=style)
+        AuiToolBar.__init__(
+            self, parent, -1, wx.DefaultPosition, wx.DefaultSize, agwStyle=style
+        )
 
         self.SetToolBitmapSize(wx.Size(32, 32))
 
@@ -2224,7 +2280,9 @@ class LayoutToolBar(AuiToolBar):
 
     def __init__(self, parent):
         style = AUI_TB_PLAIN_BACKGROUND
-        AuiToolBar.__init__(self, parent, -1, wx.DefaultPosition, wx.DefaultSize, agwStyle=style)
+        AuiToolBar.__init__(
+            self, parent, -1, wx.DefaultPosition, wx.DefaultSize, agwStyle=style
+        )
 
         self.SetToolBitmapSize(wx.Size(32, 32))
 
@@ -2321,7 +2379,9 @@ class LayoutToolBar(AuiToolBar):
         self.Refresh()
 
     def _SendRulerVisibilityStatus(self):
-        Publisher.sendMessage("Receive ruler visibility status", status=self.ontool_ruler)
+        Publisher.sendMessage(
+            "Receive ruler visibility status", status=self.ontool_ruler
+        )
 
     def _SetLayoutWithoutTask(self):
         """
@@ -2444,7 +2504,9 @@ class HistoryToolBar(AuiToolBar):
 
     def __init__(self, parent):
         style = AUI_TB_PLAIN_BACKGROUND
-        AuiToolBar.__init__(self, parent, -1, wx.DefaultPosition, wx.DefaultSize, agwStyle=style)
+        AuiToolBar.__init__(
+            self, parent, -1, wx.DefaultPosition, wx.DefaultSize, agwStyle=style
+        )
 
         self.SetToolBitmapSize(wx.Size(32, 32))
 

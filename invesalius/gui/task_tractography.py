@@ -65,7 +65,9 @@ class TaskPanel(wx.Panel):
         inner_panel = InnerTaskPanel(self)
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add(inner_panel, 1, wx.EXPAND | wx.GROW | wx.BOTTOM | wx.RIGHT | wx.LEFT, 7)
+        sizer.Add(
+            inner_panel, 1, wx.EXPAND | wx.GROW | wx.BOTTOM | wx.RIGHT | wx.LEFT, 7
+        )
         sizer.Fit(self)
 
         self.SetSizer(sizer)
@@ -141,7 +143,9 @@ class InnerTaskPanel(wx.Panel):
         spin_peel_depth.Enable(True)
         spin_peel_depth.SetRange(0, const.MAX_PEEL_DEPTH)
         spin_peel_depth.SetValue(const.PEEL_DEPTH)
-        spin_peel_depth.Bind(wx.EVT_TEXT, partial(self.OnSelectPeelingDepth, ctrl=spin_peel_depth))
+        spin_peel_depth.Bind(
+            wx.EVT_TEXT, partial(self.OnSelectPeelingDepth, ctrl=spin_peel_depth)
+        )
         spin_peel_depth.Bind(
             wx.EVT_SPINCTRL, partial(self.OnSelectPeelingDepth, ctrl=spin_peel_depth)
         )
@@ -152,8 +156,12 @@ class InnerTaskPanel(wx.Panel):
         spin_ntracts.Enable(True)
         spin_ntracts.SetRange(1, 2000)
         spin_ntracts.SetValue(const.N_TRACTS)
-        spin_ntracts.Bind(wx.EVT_TEXT, partial(self.OnSelectNumTracts, ctrl=spin_ntracts))
-        spin_ntracts.Bind(wx.EVT_SPINCTRL, partial(self.OnSelectNumTracts, ctrl=spin_ntracts))
+        spin_ntracts.Bind(
+            wx.EVT_TEXT, partial(self.OnSelectNumTracts, ctrl=spin_ntracts)
+        )
+        spin_ntracts.Bind(
+            wx.EVT_SPINCTRL, partial(self.OnSelectNumTracts, ctrl=spin_ntracts)
+        )
 
         # Change seed offset for computing tracts
         text_offset = wx.StaticText(self, -1, _("Seed offset (mm):"))
@@ -162,7 +170,9 @@ class InnerTaskPanel(wx.Panel):
         spin_offset.SetRange(0, 100.0)
         spin_offset.SetValue(self.seed_offset)
         spin_offset.Bind(wx.EVT_TEXT, partial(self.OnSelectOffset, ctrl=spin_offset))
-        spin_offset.Bind(wx.EVT_SPINCTRL, partial(self.OnSelectOffset, ctrl=spin_offset))
+        spin_offset.Bind(
+            wx.EVT_SPINCTRL, partial(self.OnSelectOffset, ctrl=spin_offset)
+        )
         # self.spin_offset = spin_offset
 
         # Change seed radius for computing tracts
@@ -172,7 +182,9 @@ class InnerTaskPanel(wx.Panel):
         spin_radius.SetRange(0, 100.0)
         spin_radius.SetValue(self.seed_radius)
         spin_radius.Bind(wx.EVT_TEXT, partial(self.OnSelectRadius, ctrl=spin_radius))
-        spin_radius.Bind(wx.EVT_SPINCTRL, partial(self.OnSelectRadius, ctrl=spin_radius))
+        spin_radius.Bind(
+            wx.EVT_SPINCTRL, partial(self.OnSelectRadius, ctrl=spin_radius)
+        )
         # self.spin_radius = spin_radius
 
         # Change sleep pause between navigation loops
@@ -191,7 +203,9 @@ class InnerTaskPanel(wx.Panel):
         spin_opacity.SetRange(0, 1.0)
         spin_opacity.SetValue(self.brain_opacity)
         spin_opacity.Bind(wx.EVT_TEXT, partial(self.OnSelectOpacity, ctrl=spin_opacity))
-        spin_opacity.Bind(wx.EVT_SPINCTRL, partial(self.OnSelectOpacity, ctrl=spin_opacity))
+        spin_opacity.Bind(
+            wx.EVT_SPINCTRL, partial(self.OnSelectOpacity, ctrl=spin_opacity)
+        )
         self.spin_opacity = spin_opacity
 
         # Create a horizontal sizer to threshold configs
@@ -199,7 +213,12 @@ class InnerTaskPanel(wx.Panel):
         line_peel_depth = wx.BoxSizer(wx.HORIZONTAL)
         line_peel_depth.AddMany(
             [
-                (text_peel_depth, 1, wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT | wx.LEFT, border),
+                (
+                    text_peel_depth,
+                    1,
+                    wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT | wx.LEFT,
+                    border,
+                ),
                 (spin_peel_depth, 0, wx.ALL | wx.EXPAND | wx.GROW, border),
             ]
         )
@@ -207,7 +226,12 @@ class InnerTaskPanel(wx.Panel):
         line_ntracts = wx.BoxSizer(wx.HORIZONTAL)
         line_ntracts.AddMany(
             [
-                (text_ntracts, 1, wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT | wx.LEFT, border),
+                (
+                    text_ntracts,
+                    1,
+                    wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT | wx.LEFT,
+                    border,
+                ),
                 (spin_ntracts, 0, wx.ALL | wx.EXPAND | wx.GROW, border),
             ]
         )
@@ -215,7 +239,12 @@ class InnerTaskPanel(wx.Panel):
         line_offset = wx.BoxSizer(wx.HORIZONTAL)
         line_offset.AddMany(
             [
-                (text_offset, 1, wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT | wx.LEFT, border),
+                (
+                    text_offset,
+                    1,
+                    wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT | wx.LEFT,
+                    border,
+                ),
                 (spin_offset, 0, wx.ALL | wx.EXPAND | wx.GROW, border),
             ]
         )
@@ -223,7 +252,12 @@ class InnerTaskPanel(wx.Panel):
         line_radius = wx.BoxSizer(wx.HORIZONTAL)
         line_radius.AddMany(
             [
-                (text_radius, 1, wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT | wx.LEFT, border),
+                (
+                    text_radius,
+                    1,
+                    wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT | wx.LEFT,
+                    border,
+                ),
                 (spin_radius, 0, wx.ALL | wx.EXPAND | wx.GROW, border),
             ]
         )
@@ -235,7 +269,12 @@ class InnerTaskPanel(wx.Panel):
         line_opacity = wx.BoxSizer(wx.HORIZONTAL)
         line_opacity.AddMany(
             [
-                (text_opacity, 1, wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT | wx.LEFT, border),
+                (
+                    text_opacity,
+                    1,
+                    wx.EXPAND | wx.GROW | wx.TOP | wx.RIGHT | wx.LEFT,
+                    border,
+                ),
                 (spin_opacity, 0, wx.ALL | wx.EXPAND | wx.GROW, border),
             ]
         )
@@ -244,14 +283,18 @@ class InnerTaskPanel(wx.Panel):
         checktracts = wx.CheckBox(self, -1, _("Enable tracts"))
         checktracts.SetValue(False)
         checktracts.Enable(False)
-        checktracts.Bind(wx.EVT_CHECKBOX, partial(self.OnEnableTracts, ctrl=checktracts))
+        checktracts.Bind(
+            wx.EVT_CHECKBOX, partial(self.OnEnableTracts, ctrl=checktracts)
+        )
         self.checktracts = checktracts
 
         # Check box to enable surface peeling
         checkpeeling = wx.CheckBox(self, -1, _("Peel surface"))
         checkpeeling.SetValue(False)
         checkpeeling.Enable(False)
-        checkpeeling.Bind(wx.EVT_CHECKBOX, partial(self.OnShowPeeling, ctrl=checkpeeling))
+        checkpeeling.Bind(
+            wx.EVT_CHECKBOX, partial(self.OnShowPeeling, ctrl=checkpeeling)
+        )
         self.checkpeeling = checkpeeling
 
         # Check box to enable tract visualization
@@ -264,22 +307,37 @@ class InnerTaskPanel(wx.Panel):
         border_last = 1
         line_checks = wx.BoxSizer(wx.HORIZONTAL)
         line_checks.Add(checktracts, 0, wx.ALIGN_LEFT | wx.RIGHT | wx.LEFT, border_last)
-        line_checks.Add(checkpeeling, 0, wx.ALIGN_CENTER | wx.RIGHT | wx.LEFT, border_last)
+        line_checks.Add(
+            checkpeeling, 0, wx.ALIGN_CENTER | wx.RIGHT | wx.LEFT, border_last
+        )
         line_checks.Add(checkACT, 0, wx.RIGHT | wx.LEFT, border_last)
 
         # Add line sizers into main sizer
         border = 1
         border_last = 10
         main_sizer = wx.BoxSizer(wx.VERTICAL)
-        main_sizer.Add(line_btns, 0, wx.BOTTOM | wx.ALIGN_CENTER_HORIZONTAL, border_last)
         main_sizer.Add(
-            line_peel_depth, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border
+            line_btns, 0, wx.BOTTOM | wx.ALIGN_CENTER_HORIZONTAL, border_last
         )
-        main_sizer.Add(line_ntracts, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border)
-        main_sizer.Add(line_offset, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border)
-        main_sizer.Add(line_radius, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border)
+        main_sizer.Add(
+            line_peel_depth,
+            0,
+            wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP,
+            border,
+        )
+        main_sizer.Add(
+            line_ntracts, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border
+        )
+        main_sizer.Add(
+            line_offset, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border
+        )
+        main_sizer.Add(
+            line_radius, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border
+        )
         # main_sizer.Add(line_sleep, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border)
-        main_sizer.Add(line_opacity, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border)
+        main_sizer.Add(
+            line_opacity, 0, wx.GROW | wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border
+        )
         main_sizer.Add(
             line_checks,
             0,
@@ -430,7 +488,9 @@ class InnerTaskPanel(wx.Panel):
             self.checkpeeling.Enable(1)
             self.checkpeeling.SetValue(True)
             self.spin_opacity.Enable(1)
-            Publisher.sendMessage("Update status text in GUI", label=_("Brain model loaded"))
+            Publisher.sendMessage(
+                "Update status text in GUI", label=_("Brain model loaded")
+            )
             self.peel_loaded = True
             Publisher.sendMessage("Update peel visualization", data=self.peel_loaded)
             del self.tp
@@ -470,7 +530,9 @@ class InnerTaskPanel(wx.Panel):
 
                 self.trekker = None
                 file = filename.encode("utf-8")
-                with ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as exec:
+                with ThreadPoolExecutor(
+                    max_workers=multiprocessing.cpu_count()
+                ) as exec:
                     futures = [
                         exec.submit(self.UpdateDialog, msg),
                         exec.submit(Trekker.initialize, file),
@@ -491,7 +553,8 @@ class InnerTaskPanel(wx.Panel):
                 wx.MessageBox(_("FOD Import successful"), _("InVesalius 3"))
             except Exception:
                 Publisher.sendMessage(
-                    "Update status text in GUI", label=_("Trekker initialization failed.")
+                    "Update status text in GUI",
+                    label=_("Trekker initialization failed."),
                 )
                 wx.MessageBox(_("Unable to load FOD."), _("InVesalius 3"))
 
@@ -502,7 +565,9 @@ class InnerTaskPanel(wx.Panel):
         print("Import Complete")
         if trekker is not None:
             self.trekker = trekker.result()
-            self.trekker, n_threads = dti.set_trekker_parameters(self.trekker, self.trekker_cfg)
+            self.trekker, n_threads = dti.set_trekker_parameters(
+                self.trekker, self.trekker_cfg
+            )
 
             self.checktracts.Enable(True)
             self.checktracts.SetValue(True)
@@ -511,7 +576,9 @@ class InnerTaskPanel(wx.Panel):
             Publisher.sendMessage("Update Trekker object", data=self.trekker)
             Publisher.sendMessage("Update number of threads", data=n_threads)
             Publisher.sendMessage("Update tracts visualization", data=1)
-            Publisher.sendMessage("Update status text in GUI", label=_("Trekker initialized"))
+            Publisher.sendMessage(
+                "Update status text in GUI", label=_("Trekker initialized")
+            )
             self.tp.running = False
 
     def OnLoadACT(self, event=None):
@@ -539,7 +606,9 @@ class InnerTaskPanel(wx.Panel):
 
                 Publisher.sendMessage("Update status text in GUI", label=_("Busy"))
                 if filename:
-                    with ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as exec:
+                    with ThreadPoolExecutor(
+                        max_workers=multiprocessing.cpu_count()
+                    ) as exec:
                         futures = [
                             exec.submit(self.UpdateDialog, msg),
                             exec.submit(self.ACTLoading, filename),
@@ -588,7 +657,8 @@ class InnerTaskPanel(wx.Panel):
         import json
 
         filename = dlg.ShowLoadSaveDialog(
-            message=_("Load Trekker configuration"), wildcard=_("JSON file (*.json)|*.json")
+            message=_("Load Trekker configuration"),
+            wildcard=_("JSON file (*.json)|*.json"),
         )
         try:
             # Check if filename exists, read the JSON file and check if all parameters match
@@ -605,12 +675,16 @@ class InnerTaskPanel(wx.Panel):
                     Publisher.sendMessage("Update Trekker object", data=self.trekker)
                     Publisher.sendMessage("Update number of threads", data=n_threads)
 
-                Publisher.sendMessage("Update status text in GUI", label=_("Trekker config loaded"))
+                Publisher.sendMessage(
+                    "Update status text in GUI", label=_("Trekker config loaded")
+                )
 
         except (AssertionError, json.decoder.JSONDecodeError):
             # Inform user that file is not compatible
             self.trekker_cfg = const.TREKKER_CONFIG
-            wx.MessageBox(_("File incompatible, using default configuration."), _("InVesalius 3"))
+            wx.MessageBox(
+                _("File incompatible, using default configuration."), _("InVesalius 3")
+            )
             Publisher.sendMessage("Update status text in GUI", label="")
 
     def OnUpdateTracts(self, position):

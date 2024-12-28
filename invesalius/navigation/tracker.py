@@ -62,7 +62,9 @@ class Tracker(metaclass=Singleton):
         tracker_fiducials_raw = self.tracker_fiducials_raw.tolist()
         marker_tracker_fiducials_raw = self.m_tracker_fiducials_raw.tolist()
         configuration = (
-            self.tracker_connection.GetConfiguration() if self.tracker_connection else None
+            self.tracker_connection.GetConfiguration()
+            if self.tracker_connection
+            else None
         )
 
         state = {
@@ -122,7 +124,9 @@ class Tracker(metaclass=Singleton):
 
             # Check that the connection was successful.
             if not self.tracker_connection.IsConnected():
-                dlg.ShowNavigationTrackerWarning(tracker_id, self.tracker_connection.GetLibMode())
+                dlg.ShowNavigationTrackerWarning(
+                    tracker_id, self.tracker_connection.GetLibMode()
+                )
 
                 self.tracker_id = 0
                 self.tracker_connected = False
@@ -141,7 +145,9 @@ class Tracker(metaclass=Singleton):
 
     def DisconnectTracker(self):
         if self.tracker_connected:
-            Publisher.sendMessage("Update status text in GUI", label=_("Disconnecting tracker ..."))
+            Publisher.sendMessage(
+                "Update status text in GUI", label=_("Disconnecting tracker ...")
+            )
             Publisher.sendMessage("Remove sensors ID")
             Publisher.sendMessage("Remove object data")
 
@@ -157,7 +163,9 @@ class Tracker(metaclass=Singleton):
                 self.tracker_connected = False
                 self.tracker_id = 0
 
-                Publisher.sendMessage("Update status text in GUI", label=_("Tracker disconnected"))
+                Publisher.sendMessage(
+                    "Update status text in GUI", label=_("Tracker disconnected")
+                )
                 print("Tracker disconnected!")
             else:
                 Publisher.sendMessage(
@@ -215,16 +223,18 @@ class Tracker(metaclass=Singleton):
         # Update tracker fiducial with tracker coordinates
         self.tracker_fiducials[fiducial_index, :] = coord[0:3]
 
-        assert 0 <= fiducial_index <= 2, f"Fiducial index out of range (0-2): {fiducial_index}"
+        assert (
+            0 <= fiducial_index <= 2
+        ), f"Fiducial index out of range (0-2): {fiducial_index}"
 
         self.tracker_fiducials_raw[2 * fiducial_index, :] = coord_raw[0, :]
         self.tracker_fiducials_raw[2 * fiducial_index + 1, :] = coord_raw[1, :]
 
-        self.m_tracker_fiducials_raw[2 * fiducial_index, :] = dcr.compute_marker_transformation(
-            coord_raw, 0
+        self.m_tracker_fiducials_raw[2 * fiducial_index, :] = (
+            dcr.compute_marker_transformation(coord_raw, 0)
         )
-        self.m_tracker_fiducials_raw[2 * fiducial_index + 1, :] = dcr.compute_marker_transformation(
-            coord_raw, 1
+        self.m_tracker_fiducials_raw[2 * fiducial_index + 1, :] = (
+            dcr.compute_marker_transformation(coord_raw, 1)
         )
 
         print(f"Set tracker fiducial {fiducial_index} to coordinates {coord[0:3]}.")
@@ -251,16 +261,23 @@ class Tracker(metaclass=Singleton):
 
     def GetMatrixTrackerFiducials(self):
         m_probe_ref_left = (
-            np.linalg.inv(self.m_tracker_fiducials_raw[1]) @ self.m_tracker_fiducials_raw[0]
+            np.linalg.inv(self.m_tracker_fiducials_raw[1])
+            @ self.m_tracker_fiducials_raw[0]
         )
         m_probe_ref_right = (
-            np.linalg.inv(self.m_tracker_fiducials_raw[3]) @ self.m_tracker_fiducials_raw[2]
+            np.linalg.inv(self.m_tracker_fiducials_raw[3])
+            @ self.m_tracker_fiducials_raw[2]
         )
         m_probe_ref_nasion = (
-            np.linalg.inv(self.m_tracker_fiducials_raw[5]) @ self.m_tracker_fiducials_raw[4]
+            np.linalg.inv(self.m_tracker_fiducials_raw[5])
+            @ self.m_tracker_fiducials_raw[4]
         )
 
-        return [m_probe_ref_left.tolist(), m_probe_ref_right.tolist(), m_probe_ref_nasion.tolist()]
+        return [
+            m_probe_ref_left.tolist(),
+            m_probe_ref_right.tolist(),
+            m_probe_ref_nasion.tolist(),
+        ]
 
     def GetTrackerId(self):
         return self.tracker_id

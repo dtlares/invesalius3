@@ -295,14 +295,18 @@ class CLUTImageDataWidget(wx.Panel):
             # Right key - Increase node value
             if evt.GetKeyCode() in (wx.WXK_RIGHT, wx.WXK_NUMPAD_RIGHT):
                 n = self.last_selected
-                n.value = self.pixel_to_hounsfield(self.hounsfield_to_pixel(n.value) + 1)
+                n.value = self.pixel_to_hounsfield(
+                    self.hounsfield_to_pixel(n.value) + 1
+                )
                 self.Refresh()
                 self._generate_event()
 
             # Left key - Decrease node value
             elif evt.GetKeyCode() in (wx.WXK_LEFT, wx.WXK_NUMPAD_LEFT):
                 n = self.last_selected
-                n.value = self.pixel_to_hounsfield(self.hounsfield_to_pixel(n.value) - 1)
+                n.value = self.pixel_to_hounsfield(
+                    self.hounsfield_to_pixel(n.value) - 1
+                )
                 self.Refresh()
                 self._generate_event()
 
@@ -391,7 +395,9 @@ class CLUTImageDataWidget(wx.Panel):
             self._draw_circle(vi, ni.colour, ctx)
             self._draw_circle(vj, nj.colour, ctx)
 
-    def _draw_circle(self, px: float, color: Tuple[int, int, int], ctx: wx.GraphicsContext) -> None:
+    def _draw_circle(
+        self, px: float, color: Tuple[int, int, int], ctx: wx.GraphicsContext
+    ) -> None:
         w, h = self.GetVirtualSize()
 
         path: wx.GraphicsPath = ctx.CreatePath()

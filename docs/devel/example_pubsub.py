@@ -42,7 +42,9 @@ class Teacher:
 
     def SendMessage(self):
         print(f"{self.name}: Telling students the projects")
-        Publisher.sendMessage("Set Student Project", pubsub_evt=self.course.projects_dict)
+        Publisher.sendMessage(
+            "Set Student Project", pubsub_evt=self.course.projects_dict
+        )
 
         print(f"\n{self.name}: Telling students the grades")
         Publisher.sendMessage("Set Student Grade", pubsub_evt=self.course.grades_dict)

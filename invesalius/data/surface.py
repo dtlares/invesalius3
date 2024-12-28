@@ -31,18 +31,12 @@ import traceback
 import numpy as np
 import wx
 import wx.lib.agw.genericmessagedialog as GMD
-from vtkmodules.vtkCommonCore import (
-    vtkIdList,
-    vtkPoints,
-)
-from vtkmodules.vtkCommonDataModel import vtkCellArray, vtkPolyData, vtkTriangle
+from vtkmodules.vtkCommonCore import vtkIdList, vtkPoints
+from vtkmodules.vtkCommonDataModel import (vtkCellArray, vtkPolyData,
+                                           vtkTriangle)
 from vtkmodules.vtkCommonTransforms import vtkTransform
-from vtkmodules.vtkFiltersCore import (
-    vtkMassProperties,
-    vtkPolyDataNormals,
-    vtkStripper,
-    vtkTriangleFilter,
-)
+from vtkmodules.vtkFiltersCore import (vtkMassProperties, vtkPolyDataNormals,
+                                       vtkStripper, vtkTriangleFilter)
 from vtkmodules.vtkFiltersGeneral import vtkTransformPolyDataFilter
 from vtkmodules.vtkIOGeometry import vtkOBJReader, vtkSTLReader, vtkSTLWriter
 from vtkmodules.vtkIOPLY import vtkPLYReader, vtkPLYWriter
@@ -221,7 +215,9 @@ class SurfaceManager:
 
         Publisher.subscribe(self.OnDuplicate, "Duplicate surfaces")
         Publisher.subscribe(self.OnRemove, "Remove surfaces")
-        Publisher.subscribe(self.UpdateSurfaceInterpolation, "Update Surface Interpolation")
+        Publisher.subscribe(
+            self.UpdateSurfaceInterpolation, "Update Surface Interpolation"
+        )
 
         Publisher.subscribe(self.OnImportSurfaceFile, "Import surface file")
         Publisher.subscribe(self.OnImportCustomBinFile, "Import bin file")
@@ -229,8 +225,12 @@ class SurfaceManager:
         Publisher.subscribe(self.OnImportJsonConfig, "Read json config file for efield")
         Publisher.subscribe(self.UpdateConvertToInvFlag, "Update convert_to_inv flag")
 
-        Publisher.subscribe(self.CreateSurfaceFromPolydata, "Create surface from polydata")
-        Publisher.subscribe(self.export_all_surfaces_separately, "Export all surfaces separately")
+        Publisher.subscribe(
+            self.CreateSurfaceFromPolydata, "Create surface from polydata"
+        )
+        Publisher.subscribe(
+            self.export_all_surfaces_separately, "Export all surfaces separately"
+        )
 
     def OnDuplicate(self, surface_indexes):
         proj = prj.Project()
@@ -268,7 +268,9 @@ class SurfaceManager:
                         if i > index:
                             new_dict[i - 1] = old_dict[i]
                     old_dict = new_dict
-                    Publisher.sendMessage("Remove surface actor from viewer", actor=actor)
+                    Publisher.sendMessage(
+                        "Remove surface actor from viewer", actor=actor
+                    )
             self.actors_dict = new_dict
 
         if self.last_surface_index in surface_indexes:
@@ -308,7 +310,9 @@ class SurfaceManager:
             index_list.append(index)
             # self.ShowActor(index, True)
 
-        Publisher.sendMessage("Show multiple surfaces", index_list=index_list, visibility=True)
+        Publisher.sendMessage(
+            "Show multiple surfaces", index_list=index_list, visibility=True
+        )
 
     def OnLargestSurface(self):
         """
@@ -335,7 +339,9 @@ class SurfaceManager:
                 reader = vtkSTLReader()
 
                 if _has_win32api:
-                    reader.SetFileName(win32api.GetShortPathName(filename).encode(const.FS_ENCODE))
+                    reader.SetFileName(
+                        win32api.GetShortPathName(filename).encode(const.FS_ENCODE)
+                    )
                 else:
                     reader.SetFileName(filename.encode(const.FS_ENCODE))
                 reader.Update()
@@ -344,12 +350,15 @@ class SurfaceManager:
 
             if polydata.GetNumberOfPoints() == 0:
                 wx.MessageBox(
-                    _("InVesalius was not able to import this surface"), _("Import surface error")
+                    _("InVesalius was not able to import this surface"),
+                    _("Import surface error"),
                 )
                 return
             else:
                 name = os.path.splitext(os.path.split(filename)[-1])[0]
-                surface_index = self.CreateSurfaceFromPolydata(polydata, name=name, scalar=scalar)
+                surface_index = self.CreateSurfaceFromPolydata(
+                    polydata, name=name, scalar=scalar
+                )
                 return surface_index
         else:
             print("File does not exists")
@@ -442,7 +451,8 @@ class SurfaceManager:
                 file = config_dict["coils_path"] + elements["file"]
                 multilocus_coil_list.append(file)
             Publisher.sendMessage(
-                "Get multilocus paths from json", multilocus_coil_list=multilocus_coil_list
+                "Get multilocus paths from json",
+                multilocus_coil_list=multilocus_coil_list,
             )
         surface_index_cortex = self.OnImportCustomBinFile(cortex)
         if surface_index_cortex is not None:
@@ -493,7 +503,9 @@ class SurfaceManager:
                 dIperdt_list=dIperdt_list,
             )
         if scalp_index is not None:
-            Publisher.sendMessage("Send scalp index", scalp_actor=self.actors_dict[scalp_index])
+            Publisher.sendMessage(
+                "Send scalp index", scalp_actor=self.actors_dict[scalp_index]
+            )
         else:
             self.convert_to_inv = convert_to_inv
             scalp_path = config_dict["path_meshes"] + config_dict["scalp path"]
@@ -501,7 +513,9 @@ class SurfaceManager:
             Publisher.sendMessage(
                 "Send scalp index", scalp_actor=self.actors_dict[surface_index_bmesh]
             )
-            Publisher.sendMessage("Send targeting file path", targeting_file=targeting_file)
+            Publisher.sendMessage(
+                "Send targeting file path", targeting_file=targeting_file
+            )
 
     def OnImportSurfaceFile(self, filename):
         """
@@ -522,11 +536,15 @@ class SurfaceManager:
             reader = vtkXMLPolyDataReader()
             scalar = True
         else:
-            wx.MessageBox(_("File format not reconized by InVesalius"), _("Import surface error"))
+            wx.MessageBox(
+                _("File format not reconized by InVesalius"), _("Import surface error")
+            )
             return
 
         if _has_win32api:
-            reader.SetFileName(win32api.GetShortPathName(filename).encode(const.FS_ENCODE))
+            reader.SetFileName(
+                win32api.GetShortPathName(filename).encode(const.FS_ENCODE)
+            )
         else:
             reader.SetFileName(filename.encode(const.FS_ENCODE))
 
@@ -535,7 +553,8 @@ class SurfaceManager:
 
         if polydata.GetNumberOfPoints() == 0:
             wx.MessageBox(
-                _("InVesalius was not able to import this surface"), _("Import surface error")
+                _("InVesalius was not able to import this surface"),
+                _("Import surface error"),
             )
         else:
             name = os.path.splitext(os.path.split(filename)[-1])[0]
@@ -641,7 +660,9 @@ class SurfaceManager:
         if overwrite and self.actors_dict.keys():
             try:
                 old_actor = self.actors_dict[index]
-                Publisher.sendMessage("Remove surface actor from viewer", actor=old_actor)
+                Publisher.sendMessage(
+                    "Remove surface actor from viewer", actor=old_actor
+                )
             except KeyError:
                 pass
 
@@ -679,7 +700,9 @@ class SurfaceManager:
 
     def CloseProject(self):
         for index in self.actors_dict:
-            Publisher.sendMessage("Remove surface actor from viewer", actor=self.actors_dict[index])
+            Publisher.sendMessage(
+                "Remove surface actor from viewer", actor=self.actors_dict[index]
+            )
         del self.actors_dict
         self.actors_dict = {}
 
@@ -745,7 +768,9 @@ class SurfaceManager:
     ####
     # (mask_index, surface_name, quality, fill_holes, keep_largest)
 
-    def _on_complete_surface_creation(self, args, overwrite, surface_name, colour, dialog):
+    def _on_complete_surface_creation(
+        self, args, overwrite, surface_name, colour, dialog
+    ):
         surface_filename, surface_measures = args
         wx.CallAfter(
             self._show_surface,
@@ -758,7 +783,13 @@ class SurfaceManager:
         )
 
     def _show_surface(
-        self, surface_filename, surface_measures, overwrite, surface_name, colour, dialog
+        self,
+        surface_filename,
+        surface_measures,
+        overwrite,
+        surface_name,
+        colour,
+        dialog,
     ):
         print(surface_filename, surface_measures)
         reader = vtkXMLPolyDataReader()
@@ -1038,7 +1069,9 @@ class SurfaceManager:
                         fill_border_holes,
                     ),
                     callback=lambda x: filenames.append(x),
-                    error_callback=functools.partial(self._on_callback_error, dialog=sp),
+                    error_callback=functools.partial(
+                        self._on_callback_error, dialog=sp
+                    ),
                 )
 
             while len(filenames) != n_pieces:
@@ -1069,7 +1102,9 @@ class SurfaceManager:
                         colour=colour,
                         dialog=sp,
                     ),
-                    error_callback=functools.partial(self._on_callback_error, dialog=sp),
+                    error_callback=functools.partial(
+                        self._on_callback_error, dialog=sp
+                    ),
                 )
 
                 while sp.running:
@@ -1087,7 +1122,9 @@ class SurfaceManager:
             print(f"Elapsed time - {t_end - t_init}")
             sp.Close()
             if sp.error:
-                dlg = GMD.GenericMessageDialog(None, sp.error, "Exception!", wx.OK | wx.ICON_ERROR)
+                dlg = GMD.GenericMessageDialog(
+                    None, sp.error, "Exception!", wx.OK | wx.ICON_ERROR
+                )
                 dlg.ShowModal()
             del sp
 
@@ -1104,7 +1141,9 @@ class SurfaceManager:
         gc.collect()
 
     def GetActor(self, surface_index):
-        Publisher.sendMessage("Send Actor", e_field_actor=self.actors_dict[surface_index])
+        Publisher.sendMessage(
+            "Send Actor", e_field_actor=self.actors_dict[surface_index]
+        )
 
     def UpdateSurfaceInterpolation(self):
         session = ses.Session()
@@ -1193,10 +1232,14 @@ class SurfaceManager:
                 self._export_surface(temp_file, filetype, convert_to_world)
             except ValueError:
                 if wx.GetApp() is None:
-                    print("It was not possible to export the surface because the surface is empty")
+                    print(
+                        "It was not possible to export the surface because the surface is empty"
+                    )
                 else:
                     wx.MessageBox(
-                        _("It was not possible to export the surface because the surface is empty"),
+                        _(
+                            "It was not possible to export the surface because the surface is empty"
+                        ),
                         _("Export surface error"),
                     )
                 return
@@ -1327,7 +1370,11 @@ class SurfaceManager:
                 # writer.SetColorModeToUniformCellColor()
                 # writer.SetColor(255, 0, 0)
 
-            if filetype in (const.FILETYPE_STL, const.FILETYPE_STL_ASCII, const.FILETYPE_PLY):
+            if filetype in (
+                const.FILETYPE_STL,
+                const.FILETYPE_STL_ASCII,
+                const.FILETYPE_PLY,
+            ):
                 # Invert normals
                 normals = vtkPolyDataNormals()
                 normals.SetInputData(polydata)

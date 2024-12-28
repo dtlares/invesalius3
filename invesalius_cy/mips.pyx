@@ -8,11 +8,11 @@
 
 #http://en.wikipedia.org/wiki/Local_maximum_intensity_projection
 import numpy as np
-cimport numpy as np
-cimport cython
 
-from libc.math cimport floor, ceil, sqrt, fabs
+cimport cython
+cimport numpy as np
 from cython.parallel cimport prange
+from libc.math cimport ceil, fabs, floor, sqrt
 
 DTYPE = np.uint8
 ctypedef np.uint8_t DTYPE_t

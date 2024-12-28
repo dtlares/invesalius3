@@ -52,7 +52,9 @@ class MarkerVisualizer:
         self.is_target_mode = False
 
         # The assembly for the current vector field, shown relative to the highlighted marker.
-        self.vector_field_assembly = self.vector_field_visualizer.CreateVectorFieldAssembly()
+        self.vector_field_assembly = (
+            self.vector_field_visualizer.CreateVectorFieldAssembly()
+        )
 
         # Add the vector field assembly to the renderer, but make it invisible until a marker is highlighted.
         self.renderer.AddActor(self.vector_field_assembly)
@@ -67,7 +69,9 @@ class MarkerVisualizer:
         Publisher.subscribe(self.ShowMarkers, "Show markers")
         Publisher.subscribe(self.DeleteMarkers, "Delete markers")
         Publisher.subscribe(self.DeleteMarker, "Delete marker")
-        Publisher.subscribe(self.SetCameraToFocusOnMarker, "Set camera to focus on marker")
+        Publisher.subscribe(
+            self.SetCameraToFocusOnMarker, "Set camera to focus on marker"
+        )
         Publisher.subscribe(self.HighlightMarker, "Highlight marker")
         Publisher.subscribe(self.UnhighlightMarker, "Unhighlight marker")
         Publisher.subscribe(self.SetNewColor, "Set new color")
@@ -79,7 +83,8 @@ class MarkerVisualizer:
         Publisher.subscribe(self.UpdateNavigationStatus, "Navigation status")
         Publisher.subscribe(self.UpdateTargetMode, "Set target mode")
         Publisher.subscribe(
-            self.UpdateVectorFieldAssemblyVisibility, "Set vector field assembly visibility"
+            self.UpdateVectorFieldAssemblyVisibility,
+            "Set vector field assembly visibility",
         )
 
     def UpdateNavigationStatus(self, nav_status, vis_status):
@@ -99,8 +104,8 @@ class MarkerVisualizer:
         Update the vector field assembly to reflect the current vector field.
         """
         # Create a new vector field assembly.
-        new_vector_field_assembly = self.vector_field_visualizer.CreateVectorFieldAssembly(
-            brain_targets
+        new_vector_field_assembly = (
+            self.vector_field_visualizer.CreateVectorFieldAssembly(brain_targets)
         )
         # Replace the old vector field assembly with the new one.
         self.actor_factory.ReplaceActor(
@@ -168,7 +173,9 @@ class MarkerVisualizer:
 
         if cortex_marker[0] is not None:
             Publisher.sendMessage(
-                "Add cortex marker actor", position_orientation=cortex_marker, marker_id=marker_id
+                "Add cortex marker actor",
+                position_orientation=cortex_marker,
+                marker_id=marker_id,
             )
 
         marker.visualization = {

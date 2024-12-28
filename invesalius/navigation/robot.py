@@ -73,9 +73,12 @@ class Robot(metaclass=Singleton):
             self.AbortRobotConfiguration, "Robot to Neuronavigation: Close robot dialog"
         )
         Publisher.subscribe(
-            self.OnRobotConnectionStatus, "Robot to Neuronavigation: Robot connection status"
+            self.OnRobotConnectionStatus,
+            "Robot to Neuronavigation: Robot connection status",
         )
-        Publisher.subscribe(self.SetObjectiveByRobot, "Robot to Neuronavigation: Set objective")
+        Publisher.subscribe(
+            self.SetObjectiveByRobot, "Robot to Neuronavigation: Set objective"
+        )
 
         Publisher.subscribe(self.SetTarget, "Set target")
         Publisher.subscribe(self.UnsetTarget, "Unset target")
@@ -155,15 +158,21 @@ class Robot(metaclass=Singleton):
     def IsConnected(self):
         return self.is_robot_connected
 
-    def IsReady(self):  # LUKATODO: use this check before enabling robot for navigation...
-        return self.IsConnected() and (self.coil_name in self.navigation.coil_registrations)
+    def IsReady(
+        self,
+    ):  # LUKATODO: use this check before enabling robot for navigation...
+        return self.IsConnected() and (
+            self.coil_name in self.navigation.coil_registrations
+        )
 
     def SetRobotIP(self, data):
         if data is not None:
             self.robot_ip = data
 
     def ConnectToRobot(self):
-        Publisher.sendMessage("Neuronavigation to Robot: Connect to robot", robot_IP=self.robot_ip)
+        Publisher.sendMessage(
+            "Neuronavigation to Robot: Connect to robot", robot_IP=self.robot_ip
+        )
         print("Connected to robot")
 
     def InitializeRobot(self):
@@ -191,7 +200,9 @@ class Robot(metaclass=Singleton):
             return False
 
         # Compute the target in tracker coordinate system.
-        coord_raw, marker_visibilities = self.tracker.TrackerCoordinates.GetCoordinates()
+        coord_raw, marker_visibilities = (
+            self.tracker.TrackerCoordinates.GetCoordinates()
+        )
 
         # TODO: This is done here for now because the robot code expects the y-coordinate to be flipped. When this
         #   is removed, the robot code should be updated similarly, and vice versa. Create a copy of self.target by
@@ -214,7 +225,8 @@ class Robot(metaclass=Singleton):
     def TrackerFiducialsSet(self):
         tracker_fiducials = self.tracker.GetMatrixTrackerFiducials()
         Publisher.sendMessage(
-            "Neuronavigation to Robot: Set tracker fiducials", tracker_fiducials=tracker_fiducials
+            "Neuronavigation to Robot: Set tracker fiducials",
+            tracker_fiducials=tracker_fiducials,
         )
 
     def SetObjective(self, objective):
@@ -224,7 +236,9 @@ class Robot(metaclass=Singleton):
             return
 
         self.objective = objective
-        Publisher.sendMessage("Neuronavigation to Robot: Set objective", objective=objective.value)
+        Publisher.sendMessage(
+            "Neuronavigation to Robot: Set objective", objective=objective.value
+        )
 
     def SetObjectiveByRobot(self, objective):
         if objective is None:
